@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.2 (swiftlang-1103.0.32.1 clang-1103.0.32.29)"
+options: "dd9713e052c129d8e82ee862c72a33e0"
+build_time: [1586209057, 560976000]
+inputs:
+  "/Users/david/Desktop/Buddy-App-/buddy_app/ios/Runner/AppDelegate.swift": [1585321012, 18535474]
