@@ -1,8 +1,9 @@
+import 'package:buddy_app/screens/Home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:buddy_app/screens/welcome_screen.dart';
-import 'package:buddy_app/screens/login_screen.dart';
-import 'package:buddy_app/screens/registration_screen.dart';
-import 'package:buddy_app/screens/chat_screen.dart';
+import 'package:buddy_app/screens/LoginScreens/welcome_screen.dart';
+import 'package:buddy_app/screens/LoginScreens/login_screen.dart';
+import 'package:buddy_app/screens/LoginScreens/registration_screen.dart';
+import 'package:buddy_app/screens/LoginScreens/chat_screen.dart';
 
 void main() => runApp(FlashChat());
 
@@ -16,6 +17,7 @@ class FlashChat extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
         ChatScreen.id: (context) => ChatScreen(),
+        Homescreen.id: (context) => Homescreen(),
       },
     );
   }
