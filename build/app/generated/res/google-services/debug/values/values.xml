@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">210257956320-8j4ki9pe35u53as7iulcd3jq7vs6mtup.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://buddyapp-22712.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">210257956320</string>
+    <string name="google_api_key" translatable="false">AIzaSyB-GbiwW6KKZCwCiM3WBB2D5SbbH9QzBeM</string>
+    <string name="google_app_id" translatable="false">1:210257956320:android:d996af3945173dd5e92f85</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB-GbiwW6KKZCwCiM3WBB2D5SbbH9QzBeM</string>
+    <string name="google_storage_bucket" translatable="false">buddyapp-22712.appspot.com</string>
+    <string name="project_id" translatable="false">buddyapp-22712</string>
+</resources>
