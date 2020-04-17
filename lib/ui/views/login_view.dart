@@ -1,6 +1,4 @@
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/ui/widgets/busy_button.dart';
-import 'package:buddyappfirebase/ui/widgets/input_field.dart';
 import 'package:buddyappfirebase/ui/widgets/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -33,35 +31,55 @@ class _LoginViewState extends State<LoginView> {
       viewModel: LoginViewModel(),
       builder: (context, model, child) => Scaffold(
           backgroundColor: Colors.white,
-          body: Padding(
+          body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 150,
-                  child: Image.asset('assets/images/title.png'),
+                verticalSpaceLarge,
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: Colors.orangeAccent,
+                  padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
                 ),
-                InputField(
-                  placeholder: 'Email',
+                verticalSpaceLarge,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'EMAIL',
+//                    focusedBorder: UnderlineInputBorder(
+//                      borderSide: BorderSide(color: Colors.cyan),
+//                    ),
+                  ),
                   controller: emailController,
                 ),
                 verticalSpaceSmall,
-                InputField(
-                  placeholder: 'Password',
-                  password: true,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'PASSWORD',
+                  ),
                   controller: passwordController,
+                  obscureText: true,
                 ),
                 verticalSpaceMedium,
                 Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    BusyButton(
-                      title: 'Login',
-                      busy: model.busy,
+                    FlatButton(
+                      child: Text(
+                        'LOG IN',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.orangeAccent,
+                      padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                      ),
                       onPressed: () {
                         model.login(
                           email: emailController.text,
@@ -69,41 +87,64 @@ class _LoginViewState extends State<LoginView> {
                         );
                       },
                     )
+//                    BusyButton(
+//                      title: 'Login',
+//                      busy: model.busy,
+//                      onPressed: () {
+//                        model.login(
+//                          email: emailController.text,
+//                          password: passwordController.text,
+//                        );
+//                      },
+//                    )
                   ],
                 ),
-                isSignIn
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(_user.photoUrl),
+                verticalSpaceSmall,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    isSignIn
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(_user.photoUrl),
+                                ),
+                                Text(_user.displayName),
+                                OutlineButton(
+                                  onPressed: () {
+                                    gooleSignout();
+                                  },
+                                  child: Text("Logout"),
+                                )
+                              ],
                             ),
-                            Text(_user.displayName),
-                            OutlineButton(
+                          )
+                        : Center(
+                            child: OutlineButton(
                               onPressed: () {
-                                gooleSignout();
+                                handleSignIn();
+                                //_navigationService.navigateTo(HomeViewRoute);
                               },
-                              child: Text("Logout"),
-                            )
-                          ],
-                        ),
-                      )
-                    : Center(
-                        child: OutlineButton(
-                          onPressed: () {
-                            handleSignIn();
-                            //_navigationService.navigateTo(HomeViewRoute);
-                          },
-                          child: Text("SignIn with Goolge"),
-                        ),
-                      ),
-                verticalSpaceMedium,
-                TextLink(
-                  'Create an Account if you\'re new.',
-                  onPressed: () {
-                    // TODO: Handle navigation
-                  },
+                              child: Text("Sign In with Goolge"),
+                            ),
+                          ),
+                  ],
+                ),
+                verticalSpaceSmall,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextLink(
+                      'Create an Account if you\'re new.',
+                      onPressed: () {
+                        // TODO: Handle navigation
+                      },
+                    )
+                  ],
                 )
               ],
             ),
