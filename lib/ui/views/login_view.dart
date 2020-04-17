@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/ui/views/password_reset.dart';
 import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:buddyappfirebase/ui/widgets/text_link.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/locator.dart';
 import 'package:buddyappfirebase/constants/route_names.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -47,8 +49,7 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            StartView(),
+                        builder: (context) => StartView(),
                       ),
                     );
                   },
@@ -57,9 +58,6 @@ class _LoginViewState extends State<LoginView> {
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'EMAIL',
-//                    focusedBorder: UnderlineInputBorder(
-//                      borderSide: BorderSide(color: Colors.cyan),
-//                    ),
                   ),
                   controller: emailController,
                 ),
@@ -70,6 +68,72 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   controller: passwordController,
                   obscureText: true,
+                ),
+                verticalSpaceMedium,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    isSignIn
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SignInButton(
+                                  Buttons.Google,
+                                  text: "Sign out with Google",
+                                  onPressed: () {
+                                    googleSignout();
+                                  },
+                                ),
+//                                CircleAvatar(
+//                                  backgroundImage: NetworkImage(_user.photoUrl),
+//                                ),
+//                                //Text(_user.displayName),
+//                                OutlineButton(
+//                                  onPressed: () {
+//                                    gooleSignout();
+//                                  },
+//                                  child: Text("Logout"),
+//                                )
+                              ],
+                            ),
+                          )
+                        : Center(
+//                            child: OutlineButton(
+//                              onPressed: () {
+//                                handleSignIn();
+//                                //_navigationService.navigateTo(HomeViewRoute);
+//                              },
+//                              child: Text("Sign In with Google"),
+//                            ),
+                            child: SignInButton(
+                              Buttons.Google,
+                              text: "Sign In with Google",
+                              onPressed: () {
+                                handleSignIn();
+                              },
+                            ),
+                          ),
+                  ],
+                ),
+                verticalSpaceMedium,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextLink(
+                      'Forget Password',
+                      onPressed: () {
+                        // TODO: Handle navigation
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PasswordView(),
+                            ));
+                      },
+                    )
+                  ],
                 ),
                 verticalSpaceMedium,
                 Row(
@@ -96,65 +160,8 @@ class _LoginViewState extends State<LoginView> {
                         );
                       },
                     )
-//                    BusyButton(
-//                      title: 'Login',
-//                      busy: model.busy,
-//                      onPressed: () {
-//                        model.login(
-//                          email: emailController.text,
-//                          password: passwordController.text,
-//                        );
-//                      },
-//                    )
                   ],
                 ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    isSignIn
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(_user.photoUrl),
-                                ),
-                                Text(_user.displayName),
-                                OutlineButton(
-                                  onPressed: () {
-                                    gooleSignout();
-                                  },
-                                  child: Text("Logout"),
-                                )
-                              ],
-                            ),
-                          )
-                        : Center(
-                            child: OutlineButton(
-                              onPressed: () {
-                                handleSignIn();
-                                //_navigationService.navigateTo(HomeViewRoute);
-                              },
-                              child: Text("Sign In with Goolge"),
-                            ),
-                          ),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextLink(
-                      'Create an Account if you\'re new.',
-                      onPressed: () {
-                        // TODO: Handle navigation
-                      },
-                    )
-                  ],
-                )
               ],
             ),
           )),
@@ -182,7 +189,7 @@ class _LoginViewState extends State<LoginView> {
     });
   }
 
-  Future<void> gooleSignout() async {
+  Future<void> googleSignout() async {
     await _auth.signOut().then((onValue) {
       _googleSignIn.signOut();
       setState(() {

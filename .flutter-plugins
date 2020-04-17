@@ -1,7 +1,7 @@
 # This is a generated file; do not edit or check into version control.
-firebase_auth=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\firebase_auth-0.16.0\\
-firebase_auth_web=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\firebase_auth_web-0.1.2\\
-firebase_core=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\firebase_core-0.4.4+3\\
-firebase_core_web=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\firebase_core_web-0.1.1+2\\
-google_sign_in=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\google_sign_in-4.4.1\\
-google_sign_in_web=C:\\Users\\Aaron Ni\\AppData\\Roaming\\Pub\\Cache\\hosted\\pub.dartlang.org\\google_sign_in_web-0.8.4\\
+firebase_auth=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.16.0/
+firebase_auth_web=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-0.1.2/
+firebase_core=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.4+3/
+firebase_core_web=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.1.1+2/
+google_sign_in=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.4.1/
+google_sign_in_web=/Users/david/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.8.4/

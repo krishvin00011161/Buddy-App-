@@ -1,15 +1,11 @@
-import 'package:buddyappfirebase/ui/views/signup_view.dart';
 import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
-import 'package:buddyappfirebase/ui/views/login_view.dart';
 import 'managers/dialog_manager.dart';
 import 'ui/router.dart';
 import 'locator.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   // Register all the models and services before the app starts
