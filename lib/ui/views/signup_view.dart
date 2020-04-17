@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:buddyappfirebase/viewmodels/signup_view_model.dart';
@@ -24,6 +25,14 @@ class SignUpView extends StatelessWidget {
                 icon: Icon(Icons.arrow_back),
                 color: Colors.orangeAccent,
                 padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
+                onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            StartView(),
+                      ),
+                    );
+                  },
               ),
 //              Text(
 //                'Sign Up',

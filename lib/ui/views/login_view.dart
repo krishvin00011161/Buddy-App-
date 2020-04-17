@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:buddyappfirebase/ui/widgets/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -43,6 +44,14 @@ class _LoginViewState extends State<LoginView> {
                   icon: Icon(Icons.arrow_back),
                   color: Colors.orangeAccent,
                   padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            StartView(),
+                      ),
+                    );
+                  },
                 ),
                 verticalSpaceLarge,
                 TextFormField(

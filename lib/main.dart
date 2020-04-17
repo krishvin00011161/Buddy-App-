@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/ui/views/signup_view.dart';
+import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: LoginView(), //SignUpView
+      home: StartView(), //SignUpView
       onGenerateRoute: generateRoute,
     );
   }
