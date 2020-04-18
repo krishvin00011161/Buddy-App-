@@ -37,7 +37,8 @@ class Auth implements BaseAuth {
   }
 
   @override
-  Future<void> resetPassword(String email) async {
+  Future resetPassword(String email) async {
+    //Future<void> resetPassword(String email) async
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

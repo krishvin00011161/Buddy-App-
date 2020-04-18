@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/constants/route_names.dart';
 import 'package:buddyappfirebase/locator.dart';
+import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
 
 class SignUpView extends StatefulWidget {
   @override
@@ -45,11 +46,8 @@ class _SignUpViewState extends State<SignUpView> {
                 color: Colors.orangeAccent,
                 padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => StartView(),
-                    ),
-                  );
+                  Navigator.of(context)
+                      .push(Transition().createRoute(StartView()));
                 },
               ),
               verticalSpaceLarge,
@@ -147,63 +145,3 @@ class _SignUpViewState extends State<SignUpView> {
     });
   }
 }
-
-//class SignUpView extends StatelessWidget {
-//  final emailController = TextEditingController();
-//  final passwordController = TextEditingController();
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return ViewModelProvider<SignUpViewModel>.withConsumer(
-//      viewModel: SignUpViewModel(),
-//      builder: (context, model, child) => Scaffold(
-//        body: Padding(
-//          padding: const EdgeInsets.symmetric(horizontal: 50.0),
-//          child: Column(
-//            mainAxisSize: MainAxisSize.max,
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: <Widget>[
-//              Text(
-//                'Sign Up',
-//                style: TextStyle(
-//                  fontSize: 38,
-//                ),
-//              ),
-//              verticalSpaceLarge,
-//              // TODO: Add additional user data here to save (episode 2)
-//              InputField(
-//                placeholder: 'Email',
-//                controller: emailController,
-//              ),
-//              verticalSpaceSmall,
-//              InputField(
-//                placeholder: 'Password',
-//                password: true,
-//                controller: passwordController,
-//                additionalNote: 'Password has to be a minimum of 6 characters.',
-//              ),
-//              verticalSpaceMedium,
-//              Row(
-//                mainAxisSize: MainAxisSize.max,
-//                mainAxisAlignment: MainAxisAlignment.end,
-//                children: [
-//                  BusyButton(
-//                    title: 'Sign Up',
-//                    busy: model.busy,
-//                    onPressed: () {
-//                      // TODO: Perform firebase login here
-//                      model.signUp(
-//                          email: emailController.text,
-//                          password: passwordController.text);
-//                    },
-//                  )
-//                ],
-//              )
-//            ],
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-//}

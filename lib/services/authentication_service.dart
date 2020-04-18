@@ -33,4 +33,15 @@ class AuthenticationService {
       return e.message;
     }
   }
+
+  Future recoverPasswordWithEmail({
+    @required String email,
+  }) async {
+    try {
+      var authResult = await _firebaseAuth.sendPasswordResetEmail(email: email);
+      //return authResult.user != null;
+    } catch (e) {
+      return e.message;
+    }
+  }
 }

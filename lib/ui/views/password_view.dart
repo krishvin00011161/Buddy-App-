@@ -4,6 +4,8 @@ import 'package:buddyappfirebase/ui/views/login_view.dart';
 import 'package:buddyappfirebase/constants/route_names.dart';
 import 'package:buddyappfirebase/services/base_auth.dart';
 import 'package:buddyappfirebase/ui/widgets/text_link.dart';
+import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
+import 'package:buddyappfirebase/viewmodels/password_view_model.dart';
 
 class PasswordView extends StatefulWidget {
   @override
@@ -30,11 +32,8 @@ class _PasswordViewState extends State<PasswordView> {
               color: Colors.orangeAccent,
               padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LoginView(),
-                  ),
-                );
+                Navigator.of(context)
+                    .push(Transition().createRoute(LoginView()));
               },
             ),
             verticalSpaceMedium,
@@ -46,7 +45,12 @@ class _PasswordViewState extends State<PasswordView> {
               ),
               controller: emailController,
             ),
-            verticalSpaceMedium,
+            verticalSpaceSmall,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[],
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,8 +70,8 @@ class _PasswordViewState extends State<PasswordView> {
                   ),
                   onPressed: () {
                     try {
-                      Auth().resetPassword(emailController.text);
-                      print(emailController.text);
+                      PasswordViewModel()
+                          .forgetLogin(email: emailController.text);
                     } catch (e) {
                       print(e);
                       errorMessage = "Incorrect Email";
