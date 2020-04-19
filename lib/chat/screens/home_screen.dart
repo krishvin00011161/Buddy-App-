@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/chat/widgets/category_selector.dart';
 import 'package:buddyappfirebase/chat/widgets/favorite_contacts.dart';
 import 'package:buddyappfirebase/chat/widgets/recent_chats.dart';
+import 'package:buddyappfirebase/chat/models/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,11 +15,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          iconSize: 30.0,
-          color: Colors.white,
-          onPressed: () {},
+        leading: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            backgroundImage: AssetImage(
+              favorites[1].imageUrl,
+            ),
+          ),
         ),
         title: Text(
           'Chats',

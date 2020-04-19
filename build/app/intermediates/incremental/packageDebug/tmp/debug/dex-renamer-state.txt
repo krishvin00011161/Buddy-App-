@@ -1,4 +1,10 @@
-#Sun Apr 19 08:17:54 EDT 2020
-base.0=/Users/david/Desktop/Buddy-App-/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+#Sun Apr 19 18:17:26 EDT 2020
+path.2=classes3.dex
+path.1=classes2.dex
 path.0=classes.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
 renamed.0=classes.dex
+base.2=/Users/david/Desktop/Buddy-App-/build/app/intermediates/dex/debug/mergeDexDebug/out/classes3.dex
+base.1=/Users/david/Desktop/Buddy-App-/build/app/intermediates/dex/debug/mergeDexDebug/out/classes2.dex
+base.0=/Users/david/Desktop/Buddy-App-/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex

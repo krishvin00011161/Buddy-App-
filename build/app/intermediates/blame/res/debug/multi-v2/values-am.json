@@ -4,6 +4,40 @@
             "outputFile": "/Users/david/Desktop/Buddy-App-/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-am/values-am.xml",
             "map": [
                 {
+                    "source": "/Users/david/.gradle/caches/transforms-2/files-2.1/e2d15d69d843196c5549b394b444500f/jetified-firebase-messaging-20.0.1/res/values-am/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "207",
+                        "endColumns": "99",
+                        "endOffsets": "306"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2600",
+                        "endColumns": "103",
+                        "endOffsets": "2699"
+                    }
+                },
+                {
+                    "source": "/Users/david/.gradle/caches/transforms-2/files-2.1/158de9519577c7ffb49592b2f543b9bc/core-1.2.0/res/values-am/values-am.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "21",
+                        "startColumns": "4",
+                        "startOffsets": "2704",
+                        "endColumns": "100",
+                        "endOffsets": "2800"
+                    }
+                },
+                {
                     "source": "/Users/david/.gradle/caches/transforms-2/files-2.1/9f0cc5a3d2738285e032d8bb1026ae83/jetified-play-services-basement-17.0.0/res/values-am/values.xml",
                     "from": {
                         "startLines": "4",
@@ -35,23 +69,6 @@
                         "startOffsets": "105,209,380,504,608,794,919,1057,1379,1566,1671,1847,1972,2166,2323,2413,2500",
                         "endColumns": "103,170,123,103,185,124,137,130,186,104,175,124,193,156,89,86,99",
                         "endOffsets": "204,375,499,603,789,914,1052,1183,1561,1666,1842,1967,2161,2318,2408,2495,2595"
-                    }
-                },
-                {
-                    "source": "/Users/david/.gradle/caches/transforms-2/files-2.1/765d948781557ca60ad60520b9d583b2/core-1.1.0/res/values-am/values-am.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2600",
-                        "endColumns": "100",
-                        "endOffsets": "2696"
                     }
                 }
             ]

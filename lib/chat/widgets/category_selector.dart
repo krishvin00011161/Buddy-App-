@@ -7,7 +7,7 @@ class CategorySelector extends StatefulWidget {
 
 class _CategorySelectorState extends State<CategorySelector> {
   int selectedIndex = 0;
-  final List<String> categories = ['Messages', 'Online', 'Groups', 'Requests'];
+  final List<String> categories = ['Messages', 'Groups'];
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _CategorySelectorState extends State<CategorySelector> {
             },
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: 20.0,
+                horizontal: 40.0,
                 vertical: 30.0,
               ),
               child: Text(
