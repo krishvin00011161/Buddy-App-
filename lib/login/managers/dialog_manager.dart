@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:buddyappfirebase/locator.dart';
+import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/models/dialog_models.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
 

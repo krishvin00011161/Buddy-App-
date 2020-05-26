@@ -1,7 +1,7 @@
-import 'package:buddyappfirebase/locator.dart';
+import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
-import 'package:buddyappfirebase/ui/views/start_view.dart';
-import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
+import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   FirebaseAuth _auth = FirebaseAuth.instance;
- // FirebaseUser _user;
+  // FirebaseUser _user;
 
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final NavigationService _navigationService = locator<NavigationService>();
@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
               logout();
               setState(() {
                 Navigator.of(context)
-                      .push(Transition().createRoute(StartView()));
+                    .push(Transition().createRoute(StartView()));
               });
             },
           ),
@@ -50,6 +50,4 @@ class _HomeViewState extends State<HomeView> {
   logout() {
     googleSignIn.signOut();
   }
-
-  
 }

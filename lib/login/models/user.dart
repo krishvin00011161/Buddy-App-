@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class User { // User used when creating new credential in firebase
   final String id;
   final String username;
   final String email;

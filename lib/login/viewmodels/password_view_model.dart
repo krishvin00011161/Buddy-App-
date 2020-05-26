@@ -1,5 +1,5 @@
 import 'package:buddyappfirebase/constants/route_names.dart';
-import 'package:buddyappfirebase/locator.dart';
+import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/services/authentication_service.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
@@ -15,6 +15,7 @@ class PasswordViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
+  // Forget My Password
   Future forgetLogin({
     @required String email,
   }) async {
@@ -27,15 +28,18 @@ class PasswordViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(HomeViewRoute);
+        _navigationService
+            .navigateTo(HomeViewRoute); // Success then go to Home View
       } else {
         await _dialogService.showDialog(
+          // Fail then put error message
           title: 'Email not found',
           description: 'General credential failure. Please try again later',
         );
       }
     } else {
       await _dialogService.showDialog(
+        // Fail put result
         title: 'Credential Failure',
         description: result,
       );

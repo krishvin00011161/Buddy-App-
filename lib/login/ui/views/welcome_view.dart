@@ -1,14 +1,20 @@
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/ui/views/home_view.dart';
+import 'package:buddyappfirebase/login/locator.dart';
+import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class WelcomeView extends StatefulWidget {
+  const WelcomeView({Key key}) : super(key: key);
+
   @override
   _WelcomeViewState createState() => _WelcomeViewState();
 }
 
 class _WelcomeViewState extends State<WelcomeView> {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,10 +100,8 @@ class _WelcomeViewState extends State<WelcomeView> {
 
   void backPage() {
     setState(() {
-      pageController.animateToPage(
-          pageNum - 1,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.ease);
+      pageController.animateToPage(pageNum - 1,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
@@ -106,15 +110,12 @@ class _WelcomeViewState extends State<WelcomeView> {
       if (pageNum == 2) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) =>
-                HomeView(),
+            builder: (context) => HomeView(),
           ),
         );
-      }else {
-        pageController.animateToPage(
-            pageNum + 1,
-            duration: Duration(milliseconds: 500),
-            curve: Curves.ease);
+      } else {
+        pageController.animateToPage(pageNum + 1,
+            duration: Duration(milliseconds: 500), curve: Curves.ease);
       }
     });
   }
@@ -122,63 +123,63 @@ class _WelcomeViewState extends State<WelcomeView> {
   List<Widget> pages() {
     bool isTeacher = false;
     List<Widget> pages = [
-       Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(
-                image: AssetImage("assets/images/connect.jpg"),
-                width: 300,
+      Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage("assets/images/connect.jpg"),
+              width: 300,
+            ),
+            Text(
+              "Connect with friends",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              Text(
-                "Connect with friends",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+            ),
+            verticalSpaceSmall,
+            Text(
+              "Lets connect to discuss your study\nPlans and your meetings",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
               ),
-              verticalSpaceSmall,
-              Text(
-                "Lets connect to discuss your study\nPlans and your meetings",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-            ],
-          ),
-       ),
-       Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(
-                image: AssetImage("assets/images/explore.jpg"),
-                width: 300,
-              ),
-              Text(
-                "Explore",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              verticalSpaceSmall,
-              Text(
-                "Explore and Connect whatever\nyour heart desires",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+      Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage("assets/images/explore.jpg"),
+              width: 300,
+            ),
+            Text(
+              "Explore",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            verticalSpaceSmall,
+            Text(
+              "Explore and Connect whatever\nyour heart desires",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      ),
     ];
     if (isTeacher) {
-     pages = [
+      pages = [
         Container(
           child: Stack(
             children: <Widget>[
@@ -193,7 +194,7 @@ class _WelcomeViewState extends State<WelcomeView> {
           color: Colors.green,
         ),
       ];
-    }else{
+    } else {
       pages.addAll([
         Container(
           color: Colors.white,
@@ -254,7 +255,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     ];
     if (pageNum == 2) {
       _next = "Finish";
-    }else{
+    } else {
       _next = "Next";
     }
     setState(() {});

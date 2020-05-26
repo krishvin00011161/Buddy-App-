@@ -1,20 +1,20 @@
 import 'package:buddyappfirebase/chat/models/user_model.dart';
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/ui/views/password_view.dart';
-import 'package:buddyappfirebase/ui/views/start_view.dart';
-import 'package:buddyappfirebase/ui/widgets/text_link.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/views/password_view.dart';
+import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:buddyappfirebase/login/ui/widgets/text_link.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:buddyappfirebase/viewmodels/login_view_model.dart';
+import 'package:buddyappfirebase/login/viewmodels/login_view_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
-import 'package:buddyappfirebase/locator.dart';
+import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/constants/route_names.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
+import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -43,21 +43,18 @@ class _LoginViewState extends State<LoginView> {
     googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
       _navigationService.navigateTo(HomeViewRoute);
-      }, onError: (err) {
+    }, onError: (err) {
       print('Error signing in: $err');
-      });
-      googleSignIn.signInSilently(suppressErrors: false).then((account) {
-        handleSignIn(account);
-        _navigationService.navigateTo(HomeViewRoute);
-      }).catchError((err) {
+    });
+    googleSignIn.signInSilently(suppressErrors: false).then((account) {
+      handleSignIn(account);
+      _navigationService.navigateTo(HomeViewRoute);
+    }).catchError((err) {
       print('Error signing in: $err');
-      });
-      
+    });
   }
 
-
   bool isSignIn = false;
-
 
   bool isAuth = false;
 

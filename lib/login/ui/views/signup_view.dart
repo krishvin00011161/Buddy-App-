@@ -1,18 +1,17 @@
 import 'package:buddyappfirebase/chat/models/user_model.dart';
-import 'package:buddyappfirebase/services/base_auth.dart';
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/ui/views/start_view.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:buddyappfirebase/login/ui/views/welcome_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:buddyappfirebase/viewmodels/signup_view_model.dart';
+import 'package:buddyappfirebase/login/viewmodels/signup_view_model.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
-import 'package:buddyappfirebase/constants/route_names.dart';
-import 'package:buddyappfirebase/locator.dart';
-import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
+import 'package:buddyappfirebase/login/locator.dart';
+import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 
 class SignUpView extends StatefulWidget {
   @override
@@ -33,16 +32,14 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   void initState() {
-  
     super.initState();
 
     googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
-      _navigationService.navigateTo(HomeViewRoute);
-      }, onError: (err) {
+      Navigator.of(context).push(Transition().createRoute(WelcomeView()));
+    }, onError: (err) {
       print('Error signing in: $err');
-      });
-  
+    });
   }
 
   @override
@@ -140,7 +137,7 @@ class _SignUpViewState extends State<SignUpView> {
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
-    
+
       final FirebaseUser googleUser = await _auth.currentUser();
       final uid = googleUser.uid;
       // 3) get username from create account, use it to make new user document in users collection
@@ -156,13 +153,8 @@ class _SignUpViewState extends State<SignUpView> {
       doc = await usersRef.document(user.id).get();
     }
 
-   
     print(currentUser);
-  
   }
-
-  
-
 
   bool isAuth = false;
 
@@ -178,6 +170,4 @@ class _SignUpViewState extends State<SignUpView> {
       });
     }
   }
-
-  
 }

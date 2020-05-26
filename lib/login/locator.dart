@@ -6,7 +6,7 @@ import 'package:buddyappfirebase/services/dialog_service.dart';
 
 GetIt locator = GetIt.instance;
 
-void setupLocator() {
+void setupLocator() { // Locate where it register
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => AuthenticationService());

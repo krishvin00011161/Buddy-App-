@@ -1,6 +1,6 @@
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/ui/views/login_view.dart';
-import 'package:buddyappfirebase/ui/views/signup_view.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/views/login_view.dart';
+import 'package:buddyappfirebase/login/ui/views/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 

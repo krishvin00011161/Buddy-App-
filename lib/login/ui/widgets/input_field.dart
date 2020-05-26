@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:buddyappfirebase/ui/shared/shared_styles.dart';
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/shared/shared_styles.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 
 import 'note_text.dart';
 

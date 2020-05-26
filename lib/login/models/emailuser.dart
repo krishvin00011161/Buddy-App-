@@ -1,4 +1,4 @@
-class EmailUser {
+class EmailUser { // Class for Email user when creating new user throw firebase
   final String id;
   final String fullName;
   final String email;

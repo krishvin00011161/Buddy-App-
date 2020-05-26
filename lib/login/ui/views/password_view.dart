@@ -1,8 +1,8 @@
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:buddyappfirebase/ui/views/login_view.dart';
-import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
-import 'package:buddyappfirebase/viewmodels/password_view_model.dart';
+import 'package:buddyappfirebase/login/ui/views/login_view.dart';
+import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
+import 'package:buddyappfirebase/login/viewmodels/password_view_model.dart';
 
 class PasswordView extends StatefulWidget {
   @override

@@ -3,7 +3,7 @@ import 'package:buddyappfirebase/services/firestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class AuthenticationService {
+class AuthenticationService { // Class that service sign in/up forget password
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 

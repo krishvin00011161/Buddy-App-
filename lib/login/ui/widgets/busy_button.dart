@@ -1,4 +1,4 @@
-import 'package:buddyappfirebase/ui/shared/shared_styles.dart';
+import 'package:buddyappfirebase/login/ui/shared/shared_styles.dart';
 import 'package:flutter/material.dart';
 
 /// A button that shows a busy indicator in place of title
