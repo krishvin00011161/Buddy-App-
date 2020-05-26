@@ -8,4 +8,6 @@ class User {
     this.name,
     this.imageUrl,
   });
+
+  Object get username => null;
 }

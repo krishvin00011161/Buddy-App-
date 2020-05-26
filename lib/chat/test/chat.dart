@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -583,7 +583,7 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget buildCamera() {}
+  
 
   // spin the loading
   Widget buildLoading() {

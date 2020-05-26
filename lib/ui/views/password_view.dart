@@ -1,9 +1,6 @@
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/ui/views/login_view.dart';
-import 'package:buddyappfirebase/constants/route_names.dart';
-import 'package:buddyappfirebase/services/base_auth.dart';
-import 'package:buddyappfirebase/ui/widgets/text_link.dart';
 import 'package:buddyappfirebase/ui/widgets/route_transition.dart';
 import 'package:buddyappfirebase/viewmodels/password_view_model.dart';
 

@@ -1,7 +1,6 @@
 import 'package:buddyappfirebase/constants/route_names.dart';
 import 'package:buddyappfirebase/locator.dart';
 import 'package:buddyappfirebase/services/authentication_service.dart';
-import 'package:buddyappfirebase/services/base_auth.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:flutter/foundation.dart';

@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/services/authentication_service.dart';
+import 'package:buddyappfirebase/services/firestoreService.dart';
 import 'package:get_it/get_it.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/services/dialog_service.dart';
@@ -9,4 +10,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => AuthenticationService());
+  locator.registerLazySingleton(() => FirestoreService());
 }

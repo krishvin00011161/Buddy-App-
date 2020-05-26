@@ -1,12 +1,14 @@
+import 'package:buddyappfirebase/chat/models/user_model.dart';
+import 'package:buddyappfirebase/services/base_auth.dart';
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/ui/views/start_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:buddyappfirebase/viewmodels/signup_view_model.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:buddyappfirebase/ui/widgets/text_link.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
 import 'package:buddyappfirebase/constants/route_names.dart';
 import 'package:buddyappfirebase/locator.dart';
@@ -23,10 +25,25 @@ class _SignUpViewState extends State<SignUpView> {
 
   final NavigationService _navigationService = locator<NavigationService>();
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser _user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = new GoogleSignIn();
+  final usersRef = Firestore.instance.collection('users');
+  final DateTime timestamp = DateTime.now();
+  User currentUser;
 
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
+  @override
+  void initState() {
+  
+    super.initState();
+
+    googleSignIn.onCurrentUserChanged.listen((account) {
+      handleSignIn(account);
+      _navigationService.navigateTo(HomeViewRoute);
+      }, onError: (err) {
+      print('Error signing in: $err');
+      });
+  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +92,7 @@ class _SignUpViewState extends State<SignUpView> {
                       Buttons.Google,
                       text: "Sign Up with Google",
                       onPressed: () {
-                        handleSignIn();
+                        googleSignIn.signIn();
                       },
                     ),
                   ),
@@ -104,6 +121,7 @@ class _SignUpViewState extends State<SignUpView> {
                         email: emailController.text,
                         password: passwordController.text,
                       );
+                      //createNormalUserInFirestore();
                     },
                   )
                 ],
@@ -115,33 +133,51 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  bool isSignIn = false;
+  createUserInFirestore() async {
+    // 1) check if user exists in users collection in database (according to their id)
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    DocumentSnapshot doc = await usersRef.document(user.id).get();
 
-  Future<void> handleSignIn() async {
-    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-
-    AuthCredential credential = GoogleAuthProvider.getCredential(
-        idToken: googleSignInAuthentication.idToken,
-        accessToken: googleSignInAuthentication.accessToken);
-
-    AuthResult result = (await _auth.signInWithCredential(credential));
-
-    _user = result.user;
-
-    setState(() {
-      isSignIn = true;
-      _navigationService.navigateTo(HomeViewRoute);
-    });
-  }
-
-  Future<void> googleSignout() async {
-    await _auth.signOut().then((onValue) {
-      _googleSignIn.signOut();
-      setState(() {
-        isSignIn = true;
+    if (!doc.exists) {
+      // 2) if the user doesn't exist, then we want to take them to the create account page
+    
+      final FirebaseUser googleUser = await _auth.currentUser();
+      final uid = googleUser.uid;
+      // 3) get username from create account, use it to make new user document in users collection
+      usersRef.document(user.id).setData({
+        "id": uid,
+        "photoUrl": user.photoUrl,
+        "email": user.email,
+        "displayName": user.displayName,
+        "bio": "",
+        "timestamp": timestamp
       });
-    });
+
+      doc = await usersRef.document(user.id).get();
+    }
+
+   
+    print(currentUser);
+  
   }
+
+  
+
+
+  bool isAuth = false;
+
+  handleSignIn(GoogleSignInAccount account) {
+    if (account != null) {
+      createUserInFirestore();
+      setState(() {
+        isAuth = true;
+      });
+    } else {
+      setState(() {
+        isAuth = false;
+      });
+    }
+  }
+
+  
 }

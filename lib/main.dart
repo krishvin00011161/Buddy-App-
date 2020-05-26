@@ -1,4 +1,3 @@
-import 'package:buddyappfirebase/chat/screens/home_screen.dart';
 import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/services/navigation_service.dart';
@@ -19,6 +18,7 @@ class MyApp extends StatelessWidget {
  @override
  Widget build(BuildContext context) {
    return MaterialApp(
+     debugShowCheckedModeBanner: false,
      title: 'Compound',
      builder: (context, child) => Navigator(
        key: locator<DialogService>().dialogNavigationKey,

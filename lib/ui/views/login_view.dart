@@ -1,7 +1,9 @@
+import 'package:buddyappfirebase/chat/models/user_model.dart';
 import 'package:buddyappfirebase/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/ui/views/password_view.dart';
 import 'package:buddyappfirebase/ui/views/start_view.dart';
 import 'package:buddyappfirebase/ui/widgets/text_link.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:buddyappfirebase/viewmodels/login_view_model.dart';
@@ -23,13 +25,62 @@ class _LoginViewState extends State<LoginView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final NavigationService _navigationService = locator<NavigationService>();
+  LoginViewModel model = new LoginViewModel();
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
 
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
+  GoogleSignIn googleSignIn = new GoogleSignIn();
+  final usersRef = Firestore.instance.collection('users');
+  final DateTime timestamp = DateTime.now();
+  User currentUser;
 
   bool showSpinner = false; // A spinner that shows progress of login
+
+  @override
+  void initState() {
+    super.initState();
+    googleSignIn.onCurrentUserChanged.listen((account) {
+      handleSignIn(account);
+      _navigationService.navigateTo(HomeViewRoute);
+      }, onError: (err) {
+      print('Error signing in: $err');
+      });
+      googleSignIn.signInSilently(suppressErrors: false).then((account) {
+        handleSignIn(account);
+        _navigationService.navigateTo(HomeViewRoute);
+      }).catchError((err) {
+      print('Error signing in: $err');
+      });
+      
+  }
+
+
+  bool isSignIn = false;
+
+
+  bool isAuth = false;
+
+  handleSignIn(GoogleSignInAccount account) {
+    if (account != null) {
+      setState(() {
+        isAuth = true;
+      });
+    } else {
+      setState(() {
+        isAuth = false;
+      });
+    }
+  }
+
+  Future<void> googleSignout() async {
+    await _auth.signOut().then((onValue) {
+      googleSignIn.signOut();
+      setState(() {
+        isSignIn = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +162,8 @@ class _LoginViewState extends State<LoginView> {
                                   Buttons.Google,
                                   text: "Sign In with Google",
                                   onPressed: () {
-                                    handleSignIn();
+                                    // Todo
+                                    googleSignIn.signIn();
                                   },
                                 ),
                               ),
@@ -170,40 +222,5 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ));
-  }
-
-  bool isSignIn = false;
-
-  Future<void> handleSignIn() async {
-    try {
-      GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-      GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      AuthCredential credential = GoogleAuthProvider.getCredential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken);
-
-      AuthResult result = (await _auth.signInWithCredential(credential));
-
-      _user = result.user;
-
-      setState(() {
-        isSignIn = true;
-        showSpinner = false;
-        _navigationService.navigateTo(HomeViewRoute);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> googleSignout() async {
-    await _auth.signOut().then((onValue) {
-      _googleSignIn.signOut();
-      setState(() {
-        isSignIn = true;
-      });
-    });
   }
 }

@@ -4,12 +4,16 @@ import 'package:buddyappfirebase/ui/views/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+
+
 class StartView extends StatefulWidget {
   @override
   _StartViewState createState() => _StartViewState();
 }
 
 class _StartViewState extends State<StartView> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
