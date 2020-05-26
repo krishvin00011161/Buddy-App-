@@ -53,7 +53,7 @@ dependencies:
 
   intl: ^0.15.7
 
-  flutter_local_notifications: 1.4.0
+  flutter_local_notifications: ^1.4.0
 
   photo_view: ^0.5.0
 
