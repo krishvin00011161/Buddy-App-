@@ -1,7 +1,7 @@
 import 'package:buddyappfirebase/login/ui/views/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/welcome_view.dart';
 import 'package:flutter/material.dart';
-import 'package:buddyappfirebase/constants/route_names.dart';
+import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:buddyappfirebase/login/ui/views/signup_view.dart';
 

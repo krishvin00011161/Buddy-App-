@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/models/dialog_models.dart';
-import 'package:buddyappfirebase/services/dialog_service.dart';
+import 'package:buddyappfirebase/login/models/dialog_models.dart';
+import 'package:buddyappfirebase/login/services/dialog_service.dart';
 
 class DialogManager extends StatefulWidget {
   final Widget child;

@@ -1,5 +1,5 @@
-import 'package:buddyappfirebase/models/emailuser.dart';
-import 'package:buddyappfirebase/services/firestoreService.dart';
+import 'package:buddyappfirebase/login/models/emailuser.dart';
+import 'package:buddyappfirebase/login/services/firestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 

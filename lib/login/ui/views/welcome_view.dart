@@ -1,5 +1,5 @@
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/home_view.dart';
 import 'package:flutter/material.dart';

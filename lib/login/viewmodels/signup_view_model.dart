@@ -1,8 +1,8 @@
 import 'package:buddyappfirebase/chat/models/user_model.dart';
-import 'package:buddyappfirebase/constants/route_names.dart';
-import 'package:buddyappfirebase/services/authentication_service.dart';
-import 'package:buddyappfirebase/services/dialog_service.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/constants/route_names.dart';
+import 'package:buddyappfirebase/login/services/authentication_service.dart';
+import 'package:buddyappfirebase/login/services/dialog_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';

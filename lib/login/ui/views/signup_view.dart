@@ -9,7 +9,7 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:buddyappfirebase/login/viewmodels/signup_view_model.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 

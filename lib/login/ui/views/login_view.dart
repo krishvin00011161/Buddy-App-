@@ -10,9 +10,9 @@ import 'package:buddyappfirebase/login/viewmodels/login_view_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/constants/route_names.dart';
+import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 

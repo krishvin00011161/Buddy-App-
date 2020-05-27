@@ -1,9 +1,9 @@
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
-import 'package:buddyappfirebase/services/dialog_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/services/dialog_service.dart';
 import 'login/ui/router.dart';
-import 'managers/dialog_manager.dart';
+import 'login/managers/dialog_manager.dart';
 import 'login/locator.dart';
 import 'package:flutter/cupertino.dart';
 

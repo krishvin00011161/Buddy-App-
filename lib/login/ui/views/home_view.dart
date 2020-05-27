@@ -1,5 +1,5 @@
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 

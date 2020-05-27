@@ -7,39 +7,10 @@
     <list default="true" id="a9532f68-7351-4ebb-9db5-59a6d100e066" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/constants/route_names.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/constants/route_names.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/locator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/locator.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/managers/dialog_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/managers/dialog_manager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/dialog_models.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/models/dialog_models.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/emailuser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/models/emailuser.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/models/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/authentication_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/services/authentication_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/base_auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/services/base_auth.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/dialog_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/services/dialog_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/firestoreService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/services/firestoreService.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/navigation_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/services/navigation_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/router.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/router.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/shared/app_colors.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/shared/app_colors.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/shared/shared_styles.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/shared/shared_styles.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/shared/ui_helpers.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/shared/ui_helpers.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/base_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/base_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/home_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/home_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/login_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/login_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/password_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/password_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/signup_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/signup_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/start_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/start_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/views/welcome_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/views/welcome_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/busy_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/busy_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/busy_overlay.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/busy_overlay.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/input_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/input_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/note_text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/note_text.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/route_transition.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/route_transition.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/text_link.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/ui/widgets/text_link.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/viewmodels/base_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/viewmodels/base_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/viewmodels/login_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/viewmodels/login_view_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/viewmodels/password_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/viewmodels/password_view_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/viewmodels/signup_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/login/viewmodels/signup_view_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,11 +24,14 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_6_API_28" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="672">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="189">
+              <caret line="9" column="13" lean-forward="true" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -110,8 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pubspec.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1176">
-              <caret line="56" selection-start-line="56" selection-end-line="56" />
+            <state relative-caret-position="1323">
+              <caret line="63" column="68" lean-forward="true" selection-start-line="63" selection-start-column="68" selection-end-line="63" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -119,17 +93,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
+            <state relative-caret-position="840">
               <caret line="40" column="3" selection-start-line="40" selection-start-column="3" selection-end-line="40" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/login/managers/dialog_manager.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="168">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -190,9 +164,9 @@
         <option value="$PROJECT_DIR$/lib/chat/widgets/recent_chats.dart" />
         <option value="$PROJECT_DIR$/lib/chat/widgets/favorite_contacts.dart" />
         <option value="$PROJECT_DIR$/lib/chat/test/chat.dart" />
-        <option value="$PROJECT_DIR$/lib/main.dart" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/android/app/build.gradle" />
+        <option value="$PROJECT_DIR$/lib/main.dart" />
       </list>
     </option>
   </component>
@@ -215,10 +189,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="411" />
+    <option name="x" value="269" />
     <option name="y" value="23" />
     <option name="width" value="1171" />
-    <option name="height" value="1031" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -228,9 +202,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -276,6 +249,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -351,7 +325,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="411" y="23" width="1171" height="1031" extended-state="0" />
+    <frame x="269" y="23" width="1171" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
@@ -370,7 +344,7 @@
       <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.49955714" weight="0.3290735" />
       <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.50044286" side_tool="true" weight="0.3290735" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32953367" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49955714" weight="0.20234291" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49955714" visible="true" weight="0.20127389" />
       <window_info anchor="bottom" id="Logcat" order="8" weight="0.3290735" />
       <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="10" />
@@ -757,13 +731,6 @@
     <entry file="file://$PROJECT_DIR$/assets/images/mimi4.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/main.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/chat/test/chat.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3528">
@@ -801,16 +768,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1176">
-          <caret line="56" selection-start-line="56" selection-end-line="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/android/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
+        <state relative-caret-position="840">
           <caret line="40" column="3" selection-start-line="40" selection-start-column="3" selection-end-line="40" selection-end-column="3" />
         </state>
       </provider>
@@ -818,9 +778,26 @@
     <entry file="file://$PROJECT_DIR$/lib/login/managers/dialog_manager.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1323">
+          <caret line="63" column="68" lean-forward="true" selection-start-line="63" selection-start-column="68" selection-end-line="63" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="13" lean-forward="true" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
