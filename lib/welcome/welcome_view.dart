@@ -1,3 +1,4 @@
+import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
@@ -13,6 +14,7 @@ class WelcomeView extends StatefulWidget {
 }
 
 class _WelcomeViewState extends State<WelcomeView> {
+  final NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +122,10 @@ class _WelcomeViewState extends State<WelcomeView> {
   }
 
   List<Widget> pages() {
-    bool isTeacher = false;
+    bool teacherPressed = false;
+    bool studentPressed = false;
     List<Widget> pages = [
-      Container(
+      Container( // first page
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -149,6 +152,85 @@ class _WelcomeViewState extends State<WelcomeView> {
           ],
         ),
       ),
+      Container( // 2nd page
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+        
+            Image(
+              image: AssetImage("assets/images/setup.jpg"),
+              width: 300,
+            ),
+            Text(
+              "Setup and customization",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            verticalSpaceSmall,
+            Text(
+              "Set up your experience to meet your \n requirements your experiences",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
+            Divider(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+            ButtonTheme( // Teacher Button
+                minWidth: 130.0,
+                height: 50.0,
+                child: RaisedButton(
+                child: Text("Teacher"),
+                shape: RoundedRectangleBorder(
+                  borderRadius:  BorderRadius.circular(5.0),
+                  side: BorderSide(color: Colors.blueAccent)
+                  
+                ),
+                
+                onPressed: () {
+                  setState(() {
+                    teacherPressed = true;
+                    studentPressed = false;
+                    // Todo
+                    _navigationService.navigateTo(setUpViewRoute);
+                  });
+                },
+                color: teacherPressed ? Colors.blue : Colors.white,
+              ),
+            ),
+            ButtonTheme( // Student Button
+                minWidth: 130.0,
+                height: 50.0,
+                child: RaisedButton(
+                child: Text("Student"),
+                shape: RoundedRectangleBorder(
+                  borderRadius:  BorderRadius.circular(5.0),
+                  side: BorderSide(color: Colors.blueAccent), 
+                ),
+                color: studentPressed ? Colors.blue : Colors.white,
+                onPressed: () {
+                  setState(() {
+                    teacherPressed = false;
+                    studentPressed = true;
+                  });
+                },
+              ),
+            ),
+              ],
+            ),
+            
+          ],
+        ),
+      ),
+      
       Container(
         color: Colors.white,
         child: Column(
@@ -177,21 +259,35 @@ class _WelcomeViewState extends State<WelcomeView> {
         ),
       ),
     ];
-    if (isTeacher) {
+    if (teacherPressed) {
       pages = [
         Container(
-          child: Stack(
-            children: <Widget>[
-              RaisedButton(
-                child: Text("add page"),
-                onPressed: () {
-                  print("lol");
-                },
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage("assets/images/explore.jpg"),
+              width: 300,
+            ),
+            Text(
+              "Teacher setup",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-            ],
-          ),
-          color: Colors.green,
+            ),
+            verticalSpaceSmall,
+            Text(
+              "Explore and Connect whatever\nyour heart desires",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
+          ],
         ),
+      ),
       ];
     } else {
       pages.addAll([

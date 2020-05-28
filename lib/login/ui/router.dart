@@ -1,6 +1,7 @@
 import 'package:buddyappfirebase/home/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
-import 'package:buddyappfirebase/login/ui/views/welcome_view.dart';
+import 'package:buddyappfirebase/welcome/setup_class.dart';
+import 'package:buddyappfirebase/welcome/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
@@ -34,6 +35,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: StartView(),
       );
+      case setUpViewRoute:
+        return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: Setup(),
+        );
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

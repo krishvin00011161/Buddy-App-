@@ -15,10 +15,7 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class LoginView extends StatefulWidget {
   @override

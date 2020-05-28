@@ -1,10 +1,5 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
 import 'package:buddyappfirebase/home/MainHomeView.dart';
-import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/login/services/navigation_service.dart';
-import 'package:buddyappfirebase/login/ui/views/start_view.dart';
-import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
-import 'package:buddyappfirebase/chat/screens/home_screen.dart';
 import 'package:buddyappfirebase/message/message.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -24,7 +19,6 @@ class _HomeViewState extends State<HomeView> {
   // FirebaseUser _user;
 
   final GoogleSignIn googleSignIn = new GoogleSignIn();
-  final NavigationService _navigationService = locator<NavigationService>();
   PageController pageController;
   int pageIndex = 0;
 

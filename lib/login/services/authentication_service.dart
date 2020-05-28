@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthenticationService { // Class that service sign in/up forget password
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final DateTime timestamp = DateTime.now();
 
   Future loginWithEmail({
     @required String email,
@@ -35,6 +36,7 @@ class AuthenticationService { // Class that service sign in/up forget password
       await FirestoreService.createUser(EmailUser(
         id: authResult.user.uid,
         email: email,
+        
       ));
       return authResult.user != null;
     } catch (e) {

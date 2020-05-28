@@ -6,7 +6,7 @@ class User { // User used when creating new credential in firebase
   final String email;
   final String photoUrl;
   final String displayName;
-  final String bio;
+  final String fullName;
 
   User({
     this.id,
@@ -14,7 +14,7 @@ class User { // User used when creating new credential in firebase
     this.email,
     this.photoUrl,
     this.displayName,
-    this.bio,
+    this.fullName,
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -24,7 +24,7 @@ class User { // User used when creating new credential in firebase
       username: doc['username'],
       photoUrl: doc['photoUrl'],
       displayName: doc['displayName'],
-      bio: doc['bio'],
+      fullName: doc['fullName'],
     );
   }
 }
