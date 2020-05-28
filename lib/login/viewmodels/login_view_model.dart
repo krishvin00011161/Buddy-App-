@@ -3,6 +3,7 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/authentication_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import 'base_model.dart';
@@ -13,6 +14,7 @@ class LoginViewModel extends BaseModel {
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  // Todo check if the user is authenticated
 
   // Requiring Email and Password
   Future login({

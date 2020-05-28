@@ -1,11 +1,13 @@
-import 'package:buddyappfirebase/login/ui/views/home_view.dart';
+import 'package:buddyappfirebase/home/home_view.dart';
+import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/login/ui/views/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:buddyappfirebase/login/ui/views/signup_view.dart';
 
-Route<dynamic> generateRoute(RouteSettings settings) { // Generating routes it is used by navigation service
+Route<dynamic> generateRoute(RouteSettings settings) {
+  // Generating routes it is used by navigation service
   switch (settings.name) {
     case LoginViewRoute:
       return _getPageRoute(
@@ -26,6 +28,11 @@ Route<dynamic> generateRoute(RouteSettings settings) { // Generating routes it i
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: WelcomeView(),
+      );
+    case StartViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: StartView(),
       );
     default:
       return MaterialPageRoute(

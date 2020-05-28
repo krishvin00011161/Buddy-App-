@@ -15,6 +15,10 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -25,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final NavigationService _navigationService = locator<NavigationService>();
-  LoginViewModel model = new LoginViewModel();
+  static bool auth = false;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
@@ -34,8 +38,9 @@ class _LoginViewState extends State<LoginView> {
   final usersRef = Firestore.instance.collection('users');
   final DateTime timestamp = DateTime.now();
   User currentUser;
-
   bool showSpinner = false; // A spinner that shows progress of login
+  String email = "";
+  String password = "";
 
   @override
   void initState() {
@@ -52,6 +57,10 @@ class _LoginViewState extends State<LoginView> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
+  }
+
+  handleLoginInSecret() async {
+    auth = true;
   }
 
   bool isSignIn = false;
@@ -208,6 +217,10 @@ class _LoginViewState extends State<LoginView> {
                                 email: emailController.text,
                                 password: passwordController.text,
                               );
+                              setState(() {
+                                auth = true;
+                              });
+                              print(emailController.text);
                             } catch (e) {
                               print(e);
                             }

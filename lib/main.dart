@@ -1,4 +1,7 @@
+import 'package:buddyappfirebase/home/home_view.dart';
+import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:buddyappfirebase/login/viewmodels/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
@@ -15,6 +18,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  LoginView auth = new LoginView();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +38,9 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: StartView(), //SignUpView
+      home: (1 < 3)
+          ? HomeView()
+          : LoginView(), // Checks if the user is logged in, if not make sure to navigate to Login
       onGenerateRoute: generateRoute,
     );
   }
