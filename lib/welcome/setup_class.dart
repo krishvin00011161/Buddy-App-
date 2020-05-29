@@ -1,9 +1,6 @@
-import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/login/ui/views/start_view.dart';
-import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 import 'package:flutter/material.dart';
 class Setup extends StatefulWidget {
   @override

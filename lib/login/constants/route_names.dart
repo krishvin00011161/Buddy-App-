@@ -6,4 +6,4 @@ const String HomeViewRoute = "HomeView";
 const String ForgetRoute = "PasswordView";
 const String StartViewRoute = "StartView";
 const String WelcomeViewRoute = "WelcomeView";
-const String setUpViewRoute = "Setup";
+const String SetUpViewRoute = "Setup";

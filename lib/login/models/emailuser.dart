@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class EmailUser { // Class for Email user when creating new user throw firebase
 

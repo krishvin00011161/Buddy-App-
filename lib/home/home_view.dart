@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatefulWidget { // The main place, where you put all your views together.
   const HomeView({Key key}) : super(key: key);
 
   @override

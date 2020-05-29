@@ -1,6 +1,5 @@
-import 'package:buddyappfirebase/home/home_view.dart';
+
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
-import 'package:buddyappfirebase/welcome/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
@@ -8,6 +7,8 @@ import 'login/ui/router.dart';
 import 'login/managers/dialog_manager.dart';
 import 'login/locator.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'login/ui/views/start_view.dart';
 
 void main() {
   // Register all the models and services before the app starts
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
       home: 
       // (1 < 3)
       //     ? HomeView()
-          WelcomeView(), // Checks if the user is logged in, if not make sure to navigate to Login
+      
+          StartView(), // Checks if the user is logged in, if not make sure to navigate to Login
       onGenerateRoute: generateRoute,
     );
   }

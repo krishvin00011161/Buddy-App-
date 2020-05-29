@@ -1,10 +1,10 @@
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
-import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
+import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key key}) : super(key: key);
@@ -15,168 +15,161 @@ class WelcomeView extends StatefulWidget {
 
 class _WelcomeViewState extends State<WelcomeView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  PageController _pageController;
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    _pageController = PageController(
+      initialPage: 0
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: <Widget>[
-            PageView(
-              //physics:new NeverScrollableScrollPhysics(),
-              controller: pageController,
-              onPageChanged: (index) {
-                pageNum = index;
-                pageIndicators();
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20, top: 20),
+            child: GestureDetector(
+              onTap: () {
+                _navigationService.navigateTo(HomeViewRoute);
               },
-              children: pages(),
-//              <Widget>[
-//                Container(
-//                  color: Colors.red,
-//                ),
-//
-//                for(int i = 0; i < 4; i++){
-//
-//                },
-//              ],
+                child: Text('Skip', style: TextStyle(
+                color: ColorSys.gray,
+                fontSize: 18,
+                fontWeight: FontWeight.w400
+              ),),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FlatButton(
-                      child: Text(
-                        "Back",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      onPressed: () {
-                        backPage();
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                      ),
-                    ),
-                    Row(
-                      children: pageIndicators(),
-                    ),
-                    FlatButton(
-                      child: Text(
-                        "$_next",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      onPressed: () {
-                        nextPage();
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                      ),
-                    ),
-                  ],
-                ),
-                verticalSpaceLarge,
-              ],
+          )
+        ],
+      ),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          PageView(
+            onPageChanged: (int page) {
+              setState(() {
+                currentIndex = page;
+              });
+            },
+            controller: _pageController,
+            children: <Widget>[
+              makePage(
+                image: 'assets/images/connect.jpg',
+                title: Strings.stepOneTitle,
+                content: Strings.stepOneContent
+              ),
+              makeSetUpPage(
+                image: 'assets/images/setup.jpg',
+                title: Strings.stepTwoTitle,
+                content: Strings.stepTwoContent
+              ),
+              makePage(
+                image: 'assets/images/explore.jpg',
+                title: Strings.stepThreeTitle,
+                content: Strings.stepThreeContent
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 60),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildIndicator(),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
 
-  int pageNum = 0;
-
-  PageController pageController = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
-
-  void backPage() {
-    setState(() {
-      pageController.animateToPage(pageNum - 1,
-          duration: Duration(milliseconds: 500), curve: Curves.ease);
-    });
-  }
-
-  void nextPage() {
-    setState(() {
-      if (pageNum == 2) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => HomeView(),
-          ),
-        );
-      } else {
-        pageController.animateToPage(pageNum + 1,
-            duration: Duration(milliseconds: 500), curve: Curves.ease);
-      }
-    });
-  }
-
-  List<Widget> pages() {
-    bool teacherPressed = false;
-    bool studentPressed = false;
-    List<Widget> pages = [
-      Container( // first page
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              image: AssetImage("assets/images/connect.jpg"),
-              width: 300,
-            ),
-            Text(
-              "Connect with friends",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+  Widget makePage({image, title, content, reverse = false}) {
+    return Container(
+      padding: EdgeInsets.only(left: 50, right: 50, bottom: 60),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          !reverse ? 
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(image),
               ),
-            ),
-            verticalSpaceSmall,
-            Text(
-              "Lets connect to discuss your study\nPlans and your meetings",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
+              SizedBox(height: 30,),
+            ],
+          ) : SizedBox(),
+          Text(title, style: TextStyle(
+            color: ColorSys.primary,
+            fontSize: 25,
+            fontWeight: FontWeight.bold
+          ),),
+          SizedBox(height: 20,),
+          Text(content, textAlign: TextAlign.center, style: TextStyle(
+            color: ColorSys.gray,
+            fontSize: 20,
+            fontWeight: FontWeight.w400
+          ),),
+          reverse ? 
+          Column(
+            children: <Widget>[
+              SizedBox(height: 30,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(image),
               ),
-            ),
-          ],
-        ),
+            ],
+          ) : SizedBox(),
+        ],
       ),
-      Container( // 2nd page
+    );
+  }
+
+  Widget makeSetUpPage({image, title, content}) {
+    bool isTeacherPressed = false;
+    bool isStudentPressed = false;
+    return Container(
+      padding: EdgeInsets.only(left: 50, right: 50, bottom: 60),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(image),
+              ),
+              SizedBox(height: 30,),
+            ],
+          ),
+          Text(title, style: TextStyle(
+            color: ColorSys.primary,
+            fontSize: 25,
+            fontWeight: FontWeight.bold
+          ),),
+          SizedBox(height: 20,),
+          Text(content, textAlign: TextAlign.center, style: TextStyle(
+            color: ColorSys.gray,
+            fontSize: 20,
+            fontWeight: FontWeight.w400
+          ),),
+        Container( // 2nd page
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-        
-            Image(
-              image: AssetImage("assets/images/setup.jpg"),
-              width: 300,
-            ),
-            Text(
-              "Setup and customization",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            verticalSpaceSmall,
-            Text(
-              "Set up your experience to meet your \n requirements your experiences",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-              ),
-            ),
             Divider(
               height: 50.0,
             ),
@@ -184,26 +177,35 @@ class _WelcomeViewState extends State<WelcomeView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               // mainAxisSize: MainAxisSize.min,
               children: [
-            ButtonTheme( // Teacher Button
-                minWidth: 130.0,
-                height: 50.0,
-                child: RaisedButton(
-                child: Text("Teacher"),
-                shape: RoundedRectangleBorder(
-                  borderRadius:  BorderRadius.circular(5.0),
-                  side: BorderSide(color: Colors.blueAccent)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isTeacherPressed = true;
+                  isStudentPressed = false;
+                });
+              },
+              child: ButtonTheme( // Teacher Button
+                  minWidth: 130.0,
+                  height: 50.0,
+                  child: RaisedButton(
+                  child: Text("Teacher"),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:  BorderRadius.circular(5.0),
+                    side: BorderSide(color: Colors.blueAccent)
+                    
+                  ),
                   
+                  onPressed: () {
+                    setState(() {
+                      isTeacherPressed = true;
+                      isStudentPressed = false;
+                      // // Todo
+                      // _navigationService.navigateTo(setUpViewRoute);
+                    });
+                    print(isTeacherPressed);
+                  },
+                 color: isTeacherPressed ? Colors.red : Colors.white,
                 ),
-                
-                onPressed: () {
-                  setState(() {
-                    teacherPressed = true;
-                    studentPressed = false;
-                    // Todo
-                    _navigationService.navigateTo(setUpViewRoute);
-                  });
-                },
-                color: teacherPressed ? Colors.blue : Colors.white,
               ),
             ),
             ButtonTheme( // Student Button
@@ -215,12 +217,14 @@ class _WelcomeViewState extends State<WelcomeView> {
                   borderRadius:  BorderRadius.circular(5.0),
                   side: BorderSide(color: Colors.blueAccent), 
                 ),
-                color: studentPressed ? Colors.blue : Colors.white,
+                color: isStudentPressed ? Colors.blue : Colors.white,
                 onPressed: () {
                   setState(() {
-                    teacherPressed = false;
-                    studentPressed = true;
+                    isTeacherPressed = false;
+                    isStudentPressed = true;
+                    
                   });
+                  _navigationService.navigateTo(SetUpViewRoute);
                 },
               ),
             ),
@@ -230,130 +234,35 @@ class _WelcomeViewState extends State<WelcomeView> {
           ],
         ),
       ),
-      
-      Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              image: AssetImage("assets/images/explore.jpg"),
-              width: 300,
-            ),
-            Text(
-              "Explore",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            verticalSpaceSmall,
-            Text(
-              "Explore and Connect whatever\nyour heart desires",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
-    ];
-    if (teacherPressed) {
-      pages = [
-        Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              image: AssetImage("assets/images/explore.jpg"),
-              width: 300,
-            ),
-            Text(
-              "Teacher setup",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            verticalSpaceSmall,
-            Text(
-              "Explore and Connect whatever\nyour heart desires",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-              ),
-            ),
-          ],
-        ),
-      ),
-      ];
-    } else {
-      pages.addAll([
-        Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(
-                image: AssetImage("assets/images/setup.jpg"),
-                width: 300,
-              )
-            ],
-          ),
-        ),
-      ]);
-    }
-    return pages;
+    );
   }
 
-  String _next = "Next";
-
-  List<Widget> pageIndicators() {
-    List<Widget> indicators = [
-      Container(
-        width: 10.0,
-        height: 10.0,
-        decoration: new BoxDecoration(
-          color: pageNum == 0 ? Colors.blue : Colors.grey,
-          shape: BoxShape.circle,
-        ),
+  Widget _indicator(bool isActive) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: 6,
+      width: isActive ? 30 : 6,
+      margin: EdgeInsets.only(right: 5),
+      decoration: BoxDecoration(
+        color: ColorSys.secoundry,
+        borderRadius: BorderRadius.circular(5)
       ),
+    );
+  }
 
-      Container(
-        width: 10.0,
-        height: 10.0,
-        decoration: new BoxDecoration(
-          color: pageNum == 1 ? Colors.blue : Colors.grey,
-          shape: BoxShape.circle,
-        ),
-      ),
-
-      Container(
-        width: 10.0,
-        height: 10.0,
-        decoration: new BoxDecoration(
-          color: pageNum == 2 ? Colors.blue : Colors.grey,
-          shape: BoxShape.circle,
-        ),
-      ),
-
-//      Container(
-//        width: 10.0,
-//        height: 10.0,
-//        decoration: new BoxDecoration(
-//          color: pageNum == 3 ? Colors.blue : Colors.grey,
-//          shape: BoxShape.circle,
-//        ),
-//      ),
-    ];
-    if (pageNum == 2) {
-      _next = "Finish";
-    } else {
-      _next = "Next";
+  List<Widget> _buildIndicator() {
+    List<Widget> indicators = [];
+    for (int i = 0; i<3; i++) {
+      if (currentIndex == i) {
+        indicators.add(_indicator(true));
+      } else {
+        indicators.add(_indicator(false));
+      }
     }
-    setState(() {});
+
     return indicators;
   }
+
 }

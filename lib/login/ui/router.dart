@@ -35,7 +35,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: StartView(),
       );
-      case setUpViewRoute:
+      case SetUpViewRoute:
         return _getPageRoute(
           routeName: settings.name,
           viewToShow: Setup(),

@@ -1,3 +1,7 @@
+import 'package:buddyappfirebase/Notifications/notification.dart';
+import 'package:buddyappfirebase/Profile/profile.dart';
+import 'package:buddyappfirebase/Requests/requests.dart';
+import 'package:buddyappfirebase/Settings/settings.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
@@ -26,9 +30,11 @@ class _MainHomeViewState extends State<MainHomeView> {
                 backgroundImage: NetworkImage(
                   "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png",
                 ),
+                
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
+                
               },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
@@ -93,6 +99,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                 ),
                 onTap: () {
                   // Navigator push
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileView()));
                 },
               ),
               Divider(
@@ -109,6 +116,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                 ),
                 onTap: () {
                   // Navigator push
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationView()));
                 },
               ),
               Divider(
@@ -125,6 +133,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                 ),
                 onTap: () {
                   // Navigator push
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => RequestsView()));
                 },
               ),
               Divider(
@@ -141,6 +150,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                 ),
                 onTap: () {
                   // Navigator push
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsView()));
                 },
               ),
               Divider(
