@@ -1,3 +1,5 @@
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -5,7 +7,13 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        home: Scaffold(body: ProfilePage()));
+        home: Scaffold(
+          appBar: CustomAppBar(),
+          drawer: CustomDrawers(),
+          body: ProfilePage(),
+          
+
+          ));
   }
 }
 
@@ -104,6 +112,10 @@ class ProfilePage extends StatelessWidget {
                 ],
               )
           )
-    ]);
+
+    ]
+    
+    );
+    
   }
 }

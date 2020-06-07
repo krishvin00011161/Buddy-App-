@@ -1,3 +1,5 @@
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
@@ -11,11 +13,8 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Setting"
-        ),
-      ),
+      appBar: CustomAppBar(),
+      drawer: CustomDrawers(),
     );
   }
 }

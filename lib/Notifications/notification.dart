@@ -1,3 +1,5 @@
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 
 class NotificationView extends StatefulWidget {
@@ -11,11 +13,8 @@ class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Notification"
-        ),
-      ),
+      appBar: CustomAppBar(),
+      drawer: CustomDrawers(),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/chat/widgets/category_selector.dart';
 import 'package:buddyappfirebase/chat/widgets/favorite_contacts.dart';
@@ -14,32 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-        leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundImage: AssetImage(
-              favorites[1].imageUrl,
-            ),
-          ),
-        ),
-        title: Text(
-          'Chats',
-          style: TextStyle(
-            fontSize: 28.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(),
+      drawer: CustomDrawers(),
       body: Column(
         children: <Widget>[
           CategorySelector(),

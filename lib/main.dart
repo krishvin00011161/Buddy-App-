@@ -1,4 +1,5 @@
 
+import 'package:buddyappfirebase/home/screens/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
       // (1 < 3)
       //     ? HomeView()
       
-          StartView(), // Checks if the user is logged in, if not make sure to navigate to Login
+          HomeView(), // Checks if the user is logged in, if not make sure to navigate to Login
       onGenerateRoute: generateRoute,
     );
   }

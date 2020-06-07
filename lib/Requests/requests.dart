@@ -1,3 +1,5 @@
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 
 class RequestsView extends StatefulWidget {
@@ -11,11 +13,8 @@ class _RequestsViewState extends State<RequestsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Profile"
-        ),
-      ),
+      appBar: CustomAppBar(),
+      drawer: CustomDrawers(),
     );
   }
 }
