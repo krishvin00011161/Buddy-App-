@@ -27,6 +27,7 @@ class AuthenticationService { // Class that service sign in/up forget password
   Future signUpWithEmail({
     @required String email,
     @required String password,
+    @required String fullName,
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -36,7 +37,7 @@ class AuthenticationService { // Class that service sign in/up forget password
       await FirestoreService.createUser(EmailUser(
         id: authResult.user.uid,
         email: email,
-        
+        fullName: fullName,
       ));
       return authResult.user != null;
     } catch (e) {

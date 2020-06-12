@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
+import 'package:buddyappfirebase/login/services/firestoreService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key key}) : super(key: key);
@@ -40,19 +44,6 @@ class _WelcomeViewState extends State<WelcomeView> {
         elevation: 0,
         backgroundColor: Colors.white,
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20, top: 20),
-            child: GestureDetector(
-              onTap: () {
-                _navigationService.navigateTo(HomeViewRoute);
-              },
-                child: Text('Skip', style: TextStyle(
-                color: ColorSys.gray,
-                fontSize: 18,
-                fontWeight: FontWeight.w400
-              ),),
-            ),
-          )
         ],
       ),
       body: Stack(
@@ -71,15 +62,15 @@ class _WelcomeViewState extends State<WelcomeView> {
                 title: Strings.stepOneTitle,
                 content: Strings.stepOneContent
               ),
-              makeSetUpPage(
-                image: 'assets/images/setup.jpg',
-                title: Strings.stepTwoTitle,
-                content: Strings.stepTwoContent
-              ),
               makePage(
                 image: 'assets/images/explore.jpg',
                 title: Strings.stepThreeTitle,
                 content: Strings.stepThreeContent
+              ),
+              makeSetUpPage(
+                image: 'assets/images/setup.jpg',
+                title: Strings.stepTwoTitle,
+                content: Strings.stepTwoContent
               ),
             ],
           ),
@@ -101,7 +92,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          !reverse ? 
+          !reverse ?
           Column(
             children: <Widget>[
               Padding(
@@ -122,7 +113,7 @@ class _WelcomeViewState extends State<WelcomeView> {
             fontSize: 20,
             fontWeight: FontWeight.w400
           ),),
-          reverse ? 
+          reverse ?
           Column(
             children: <Widget>[
               SizedBox(height: 30,),
@@ -171,7 +162,8 @@ class _WelcomeViewState extends State<WelcomeView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Divider(
-              height: 50.0,
+              color: Colors.transparent,
+              height: 20.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -192,15 +184,15 @@ class _WelcomeViewState extends State<WelcomeView> {
                   shape: RoundedRectangleBorder(
                     borderRadius:  BorderRadius.circular(5.0),
                     side: BorderSide(color: Colors.blueAccent)
-                    
+
                   ),
-                  
+
                   onPressed: () {
                     setState(() {
                       isTeacherPressed = true;
                       isStudentPressed = false;
                       // // Todo
-                      // _navigationService.navigateTo(setUpViewRoute);
+                      _navigationService.navigateTo(SetUpViewRoute);
                     });
                     print(isTeacherPressed);
                   },
@@ -215,22 +207,23 @@ class _WelcomeViewState extends State<WelcomeView> {
                 child: Text("Student"),
                 shape: RoundedRectangleBorder(
                   borderRadius:  BorderRadius.circular(5.0),
-                  side: BorderSide(color: Colors.blueAccent), 
+                  side: BorderSide(color: Colors.blueAccent),
                 ),
                 color: isStudentPressed ? Colors.blue : Colors.white,
                 onPressed: () {
+                  // sets user role
+                  Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'student'});
                   setState(() {
                     isTeacherPressed = false;
                     isStudentPressed = true;
-                    
                   });
-                  _navigationService.navigateTo(SetUpViewRoute);
+                  _navigationService.navigateTo(HomeViewRoute);
                 },
               ),
             ),
               ],
             ),
-            
+
           ],
         ),
       ),
@@ -246,7 +239,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       width: isActive ? 30 : 6,
       margin: EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
-        color: ColorSys.secoundry,
+        color: Colors.blueAccent,
         borderRadius: BorderRadius.circular(5)
       ),
     );

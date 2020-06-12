@@ -19,6 +19,8 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
 
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -62,6 +64,20 @@ class _SignUpViewState extends State<SignUpView> {
                 },
               ),
               verticalSpaceLarge,
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'FIRST NAME',
+                ),
+                controller: firstNameController,
+              ),
+              verticalSpaceSmall,
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'LAST NAME',
+                ),
+                controller: lastNameController,
+              ),
+              verticalSpaceSmall,
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'EMAIL',
@@ -114,6 +130,7 @@ class _SignUpViewState extends State<SignUpView> {
                       model.signUp(
                         email: emailController.text,
                         password: passwordController.text,
+                        fullName: firstNameController.text + ' ' + lastNameController.text,
                       );
                       //createNormalUserInFirestore();
                     },

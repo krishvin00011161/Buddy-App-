@@ -1,4 +1,4 @@
-
+import 'dart:collection';
 
 class EmailUser { // Class for Email user when creating new user throw firebase
 
@@ -8,7 +8,8 @@ class EmailUser { // Class for Email user when creating new user throw firebase
   final String fullName;
   final String email;
   final String userRole;
-  
+  final HashMap<String, String> classes = HashMap();
+
 
   EmailUser({this.id, this.fullName, this.email, this.userRole});
   EmailUser.fromData(Map<String, dynamic> data)
@@ -23,6 +24,7 @@ class EmailUser { // Class for Email user when creating new user throw firebase
       'email': email,
       'userRole': userRole,
       'timestamp' : timestamp,
+      'classes' : classes,
     };
   }
 }
