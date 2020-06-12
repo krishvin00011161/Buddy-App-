@@ -61,6 +61,8 @@ dependencies:
 
   autocomplete_textfield: ^1.7.3
 
+  link: ^1.0.0
+
 
 
 
