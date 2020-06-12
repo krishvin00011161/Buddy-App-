@@ -63,3 +63,16 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+
+# VVVV Don't commit any of this stuff or else Aaron will be mad! Got it? VVVV 
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pubspec.lock
+.DS_Store
+*.iml
+*.ipr
+*.iws
+.idea/
+.dart_tool/
