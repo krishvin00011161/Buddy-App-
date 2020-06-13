@@ -1,7 +1,10 @@
 import 'package:buddyappfirebase/login/models/emailuser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirestoreService { // Service the creating users in firebase
+// Service the creating users in firebase
+// Dk
+
+class FirestoreService { 
   static final CollectionReference usersCollectionReference =
       Firestore.instance.collection("users");
   static String id;

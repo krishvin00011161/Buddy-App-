@@ -5,6 +5,8 @@ import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 
 import 'note_text.dart';
 
+// Input field widget can use
+
 class InputField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType textInputType;

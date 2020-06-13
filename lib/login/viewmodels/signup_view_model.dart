@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 import 'base_model.dart';
 
+// Any Backend that goes into Signup
+// It catches any errors
+// Dk
+
 class SignUpViewModel extends BaseModel {
   // Takes care of the backend of sign up
   final AuthenticationService _authenticationService =

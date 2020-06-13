@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/chat/widgets/category_selector.dart';
 import 'package:buddyappfirebase/chat/widgets/favorite_contacts.dart';
 import 'package:buddyappfirebase/chat/widgets/recent_chats.dart';
-import 'package:buddyappfirebase/chat/models/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

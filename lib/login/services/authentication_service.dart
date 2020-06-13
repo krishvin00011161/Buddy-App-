@@ -3,12 +3,16 @@ import 'package:buddyappfirebase/login/services/firestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class AuthenticationService { // Class that service sign in/up forget password
+class AuthenticationService { 
+  // Class that service sign in/up forget password
+  // Dk
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final DateTime timestamp = DateTime.now();
 
-  Future loginWithEmail({
+  Future loginWithEmail({ 
+    // This is called like Model.login(email, password)
+    // It is responsible of doing backend work when the login With Email button is pressed
     @required String email,
     @required String password,
   }) async {
@@ -25,6 +29,8 @@ class AuthenticationService { // Class that service sign in/up forget password
   }
 
   Future signUpWithEmail({
+    // This is called like Model.signUpWIthEmail(email, password)
+    // It is responsible of doing backend work when the login With Email button is pressed
     @required String email,
     @required String password,
     @required String fullName,

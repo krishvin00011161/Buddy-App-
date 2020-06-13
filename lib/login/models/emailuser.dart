@@ -1,6 +1,8 @@
 import 'dart:collection';
 
-class EmailUser { // Class for Email user when creating new user throw firebase
+class EmailUser { 
+  // Class for Email user when creating new user throw firebase
+  
 
   final DateTime timestamp = DateTime.now();
 

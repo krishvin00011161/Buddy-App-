@@ -7,6 +7,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +15,6 @@ class _ExplorePageState extends State<ExplorePage> {
         title: Text("Explore page"),
       ),
       body: ListView(
-
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(11.5),
@@ -42,17 +42,6 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
               ],
             ),
-          );
+      );
   }
 }
-// class ExplorePage extends StatefulWidget {
-//   @override
-//   _ExplorePageState createState() => _ExplorePageState();
-// }
-
-// class _ExplorePageState extends State<ExplorePage> {
-//   @override
-//   Widget build(BuildContext context) {
-    
-//   }
-// }

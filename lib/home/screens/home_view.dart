@@ -16,7 +16,6 @@ class HomeView extends StatefulWidget { // The main place, where you put all you
 
 class _HomeViewState extends State<HomeView> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  // FirebaseUser _user;
 
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   PageController pageController;
@@ -24,7 +23,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pageController = PageController();
   }
@@ -53,7 +51,6 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          // Timeline(),
           MainHomeView(),
           ExplorePage(),
           MessageScreen(),

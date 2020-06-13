@@ -9,7 +9,6 @@ import 'login/managers/dialog_manager.dart';
 import 'login/locator.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'login/ui/views/start_view.dart';
 
 void main() {
   // Register all the models and services before the app starts

@@ -7,6 +7,10 @@ import 'package:flutter/foundation.dart';
 
 import 'base_model.dart';
 
+// Any Backend that goes into login
+// It catches any errors
+// Dk
+
 class LoginViewModel extends BaseModel {
   // All backend service for the login page
   final AuthenticationService _authenticationService =

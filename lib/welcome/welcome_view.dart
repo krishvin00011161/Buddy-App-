@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';

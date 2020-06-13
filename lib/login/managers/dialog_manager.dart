@@ -3,6 +3,9 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/models/dialog_models.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
 
+// Dk
+// Service class that is necessary to do Email Login
+
 class DialogManager extends StatefulWidget {
   final Widget child;
   DialogManager({Key key, this.child}) : super(key: key);
