@@ -7,6 +7,7 @@ import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
 import 'package:buddyappfirebase/login/services/firestoreService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key key}) : super(key: key);
@@ -210,12 +211,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                 color: isStudentPressed ? Colors.blue : Colors.white,
                 onPressed: () {
                   // sets user role
-                  Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'student'});
+                  _navigationService.navigateTo(SetUpViewRoute);
                   setState(() {
                     isTeacherPressed = false;
                     isStudentPressed = true;
                   });
-                  _navigationService.navigateTo(HomeViewRoute);
                 },
               ),
             ),

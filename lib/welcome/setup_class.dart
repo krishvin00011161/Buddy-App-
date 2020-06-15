@@ -1,7 +1,7 @@
 import 'dart:collection';
 
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,12 @@ class _SetupState extends State<Setup> {
                   onPressed: () async {
                     // createData();
                     updateInfo();
-                    _navigationService.navigateTo(HomeViewRoute);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainHomeView()
+                      ),
+                    );
                   },
                 )
               ],
