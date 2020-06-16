@@ -1,7 +1,7 @@
 import 'package:buddyappfirebase/login/models/emailuser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// Service the creating users in firebase
+// Service the creating emailusers in firebase
 // Dk
 
 class FirestoreService { 

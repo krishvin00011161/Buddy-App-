@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/login/locator.dart';
+import 'package:buddyappfirebase/login/services/GoogleFirestoreService.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,21 +11,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:buddyappfirebase/login/services/firestoreService.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
+import '../login/models/user.dart';
+import '../login/ui/views/signup_view.dart';
+import '../login/ui/views/signup_view.dart';
 
 
 // This is for teachers setup
 
-class Setup extends StatefulWidget {
+class SetUpStudent extends StatefulWidget {
   @override
-  _SetupState createState() => _SetupState();
+  _SetUpStudentState createState() => _SetUpStudentState();
 }
 
-class _SetupState extends State<Setup> {
+class _SetUpStudentState extends State<SetUpStudent> {
   final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController className = new TextEditingController();
   TextEditingController classCode = new TextEditingController();
   String documentID;
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user.uid;
+  }
+
+
+  // @override
+  //  initState() async { 
+  //   super.initState();
+  //   userId = await getUser();
+  //   print(userId);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +100,7 @@ class _SetupState extends State<Setup> {
               children: [
                 FlatButton(
                   child: Text(
-                    'CREATE CLASS',
+                    'JOIN CLASS',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.white,
@@ -96,7 +112,8 @@ class _SetupState extends State<Setup> {
                     borderRadius: new BorderRadius.circular(25.0),
                   ),
                   onPressed: () async {
-                    updateInfo(); // Called 
+                    googleUpdateInfo(); 
+                    updateInfo();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -113,12 +130,29 @@ class _SetupState extends State<Setup> {
     );
   }
 
-  // gets info from input and updates firestore
+  //gets info from input and updates firestore
   void updateInfo() {
     final HashMap<String, String> classes = HashMap();
     classes[className.text] = classCode.text;
     Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
-    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'teacher'});
+    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'Student'});
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = new GoogleSignIn();
+  final usersRef = Firestore.instance.collection('users');
+  final DateTime timestamp = DateTime.now();
+  User currentUser;
+  
+  void googleUpdateInfo() async {
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    DocumentSnapshot doc = await usersRef.document(user.id).get();
+
+    final HashMap<String, String> classes = HashMap();
+    classes[className.text] = classCode.text;
+    print(user.id);
+    //usersRef.document(SignUpView().id.toString()).updateData({'classes' : classes}); // bug always throw   Unhandled Exception: NoSuchMethodError: The getter 'id' was called on null
+    //usersRef.document(SignUpView().id.toString()).updateData({'userRole' : "Student"});
+    
+  }
 }

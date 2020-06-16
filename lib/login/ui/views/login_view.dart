@@ -1,4 +1,3 @@
-import 'package:buddyappfirebase/chat/models/user_model.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/password_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
@@ -16,6 +15,8 @@ import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 import 'dart:async';
+
+import '../../models/user.dart';
 
 class LoginView extends StatefulWidget {
   @override

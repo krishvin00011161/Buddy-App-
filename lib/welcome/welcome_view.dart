@@ -1,6 +1,7 @@
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
+import 'package:buddyappfirebase/welcome/setup_class_student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
@@ -211,7 +212,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                 color: isStudentPressed ? Colors.blue : Colors.white,
                 onPressed: () {
                   // sets user role
-                  _navigationService.navigateTo(SetUpViewRoute);
+                  //_navigationService.navigateTo(SetUpStudent);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SetUpStudent(), // fix later
+                      ),
+                    );
                   setState(() {
                     isTeacherPressed = false;
                     isStudentPressed = true;

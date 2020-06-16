@@ -1,5 +1,4 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
-import 'package:buddyappfirebase/chat/test/chat.dart';
 import 'package:buddyappfirebase/home/screens/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/welcome/setup_class.dart';
@@ -42,11 +41,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           routeName: settings.name,
           viewToShow: ExplorePage(),
         );
-      case ChatViewRoute:
-        return _getPageRoute(
-          routeName: settings.name,
-          viewToShow: ChatScreen(),
-        );
+    
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

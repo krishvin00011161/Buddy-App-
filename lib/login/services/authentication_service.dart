@@ -40,7 +40,7 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      await FirestoreService.createUser(EmailUser(
+      await FirestoreService.createUser(EmailUser( // where i call it
         id: authResult.user.uid,
         email: email,
         fullName: fullName,
