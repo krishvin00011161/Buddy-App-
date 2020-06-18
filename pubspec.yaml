@@ -63,7 +63,9 @@ dependencies:
 
   link: ^1.0.0
 
+  simple_animations: ^1.3.3
 
+  google_fonts: ^1.1.0
 
 
 
