@@ -89,7 +89,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/like.jpg
+    - assets/images/love.jpg
+    - assets/images/haha.png
+    - assets/images/wow.jpg
+    - assets/images/sad.png
     - assets/images/img_not_available.jpeg
     - assets/images/mimi1.gif
     - assets/images/mimi2.gif
