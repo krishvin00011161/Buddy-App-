@@ -135,10 +135,11 @@ class _SignUpViewState extends State<SignUpView> {
                       borderRadius: new BorderRadius.circular(25.0),
                     ),
                     onPressed: () {
+                      // .replaceAll(new RegExp(r"\s+\b|\b\s"), "") removes spaces
                       model.signUp(
-                        email: emailController.text,
-                        password: passwordController.text,
-                        fullName: firstNameController.text + ' ' + lastNameController.text,
+                        email: emailController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
+                        password: passwordController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
+                        fullName: firstNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
                       );
                       
                     },

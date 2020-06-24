@@ -114,12 +114,6 @@ class _SetUpStudentState extends State<SetUpStudent> {
                   onPressed: () async {
                     googleUpdateInfo(); 
                     updateInfo();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainHomeView()
-                      ),
-                    );
                   },
                 )
               ],
@@ -131,11 +125,42 @@ class _SetUpStudentState extends State<SetUpStudent> {
   }
 
   //gets info from input and updates firestore
-  void updateInfo() {
+  void updateInfo() async{
     final HashMap<String, String> classes = HashMap();
-    classes[className.text] = classCode.text;
-    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
-    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'Student'});
+
+    // checks if class exists and if class code is correct
+    DocumentReference documentReference = Firestore.instance.collection("classes").document(className.text);
+    documentReference.get().then((datasnapshot) {
+      if (datasnapshot.exists && datasnapshot.data['code'] == classCode.text) {
+        // adds class for user
+        classes[className.text] = classCode.text;
+        Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
+        Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'student'});
+
+        // adds user's id to the class's user array
+        Firestore.instance.collection('classes').document(className.text).updateData({"users": FieldValue.arrayUnion([FirestoreService.id])});
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainHomeView()
+          ),
+        );
+      }else {
+        AlertDialog inUse = AlertDialog(
+          title: Text("Class not found"),
+          content: Text("Please make sure the class name and the class code are correct."),
+        );
+
+        // show the dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return inUse;
+          },
+        );
+      }
+    });
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;

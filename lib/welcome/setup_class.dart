@@ -24,7 +24,6 @@ class _SetupState extends State<Setup> {
   final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController className = new TextEditingController();
   TextEditingController classCode = new TextEditingController();
-  String documentID;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class _SetupState extends State<Setup> {
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return 'Please make a class code.';
+                  return 'Please make a class name.';
                 }
               },
             ),
@@ -96,13 +95,7 @@ class _SetupState extends State<Setup> {
                     borderRadius: new BorderRadius.circular(25.0),
                   ),
                   onPressed: () async {
-                    updateInfo(); // Called 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainHomeView()
-                      ),
-                    );
+                    updateInfo(); // Called
                   },
                 )
               ],
@@ -114,11 +107,48 @@ class _SetupState extends State<Setup> {
   }
 
   // gets info from input and updates firestore
-  void updateInfo() {
+  void updateInfo() async{
     final HashMap<String, String> classes = HashMap();
-    classes[className.text] = classCode.text;
-    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
-    Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'teacher'});
+    final userList = [];
+    // adds class to classes collection
+    final classDocument = await Firestore.instance
+      .collection('classes')
+      .document(className.text)
+      .get();
+
+    // checks to see if class already exists
+    if (classDocument == null || !classDocument.exists) {
+      // adds class for user
+      classes[className.text] = classCode.text;
+      Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
+      Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'teacher'});
+
+      // adds class to classes collection
+      Firestore.instance.collection('classes').document(className.text).setData({
+        'code' : classCode.text,
+        'users' : userList
+      });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainHomeView()
+        ),
+      );
+    }else {
+      AlertDialog inUse = AlertDialog(
+        title: Text("Class name taken"),
+        content: Text("Please try a different class name."),
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return inUse;
+        },
+      );
+    }
   }
 
 }
