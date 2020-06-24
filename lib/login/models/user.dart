@@ -1,4 +1,4 @@
-import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
  // Place where fields are init for google users
 class User { 

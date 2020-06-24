@@ -1,5 +1,3 @@
-import 'package:buddyappfirebase/login/models/emailUser.dart';
-import 'package:buddyappfirebase/login/services/GoogleFirestoreService.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/welcome/welcome_view.dart';

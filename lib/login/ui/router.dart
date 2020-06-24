@@ -1,5 +1,4 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
-import 'package:buddyappfirebase/home/screens/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/welcome/setup_class.dart';
 import 'package:buddyappfirebase/welcome/welcome_view.dart';

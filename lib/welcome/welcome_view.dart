@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
-import 'package:buddyappfirebase/login/services/firestoreService.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key key}) : super(key: key);

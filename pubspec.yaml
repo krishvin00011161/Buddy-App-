@@ -104,6 +104,9 @@ flutter:
     - assets/images/mimi7.gif
     - assets/images/mimi8.gif
     - assets/images/mimi9.gif
+    - assets/images/explore.jpg
+    - assets/images/connect.jpg
+    - assets/images/setup.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

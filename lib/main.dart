@@ -1,16 +1,14 @@
 
-import 'package:buddyappfirebase/home/screens/home_view.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
+import 'home/screens/MainHomeView.dart';
 import 'login/ui/router.dart';
 import 'login/managers/dialog_manager.dart';
 import 'login/locator.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'login/ui/views/start_view.dart';
-import 'welcome/welcome_view.dart';
 
 
 void main() {
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: HomeView(), // HomeView(), // Checks if the user is logged in, if not make sure to navigate to Login
+      home: MainHomeView(), // Checks if the user is logged in, if not make sure to navigate to Login
       onGenerateRoute: generateRoute,
     );
   }

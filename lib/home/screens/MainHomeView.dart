@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../Explore/explore.dart';
+import '../../message/message.dart';
+
 //Dk
 
 class MainHomeView extends StatefulWidget {
@@ -18,7 +21,8 @@ class MainHomeView extends StatefulWidget {
 class _MainHomeViewState extends State<MainHomeView> {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final NavigationService _navigationService = locator<NavigationService>();
-  
+  int _currentIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   logout() {
     googleSignIn.signOut();
@@ -29,10 +33,66 @@ class _MainHomeViewState extends State<MainHomeView> {
 
   Scaffold home() { // This is responsible for the Home View
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey[100],
       appBar: homeAppBar(),
       drawer: CustomDrawers(),
       body: homeBody(),
+      bottomNavigationBar: tabBar(),
+    );
+  }
+
+  CupertinoTabBar tabBar() {
+    return CupertinoTabBar( // Code reuse make some class Reminder
+          
+          currentIndex: _currentIndex,
+          items: [
+          BottomNavigationBarItem(
+         
+          icon: Icon(
+            Icons.home,
+            color: _currentIndex == 0 ? Theme.of(context).primaryColor : Colors.grey,
+          ),
+          title: Text(""),
+          ),
+          BottomNavigationBarItem(
+          icon: Icon(
+            Icons.search,
+            color: _currentIndex == 1 ? Theme.of(context).primaryColor : Colors.grey
+          ),
+          title: Text(""),
+          ),
+          BottomNavigationBarItem(
+          icon: Icon(
+            Icons.chat,
+            color: _currentIndex == 2 ? Theme.of(context).primaryColor : Colors.grey
+          ),
+          title: Text(""),
+          )
+      ],
+      onTap: (index) {
+        if (index == 0) {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainHomeView()),
+          );
+
+          
+      } else if (index == 1) {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ExplorePage()),
+          );
+      } else {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MessageScreen()),
+          );
+      }
+      },
     );
   }
 
@@ -41,7 +101,10 @@ class _MainHomeViewState extends State<MainHomeView> {
         iconTheme: new IconThemeData(color: Colors.grey),
         backgroundColor: Colors.grey[100],
         elevation: 0,
-        //leading: Icon(Icons.menu, color: Colors.grey,),
+        leading: new IconButton(
+          icon: CircleAvatar(backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),),
+          onPressed: () => _scaffoldKey.currentState.openDrawer(),
+        ),
         title: Container(
           width: 310,
           child: TextField(
@@ -84,7 +147,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                     ),
                     Spacer(),
                     GestureDetector(
-                      child: Text("See all >"),
+                      child: Text(
+                          "See all >",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ), 
+                        ),
                     ),
                     ]
                   ),
@@ -105,20 +175,20 @@ class _MainHomeViewState extends State<MainHomeView> {
                   Row(children: [
                     SizedBox(width: 60,),
                     Container(
-                      height: 8,
-                      width: 70,
+                      height: 4,
+                      width: 35,
                       color: Colors.grey,
                     ),
                     SizedBox(width: 30,),
                     Container(
-                      height: 8,
-                      width: 70,
+                      height: 4,
+                      width: 35,
                       color: Colors.grey[300],
                     ),
                     SizedBox(width: 30,),
                     Container(
-                      height: 8,
-                      width: 70,
+                      height: 4,
+                      width: 35,
                       color: Colors.grey[300],
                     ),
                   ],
@@ -129,7 +199,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                       FadeAnimation(1, Text("Questions", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 35),)),
                       Spacer(),
                       GestureDetector(
-                        child: Text("See all >"),
+                        child: Text(
+                          "See all >",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ), 
+                        ),
                       ),
                     ],
                   ),
@@ -370,8 +447,8 @@ class _MainHomeViewState extends State<MainHomeView> {
             gradient: LinearGradient(
               begin: Alignment.bottomRight,
               colors: [
-                Color(0xF1C40F).withOpacity(1), //Colors.black.withOpacity(.8),
-                Color(0xF1C40F).withOpacity(1), //Colors.black.withOpacity(.2),
+                Color(0x5EC4F2).withOpacity(1), //Colors.black.withOpacity(.8),
+                Color(0x5EC4F2).withOpacity(1), //Colors.black.withOpacity(.2),
               ]
             )
           ),
@@ -379,11 +456,11 @@ class _MainHomeViewState extends State<MainHomeView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     CircleAvatar(
                     backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                     ),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -397,7 +474,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                                   child: Container(child: RichText(
                                     text: TextSpan(
                                       children: [
-                                        TextSpan(text:" Sean Kernan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0, color: Colors.white),),
+                                        TextSpan(text:"Sean Kernan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0, color: Colors.white),),
                                       ]
                                     ),overflow: TextOverflow.ellipsis,
                                   )),flex: 5,
@@ -407,7 +484,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Text("Asked at 25, September 2020", style: TextStyle(fontSize: 14.0, color: Colors.grey), maxLines: 1, ),
+                            child: Text("Asked at 25, September 2020", style: TextStyle(fontSize: 14.0, color: Colors.white), maxLines: 1, ),
                           ),
                         ],
                       ),
@@ -431,10 +508,11 @@ class _MainHomeViewState extends State<MainHomeView> {
                 WidgetSpan(
                 child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: Icon(Icons.thumb_up),
+                child: Icon(
+                  Icons.thumb_up),
               ),
             ),
-            TextSpan(text: '  8', style: TextStyle(color: Colors.black, fontSize: 20)),
+            TextSpan(text: ' 8', style: TextStyle(color: Colors.black, fontSize: 20)),
           ],
         ),
       ),
@@ -466,3 +544,5 @@ class _MainHomeViewState extends State<MainHomeView> {
       ), // overall container
     );
   }
+
+ 
