@@ -13,7 +13,7 @@ import '../login/models/user.dart';
 
 
 
-// This is for teachers setup
+// This is for students setup
 
 class SetUpStudent extends StatefulWidget {
   @override
@@ -31,13 +31,6 @@ class _SetUpStudentState extends State<SetUpStudent> {
       return user.uid;
   }
 
-
-  // @override
-  //  initState() async { 
-  //   super.initState();
-  //   userId = await getUser();
-  //   print(userId);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +102,6 @@ class _SetUpStudentState extends State<SetUpStudent> {
                     borderRadius: new BorderRadius.circular(25.0),
                   ),
                   onPressed: () async {
-                    googleUpdateInfo(); 
                     updateInfo();
                   },
                 )
@@ -160,21 +152,8 @@ class _SetUpStudentState extends State<SetUpStudent> {
     });
   }
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn googleSignIn = new GoogleSignIn();
-  final usersRef = Firestore.instance.collection('users');
-  final DateTime timestamp = DateTime.now();
-  User currentUser;
-  
-  void googleUpdateInfo() async {
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    DocumentSnapshot doc = await usersRef.document(user.id).get();
 
-    final HashMap<String, String> classes = HashMap();
-    classes[className.text] = classCode.text;
-    print(user.id);
-    //usersRef.document(SignUpView().id.toString()).updateData({'classes' : classes}); // bug always throw   Unhandled Exception: NoSuchMethodError: The getter 'id' was called on null
-    //usersRef.document(SignUpView().id.toString()).updateData({'userRole' : "Student"});
-    
-  }
+
+
+
 }

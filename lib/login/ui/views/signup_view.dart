@@ -1,5 +1,6 @@
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:buddyappfirebase/welcome/setup_class_student.dart';
 import 'package:buddyappfirebase/welcome/welcome_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,12 +40,7 @@ class _SignUpViewState extends State<SignUpView> {
   void initState() {
     super.initState();
 
-    googleSignIn.onCurrentUserChanged.listen((account) {
-      handleSignIn(account);
-      Navigator.of(context).push(Transition().createRoute(WelcomeView()));
-    }, onError: (err) {
-      print('Error signing in: $err');
-    });
+
   }
 
   @override
@@ -103,15 +99,6 @@ class _SignUpViewState extends State<SignUpView> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(
-                    child: SignInButton(
-                      Buttons.Google,
-                      text: "Sign Up with Google",
-                      onPressed: () {
-                        googleSignIn.signIn();
-                      },
-                    ),
-                  ),
                 ],
               ),
               verticalSpaceMedium,
@@ -150,71 +137,8 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
-    
-  static String id;  
-  createUserInFirestore(String classes, String userRole) async {
-    // 1) check if user exists in users collection in database (according to their id)
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    DocumentSnapshot doc = await usersRef.document(user.id).get();
-  
 
-    if (!doc.exists) {
-      // 2) if the user doesn't exist, then we want to take them to the create account page
 
-      final FirebaseUser googleUser = await _auth.currentUser();
-      final uid = googleUser.uid;
-      id = user.id;
-      // 3) get username from create account, use it to make new user document in users collection
-      usersRef.document(user.id).setData({
-        "classes" : classes,
-        "email": user.email,
-        "fullName": user.displayName,
-        "id": uid,
-        "photoUrl": user.photoUrl,
-        "userRole": userRole,
-        "timestamp": timestamp
-      });
 
-      doc = await usersRef.document(user.id).get();
-    }
-    print(user.id);
-    //print(currentUser);
-  }
 
-  // createUserInFirestore(String classes, String userRole) async {
-  //   // 1) check if user exists in users collection in database (according to their id)
-  //   final GoogleSignInAccount user = googleSignIn.currentUser;
-  //   DocumentSnapshot doc = await usersRef.document(user.id).get();
-  
-
-  //   if (!doc.exists) {
-  //     // 2) if the user doesn't exist, then we want to take them to the create account page
-
-  //     final FirebaseUser googleUser = await _auth.currentUser();
-  //     final uid = googleUser.uid;
-  //     await GoogleFirestoreService.createGoogleUser(GoogleUser(
-  //       id: uid,
-  //       email: EmailUser().email,
-  //       fullName: EmailUser().fullName,
-  //     ));
-  //   }
-  //   print(user.id);
-  //   print("called");
-  //   //print(currentUser);
-  // }
-
-  bool isAuth = false;
-
-  handleSignIn(GoogleSignInAccount account) {
-    if (account != null) {
-      createUserInFirestore("None","None");
-      setState(() {
-        isAuth = true;
-      });
-    } else {
-      setState(() {
-        isAuth = false;
-      });
-    }
-  }
 }

@@ -5,12 +5,17 @@ import 'package:buddyappfirebase/Settings/settings.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/ui/views/login_view.dart';
+import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+
 
 class CustomDrawers extends StatelessWidget {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final NavigationService _navigationService = locator<NavigationService>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,12 +132,14 @@ class CustomDrawers extends StatelessWidget {
                 onTap: () {
                   // Navigator push
                   logout();
+                  LoginView.loggedIn = false;
                 },
               ),
             ],
           ),
         );
   }
+
 
   logout() {
     googleSignIn.signOut();

@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
 
+// This class Shows images that are in the welcome view
+
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key key}) : super(key: key);
 
@@ -37,13 +39,22 @@ class _WelcomeViewState extends State<WelcomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: welcomeViewAppBar(),
+      body: welcomeViewBody(),
+    );
+  }
+
+  AppBar welcomeViewAppBar() {
+    return AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         actions: <Widget>[
         ],
-      ),
-      body: Stack(
+      );
+  }
+
+  Stack welcomeViewBody() {
+    return Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
           PageView(
@@ -79,8 +90,7 @@ class _WelcomeViewState extends State<WelcomeView> {
             ),
           )
         ],
-      ),
-    );
+      );
   }
 
   Widget makePage({image, title, content, reverse = false}) {

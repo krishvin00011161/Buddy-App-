@@ -3,6 +3,7 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/authentication_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
+import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:flutter/foundation.dart';
 
 import 'base_model.dart';
@@ -35,8 +36,9 @@ class LoginViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
+        LoginView.loggedIn = true;
         _navigationService
-            .navigateTo(HomeViewRoute); // Success then it push to Home view
+            .navigateTo(MainHomeViewRoute); // Success then it push to Home view
       } else {
         await _dialogService.showDialog(
           // If not say Login failure

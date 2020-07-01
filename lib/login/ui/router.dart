@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/welcome/setup_class.dart';
 import 'package:buddyappfirebase/welcome/welcome_view.dart';
@@ -40,7 +41,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           routeName: settings.name,
           viewToShow: ExplorePage(),
         );
-    
+      case MainHomeViewRoute:
+        return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: MainHomeView(),
+        );
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

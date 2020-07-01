@@ -21,6 +21,8 @@ import '../../models/user.dart';
 class LoginView extends StatefulWidget {
   @override
   _LoginViewState createState() => _LoginViewState();
+
+  static bool loggedIn = false;
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -40,51 +42,9 @@ class _LoginViewState extends State<LoginView> {
   String email = "";
   String password = "";
 
-  @override
-  void initState() {
-    super.initState();
-    googleSignIn.onCurrentUserChanged.listen((account) {
-      handleSignIn(account);
-      _navigationService.navigateTo(HomeViewRoute);
-    }, onError: (err) {
-      print('Error signing in: $err');
-    });
-    googleSignIn.signInSilently(suppressErrors: false).then((account) {
-      handleSignIn(account);
-      _navigationService.navigateTo(HomeViewRoute);
-    }).catchError((err) {
-      print('Error signing in: $err');
-    });
-  }
 
-  handleLoginInSecret() async {
-    auth = true;
-  }
 
-  bool isSignIn = false;
 
-  bool isAuth = false;
-
-  handleSignIn(GoogleSignInAccount account) {
-    if (account != null) {
-      setState(() {
-        isAuth = true;
-      });
-    } else {
-      setState(() {
-        isAuth = false;
-      });
-    }
-  }
-
-  Future<void> googleSignout() async {
-    await _auth.signOut().then((onValue) {
-      googleSignIn.signOut();
-      setState(() {
-        isSignIn = true;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,55 +83,6 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       controller: passwordController,
                       obscureText: true,
-                    ),
-                    verticalSpaceMedium,
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        isSignIn
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    SignInButton(
-                                      Buttons.Google,
-                                      text: "Sign out with Google",
-                                      onPressed: () {
-                                        googleSignout();
-                                      },
-                                    ),
-//                                CircleAvatar(
-//                                  backgroundImage: NetworkImage(_user.photoUrl),
-//                                ),
-//                                //Text(_user.displayName),
-//                                OutlineButton(
-//                                  onPressed: () {
-//                                    gooleSignout();
-//                                  },
-//                                  child: Text("Logout"),
-//                                )
-                                  ],
-                                ),
-                              )
-                            : Center(
-//                            child: OutlineButton(
-//                              onPressed: () {
-//                                handleSignIn();
-//                                //_navigationService.navigateTo(HomeViewRoute);
-//                              },
-//                              child: Text("Sign In with Google"),
-//                            ),
-                                child: SignInButton(
-                                  Buttons.Google,
-                                  text: "Sign In with Google",
-                                  onPressed: () {
-                                    // Todo
-                                    googleSignIn.signIn();
-                                  },
-                                ),
-                              ),
-                      ],
                     ),
                     verticalSpaceMedium,
                     Row(

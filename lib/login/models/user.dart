@@ -38,6 +38,8 @@ class User {
   //     'classes' : classes,
   //   };
   // }
+
+  
   final DateTime timeStamp = DateTime.now();
   //User used when creating new credential in firebase
   final String classes;

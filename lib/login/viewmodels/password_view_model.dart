@@ -30,7 +30,7 @@ class PasswordViewModel extends BaseModel {
     if (result is bool) {
       if (result) {
         _navigationService
-            .navigateTo(HomeViewRoute); // Success then go to Home View
+            .navigateTo(MainHomeViewRoute); // Success then go to Home View
       } else {
         await _dialogService.showDialog(
           // Fail then put error message
