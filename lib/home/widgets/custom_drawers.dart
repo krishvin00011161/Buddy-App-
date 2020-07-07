@@ -7,6 +7,7 @@ import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/views/login_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -33,8 +34,7 @@ class CustomDrawers extends StatelessWidget {
                 ),
                 accountEmail: Text("Friends: 30"),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png"),
+                  backgroundImage: NetworkImage("https://img.pngio.com/user-logos-user-logo-png-1920_1280.png")
                 ),
               ),
               ListTile(

@@ -16,7 +16,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 import 'dart:async';
 
-import '../../models/user.dart';
+
 
 class LoginView extends StatefulWidget {
   @override
@@ -37,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
   GoogleSignIn googleSignIn = new GoogleSignIn();
   final usersRef = Firestore.instance.collection('users');
   final DateTime timestamp = DateTime.now();
-  User currentUser;
+
   bool showSpinner = false; // A spinner that shows progress of login
   String email = "";
   String password = "";

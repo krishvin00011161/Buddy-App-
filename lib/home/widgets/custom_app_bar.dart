@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   AutoCompleteTextField searchTextField;
   GlobalKey<AutoCompleteTextFieldState<HomeUser>> key = new GlobalKey();
+  
   static List<HomeUser> loadUsers(String jsonString) {
     final parsed = json.decode(jsonString).cast<Map<String, dynamic>>();
     return parsed.map<HomeUser>((json) => HomeUser.fromJson(json)).toList();

@@ -15,7 +15,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
         home: Scaffold(
-          appBar: CustomAppBar(),
+          appBar: ProfileAppbar(),
           drawer: CustomDrawers(),
           body: ProfilePage(),
           bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
@@ -72,7 +72,21 @@ class ProfileView extends StatelessWidget {
   )
   );
 }
+  AppBar ProfileAppbar() {
+    bool isSearching = false;
 
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Requests",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
   
 }
 
@@ -88,25 +102,21 @@ class _ProfilePageState extends State<ProfilePage> {
   String _answerCount = "999999";
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height =  MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Profile(height) 
-    
-  );
-    
+      body: Profile(height)
+    );
   }
-  // BottomNavigationBarController bottomNav() {
-  //   return BottomNavigationBar(
-  //     items: [
-  //       BottomNavigationBarItem(
-  //         icon: Icon(Icons.home)
 
-  //       )
-  //     ],
-  //   );
-  // }
-  
+
 
   ListView Profile(double height) {
     getData();
@@ -204,8 +214,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void getData() {
     Firestore.instance.collection("users").document(FirestoreService.id).get().then((value){
       print(value.data);
-      _name = value.data['fullName'];
+      setState(() {
+        _name = value.data['fullName'];
+      });
     });
-    setState(() {});
+
   }
+
+
 }

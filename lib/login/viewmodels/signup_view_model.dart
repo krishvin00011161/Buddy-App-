@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
+
 import 'base_model.dart';
 
 // Any Backend that goes into Signup
@@ -23,7 +23,6 @@ class SignUpViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final usersRef = Firestore.instance.collection('users');
   final DateTime timestamp = DateTime.now();
-  User currentUser;
 
   Future signUp({
     // Requires email and password and name

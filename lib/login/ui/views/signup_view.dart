@@ -10,9 +10,7 @@ import 'package:buddyappfirebase/login/viewmodels/signup_view_model.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
-import 'package:buddyappfirebase/login/models/user.dart';
 
-import '../../models/user.dart';
 
 
 class SignUpView extends StatefulWidget {
@@ -33,7 +31,6 @@ class _SignUpViewState extends State<SignUpView> {
   GoogleSignIn googleSignIn = new GoogleSignIn();
   final usersRef = Firestore.instance.collection('users');
   final DateTime timestamp = DateTime.now();
-  User currentUser;
   
 
   @override

@@ -18,7 +18,7 @@ class _RequestsViewState extends State<RequestsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: RequestsAppbar(),
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
           currentIndex: _currentIndex,
@@ -71,6 +71,22 @@ class _RequestsViewState extends State<RequestsView> {
       }
       },
     ),
+    );
+  }
+
+  AppBar RequestsAppbar() {
+    bool isSearching = false;
+
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Requests",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 }

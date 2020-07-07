@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Open Sans',
         ),
       ),
-      home: LoginView.loggedIn ?  MainHomeView() : StartView(),
+      home: StartView(),
        // Checks if the user is logged in, if not make sure to navigate to Login
       onGenerateRoute: generateRoute,
     );

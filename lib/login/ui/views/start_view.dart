@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../locator.dart';
 
-
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class StartView extends StatefulWidget {
   @override
@@ -21,46 +22,26 @@ class StartView extends StatefulWidget {
 class _StartViewState extends State<StartView> {
   bool isAuth = false;
   final NavigationService _navigationService = locator<NavigationService>();
-//
-//  @override
-//  void initState() {
-//    // TODO: implement initState
-//    super.initState();
-//
-//    FirebaseAuth.instance.onAuthStateChanged.listen((firebaseUser) {
-//      if (firebaseUser != firebaseUser) {
-//        print("true");
-//        handleSignIn(firebaseUser);
-//      } else {
-//        print("On login");
-//      }
-//      //handleSignIn(firebaseUser);
-//      _navigationService.navigateTo(MainHomeViewRoute);
-//    }, onError: (err) {
-//      print('Error signing in: $err');
-//    }
-//    );
-//      print(FirebaseUser);
-//  }
-//
-//  handleSignIn(FirebaseUser user) {
-//    if (user != null) {
-//      setState(() {
-//        isAuth = true;
-//      });
-//    } else {
-//      setState(() {
-//        isAuth = false;
-//      });
-//    }
-//  }
+
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(LoginView.loggedIn);
+    getUser().then((user) {
+      if (user != null) {
+        // send the user to the home page
+//        Navigator.push(context,
+//      MaterialPageRoute(builder: (context) => MainHomeView()),
+//      );
+      }
+    });
   }
+
+  Future<FirebaseUser> getUser() async {
+    return await _auth.currentUser();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +64,7 @@ class _StartViewState extends State<StartView> {
             // Log In
             ButtonTheme(
               minWidth: MediaQuery.of(context).size.width,
-              height: 80,
+              height: 70,
               child: RaisedButton(
                 color: Colors.red,
                 onPressed: () {
@@ -107,7 +88,7 @@ class _StartViewState extends State<StartView> {
             // Sign Up
             ButtonTheme(
               minWidth: MediaQuery.of(context).size.width,
-              height: 80,
+              height: 70,
               child: RaisedButton(
                 onPressed: () {
                   Navigator.of(context).push(

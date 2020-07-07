@@ -18,7 +18,7 @@ class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: NotificationAppbar(),
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
           currentIndex: _currentIndex,
@@ -71,6 +71,21 @@ class _NotificationViewState extends State<NotificationView> {
       }
       },
     ),
+    );
+  }
+  AppBar NotificationAppbar() {
+    bool isSearching = false;
+
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Notifications",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 }

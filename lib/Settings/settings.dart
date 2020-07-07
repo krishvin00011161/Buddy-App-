@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/home/homeUser.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
+import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
+import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:buddyappfirebase/message/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +22,8 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text("Settings"),
-      ),
+      appBar: SettingAppbar(),
+      drawer: CustomDrawers(),
       body: Column(
         children: <Widget>[
           SwitchListTile(
@@ -105,11 +108,32 @@ class _SettingsViewState extends State<SettingsView> {
       }
       },
     ),
-
-
-
     );
+  }
 
+  AppBar SettingAppbar() {
+    bool isSearching = false;
 
+    AutoCompleteTextField searchTextField;
+    GlobalKey<AutoCompleteTextFieldState<HomeUser>> key = new GlobalKey();
+
+    List<HomeUser> loadUsers(String jsonString) {
+      final parsed = json.decode(jsonString).cast<Map<String, dynamic>>();
+      return parsed.map<HomeUser>((json) => HomeUser.fromJson(json)).toList();
+    }
+    List<HomeUser> users = new List<HomeUser>();
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Settings",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+    );
   }
 }
+
+
