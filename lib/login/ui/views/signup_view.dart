@@ -1,15 +1,11 @@
+import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
-import 'package:buddyappfirebase/login/ui/views/start_view.dart';
-import 'package:buddyappfirebase/welcome/setup_class_student.dart';
-import 'package:buddyappfirebase/welcome/welcome_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:buddyappfirebase/login/viewmodels/signup_view_model.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
 
 
 
@@ -53,78 +49,82 @@ class _SignUpViewState extends State<SignUpView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               verticalSpaceLarge,
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                color: Colors.orangeAccent,
-                padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(Transition().createRoute(StartView()));
-                },
+              FadeAnimation(1.3, IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: Colors.orangeAccent,
+                  padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               verticalSpaceLarge,
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'FIRST NAME',
+              FadeAnimation(1.3,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'FIRST NAME',
+                  ),
+                  controller: firstNameController,
                 ),
-                controller: firstNameController,
               ),
               verticalSpaceSmall,
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'LAST NAME',
+              FadeAnimation(1.3,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'LAST NAME',
+                  ),
+                  controller: lastNameController,
                 ),
-                controller: lastNameController,
               ),
               verticalSpaceSmall,
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'EMAIL',
+              FadeAnimation(1.3,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'EMAIL',
+                  ),
+                  controller: emailController,
                 ),
-                controller: emailController,
               ),
               verticalSpaceSmall,
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'PASSWORD',
+              FadeAnimation(1.3,
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'PASSWORD',
+                  ),
+                  controller: passwordController,
+                  obscureText: true,
                 ),
-                controller: passwordController,
-                obscureText: true,
               ),
+              verticalSpaceMedium,
               verticalSpaceMedium,
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                ],
-              ),
-              verticalSpaceMedium,
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlatButton(
-                    child: Text(
-                      'SIGN UP',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
+                  FadeAnimation(1.3,
+                     FlatButton(
+                      child: Text(
+                        'SIGN UP',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
+                      color: Colors.orangeAccent,
+                      padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                      ),
+                      onPressed: () {
+                        // .replaceAll(new RegExp(r"\s+\b|\b\s"), "") removes spaces
+                        model.signUp(
+                          email: emailController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
+                          password: passwordController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
+                          fullName: firstNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+                        );
+
+                      },
                     ),
-                    color: Colors.orangeAccent,
-                    padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                    onPressed: () {
-                      // .replaceAll(new RegExp(r"\s+\b|\b\s"), "") removes spaces
-                      model.signUp(
-                        email: emailController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
-                        password: passwordController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") ,
-                        fullName: firstNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-                      );
-                      
-                    },
                   )
                 ],
               )
@@ -134,8 +134,4 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
-
-
-
-
 }

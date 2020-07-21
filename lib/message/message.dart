@@ -183,9 +183,10 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   void initState(){
+    getUserInfo();
     super.initState();
 
-    getUserInfo();
+
   }
 
 

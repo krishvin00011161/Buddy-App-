@@ -4,8 +4,8 @@ import 'package:buddyappfirebase/message/userInfo_functions.dart';
 import 'package:buddyappfirebase/message/widgets_messages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'database_functionality.dart';
+
 class SearchAdd extends StatefulWidget {
   @override
   _SearchAddState createState() => _SearchAddState();
@@ -20,12 +20,13 @@ class _SearchAddState extends State<SearchAdd> {
         itemCount: searchSnapShot.documents.length,
         shrinkWrap: true,
         itemBuilder: (context, index){
-          return SearchTile(
-            userName: searchSnapShot.documents[index].data["num"],
+          return searchTile(
+            userName: searchSnapShot.documents[index].data["fullName"],
             userEmail: searchSnapShot.documents[index].data["email"],
           );
         }): Container();
   }
+
   createSearch(){
     dataMethod.getNameUser(searchTxt.text).then((val){
       print(val.toString());
@@ -58,7 +59,7 @@ class _SearchAddState extends State<SearchAdd> {
       print("You cannot send a message to yourself!");
     }
   }
-  Widget SearchTile({String userName, String userEmail}){
+  Widget searchTile({String userName, String userEmail}){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
@@ -70,22 +71,38 @@ class _SearchAddState extends State<SearchAdd> {
             ],
           ),
           Spacer(),
-          GestureDetector(
-            onTap:(){
-              createChatScreen(
-                  userName: userName
+//          GestureDetector(
+//            onTap:() {
+//              print("clicked");
+//              print(userName);
+//              createChatScreen(
+//                  userName: userName
+//              );
+//            },
+//            child: Container(
+//              decoration:BoxDecoration(
+//                borderRadius: BorderRadius.circular(40),
+//                color: Colors.green,
+//              ),
+//              padding: EdgeInsets.symmetric(horizontal:24,vertical:12),
+//              child: Text("Start Chart"),
+//            ),
+//          ),
+            GestureDetector(
+              onTap: () {
+                createChatScreen(userName: userName);
+              },
+              child: Container(
 
-              );
-            },
-            child: Container(
-              decoration:BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                color: Colors.green,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.green,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Text("Start Chat"),
+
               ),
-              padding: EdgeInsets.symmetric(horizontal:24,vertical:12),
-              child: Text("Start Chart"),
-            ),
-          ),
+            )
         ],
       ),
     );
@@ -97,6 +114,7 @@ class _SearchAddState extends State<SearchAdd> {
   }
 
   Database dataMethod = new Database();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,21 +129,17 @@ class _SearchAddState extends State<SearchAdd> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: TextField(
-                      controller: searchTxt,
-                      decoration: InputDecoration(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Search for other users...',
 
-                          hintText: "Search for other users...",
-                          hintStyle: TextStyle(color: Colors.white, fontFamily: "Time New Roman",),
-                          border: InputBorder.none),
-                    ),
-
+                        ),
+                        controller: searchTxt,
+                      ),
                   ),
                   GestureDetector(
                     onTap: (){
-
                       createSearch();
-
 
                     },
                     child: Container(

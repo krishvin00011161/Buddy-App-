@@ -1,8 +1,8 @@
 import 'package:buddyappfirebase/message/constant_val.dart';
 import 'package:buddyappfirebase/message/widgets_messages.dart';
 import 'package:flutter/material.dart';
-
 import 'database_functionality.dart';
+
 class ConversationScreen extends StatefulWidget {
   @override
   String chatRoomId;

@@ -1,3 +1,4 @@
+import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/password_view.dart';
 import 'package:buddyappfirebase/login/ui/views/start_view.dart';
@@ -11,10 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/login/constants/route_names.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
-import 'dart:async';
 
 
 
@@ -60,45 +58,52 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     verticalSpaceLarge,
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      color: Colors.orangeAccent,
-                      padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(Transition().createRoute(StartView()));
-                      },
+                    FadeAnimation(1.3,
+                       IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        color: Colors.orangeAccent,
+                        padding: EdgeInsets.fromLTRB(0, 0, 75, 0),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
                     verticalSpaceLarge,
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'EMAIL',
+                    FadeAnimation(1.3,
+                       TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'EMAIL',
+                        ),
+                        controller: emailController,
                       ),
-                      controller: emailController,
                     ),
                     verticalSpaceSmall,
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'PASSWORD',
+                    FadeAnimation(1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'PASSWORD',
+                        ),
+                        controller: passwordController,
+                        obscureText: true,
                       ),
-                      controller: passwordController,
-                      obscureText: true,
                     ),
                     verticalSpaceMedium,
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextLink(
-                          'Forget Password',
-                          onPressed: () {
-                            // TODO: Handle navigation
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PasswordView(),
-                                ));
-                          },
+                        FadeAnimation(1.3,
+                          TextLink(
+                            'Forget Password',
+                            onPressed: () {
+                              // TODO: Handle navigation
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PasswordView(),
+                                  ));
+                            },
+                          ),
                         )
                       ],
                     ),
@@ -107,33 +112,35 @@ class _LoginViewState extends State<LoginView> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FlatButton(
-                          child: Text(
-                            'LOG IN',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
+                        FadeAnimation(1.3,
+                          FlatButton(
+                            child: Text(
+                              'LOG IN',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
                             ),
+                            color: Colors.orangeAccent,
+                            padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                            ),
+                            onPressed: () async {
+                              try {
+                                model.login(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                                setState(() {
+                                  auth = true;
+                                });
+                                print(emailController.text);
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
                           ),
-                          color: Colors.orangeAccent,
-                          padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                          ),
-                          onPressed: () async {
-                            try {
-                              model.login(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
-                              setState(() {
-                                auth = true;
-                              });
-                              print(emailController.text);
-                            } catch (e) {
-                              print(e);
-                            }
-                          },
                         )
                       ],
                     ),
