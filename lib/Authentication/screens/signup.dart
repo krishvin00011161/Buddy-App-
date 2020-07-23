@@ -1,15 +1,15 @@
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/Message/widget/widget.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import '../../home/animation/FadeAnimation.dart';
+import '../../login/ui/shared/ui_helpers.dart';
+import '../../login/ui/widgets/text_link.dart';
 import '../../welcome/welcome_view.dart';
 import '../services/auth.dart';
+
 
 class SignUp extends StatefulWidget {
   final Function toggleView;
@@ -22,12 +22,13 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
-  TextEditingController usernameEditingController =
+  TextEditingController firstNameEditingController =
       new TextEditingController();
+  TextEditingController lastNameEditingController = new TextEditingController();
+  TextEditingController usernameEditingController = new TextEditingController();
 
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
-
 
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -37,143 +38,158 @@ class _SignUpState extends State<SignUp> {
 
   final DateTime timestamp = DateTime.now();
 
-  singUp() async {
-
-    if(formKey.currentState.validate()){
+  signUp() async {
+    if (formKey.currentState.validate()) {
       setState(() {
-
         isLoading = true;
       });
 
-      await authService.signUpWithEmailAndPassword(emailEditingController.text,
-          passwordEditingController.text, User()).then((result){
-            if(result != null){
+      await authService
+          .signUpWithEmailAndPassword(emailEditingController.text,
+              passwordEditingController.text, User())
+          .then((result) {
+        if (result != null) {
+          Map<String, String> userDataMap = {
+            "id": AuthService.idNew,
+            // "id2": AuthService.id,
+            "userName": firstNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+            "userEmail": emailEditingController.text,
+            "classes": "",
+            "photoUrl":
+                "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
+            "timeStamp": timestamp.toString(),
+            "userRole": "",
+          };
 
-              Map<String,String> userDataMap = {
-                "id" : AuthService.idNew,
-                "id2" : AuthService.id,
-                "userName" : usernameEditingController.text,
-                "userEmail" : emailEditingController.text,
-                "classes" : "",
-                "photoUrl" : "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
-                "timeStamp" : timestamp.toString(),
-                "userRole" : "",
-              };
+          databaseMethods.addUserInfo(userDataMap);
 
-              databaseMethods.addUserInfo(userDataMap);
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          HelperFunctions.saveUserNameSharedPreference(
+              firstNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+          HelperFunctions.saveUserEmailSharedPreference(
+              emailEditingController.text);
 
-              HelperFunctions.saveUserLoggedInSharedPreference(true);
-              HelperFunctions.saveUserNameSharedPreference(usernameEditingController.text);
-              HelperFunctions.saveUserEmailSharedPreference(emailEditingController.text);
-
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) => WelcomeView(),//ChatRoom()
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WelcomeView(),
               ));
-            }
+        }
       });
     }
   }
 
+  Scaffold body() {
+    return Scaffold(
+  
+      body: isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    verticalSpaceLarge,
+                    verticalSpaceLarge,
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'First Name',
+                        ),
+                        controller: firstNameEditingController,
+                      ),
+                    ),
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Last Name',
+                        ),
+                        controller: lastNameEditingController,
+                      ),
+                    ),
+                    verticalSpaceSmall,
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'EMAIL',
+                        ),
+                        controller: emailEditingController,
+                      ),
+                    ),
+                    verticalSpaceSmall,
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'PASSWORD',
+                        ),
+                        controller: passwordEditingController,
+                        obscureText: true,
+                      ),
+                    ),
+                    verticalSpaceMedium,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          TextLink(
+                            'Already Have An Account',
+                            onPressed: () {
+                              widget.toggleView();
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    verticalSpaceMedium,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          FlatButton(
+                            child: Text(
+                              'SIGN UP',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                            color: Colors.orangeAccent,
+                            padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                            ),
+                            onPressed: () {
+                              signUp();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarMain(context),
-      body: isLoading ? Container(child: Center(child: CircularProgressIndicator(),),) :  Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            Spacer(),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    style: simpleTextStyle(),
-                    controller: usernameEditingController,
-                    validator: (val){
-                      return val.isEmpty || val.length < 3 ? "Enter Username 3+ characters" : null;
-                    },
-                    decoration: textFieldInputDecoration("fullName"),
-                  ),
-                  TextFormField(
-                    controller: emailEditingController,
-                    style: simpleTextStyle(),
-                    validator: (val){
-                      return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
-                          null : "Enter correct email";
-                    },
-                    decoration: textFieldInputDecoration("email"),
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("password"),
-                    controller: passwordEditingController,
-                    validator:  (val){
-                      return val.length < 6 ? "Enter Password 6+ characters" : null;
-                    },
-
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            GestureDetector(
-              onTap: (){
-                singUp();
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [const Color(0xff007EF4), const Color(0xff2A75BC)],
-                    )),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "Sign Up",
-                  style: biggerTextStyle(),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Already have an account? ",
-                  style: simpleTextStyle(),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.toggleView();
-                  },
-                  child: Text(
-                    "SignIn now",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            )
-          ],
-        ),
-      ),
-    );
-    
+    return body();
   }
 }

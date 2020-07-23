@@ -2,20 +2,20 @@ import 'package:buddyappfirebase/Notifications/notification.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Requests/requests.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
-import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/locator.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
-import 'package:buddyappfirebase/login/ui/views/login_view.dart';
-import 'package:buddyappfirebase/login/ui/views/start_view.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../Message/helper/authenticate.dart';
 
 
 
 class CustomDrawers extends StatelessWidget {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final NavigationService _navigationService = locator<NavigationService>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
   @override
@@ -131,8 +131,11 @@ class CustomDrawers extends StatelessWidget {
                 ),
                 onTap: () {
                   // Navigator push
-                  logout();
-                  LoginView.loggedIn = false;
+                  _signOut();
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Authenticate()),
+                  );
                 },
               ),
             ],
@@ -140,9 +143,11 @@ class CustomDrawers extends StatelessWidget {
         );
   }
 
-
-  logout() {
-    googleSignIn.signOut();
-    _navigationService.navigateTo(StartViewRoute);
+  
+  Future<void> _signOut() async {
+    await _auth.signOut();
+   
   }
+
+
 }

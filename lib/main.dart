@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/services/dialog_service.dart';
+import 'Authentication/screens/signup.dart';
 import 'home/screens/MainHomeView.dart';
 import 'login/ui/router.dart';
 import 'login/managers/dialog_manager.dart';
@@ -51,18 +52,27 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+   bool showSignIn = true;
+
+  void toggleView() {
+    setState(() {
+      showSignIn = !showSignIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FlutterChat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xff145C9E),
-        scaffoldBackgroundColor: Color(0xff1F1F1F),
-        accentColor: Color(0xff007EF4),
+        primaryColor: Colors.grey,
+        scaffoldBackgroundColor: Colors.white,
+        accentColor: Color(0xFFFEF9EB),
         fontFamily: "OverpassRegular",
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      //home: Authenticate(),
       home: userIsLoggedIn != null ?  userIsLoggedIn ? MainHomeView() : Authenticate()
           : Container(
         child: Center(

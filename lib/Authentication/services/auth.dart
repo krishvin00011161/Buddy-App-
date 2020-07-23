@@ -17,7 +17,7 @@ class AuthService {
     return user != null ? User(uid: user.uid, id: user.providerId) : null;
   }
 
-  Future signInWithEmailAndPassword(String email, String password, User user) async { // Sign In should not look at this.
+  Future signInWithEmailAndPassword(String email, String password) async { // Sign In should not look at this.
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);

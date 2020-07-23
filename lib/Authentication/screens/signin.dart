@@ -1,3 +1,4 @@
+import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
@@ -9,6 +10,13 @@ import 'package:buddyappfirebase/Message/widget/widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../../home/animation/FadeAnimation.dart';
+import '../../home/screens/MainHomeView.dart';
+import '../../login/ui/shared/ui_helpers.dart';
+import '../../login/ui/shared/ui_helpers.dart';
+import '../../login/ui/widgets/text_link.dart';
+import '../../welcome/welcome_view.dart';
 
 
 class SignIn extends StatefulWidget {
@@ -38,7 +46,7 @@ class _SignInState extends State<SignIn> {
 
       await authService
           .signInWithEmailAndPassword(
-              emailEditingController.text, passwordEditingController.text, User())
+              emailEditingController.text, passwordEditingController.text)
           .then((result) async {
         if (result != null)  {
           QuerySnapshot userInfoSnapshot =
@@ -51,7 +59,7 @@ class _SignInState extends State<SignIn> {
               userInfoSnapshot.documents[0].data["userEmail"]);
 
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => ChatRoom()));
+              context, MaterialPageRoute(builder: (context) => MainHomeView()));
         } else {
           setState(() {
             isLoading = false;
@@ -62,131 +70,117 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+ 
+  Scaffold body() {
     return Scaffold(
-      appBar: appBarMain(context),
       body: isLoading
           ? Container(
               child: Center(child: CircularProgressIndicator()),
             )
-          : Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+          : SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: Form(
+              key: formKey,
               child: Column(
-                children: [
-                  Spacer(),
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          validator: (val) {
-                            return RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(val)
-                                ? null
-                                : "Please Enter Correct Email";
-                          },
-                          controller: emailEditingController,
-                          style: simpleTextStyle(),
-                          decoration: textFieldInputDecoration("email"),
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    verticalSpaceLarge,
+                    verticalSpaceLarge,
+                   
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'EMAIL',
                         ),
-                        TextFormField(
-                          obscureText: true,
-                          validator: (val) {
-                            return val.length > 6
-                                ? null
-                                : "Enter Password 6+ characters";
-                          },
-                          style: simpleTextStyle(),
-                          controller: passwordEditingController,
-                          decoration: textFieldInputDecoration("password"),
+                        controller: emailEditingController,
+                      ),
+                    ),
+                    verticalSpaceSmall,
+                    FadeAnimation(
+                      1.3,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'PASSWORD',
+                        ),
+                        controller: passwordEditingController,
+                        obscureText: true,
+                      ),
+                    ),
+                    verticalSpaceMedium,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          TextLink(
+                            'Forget Password',
+                            onPressed: () {
+                              Navigator.push(
+                               context,
+                              MaterialPageRoute(builder: (context) => Reset()),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    verticalSpaceMedium,
+                    
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          FlatButton(
+                            child: Text(
+                              'Log In',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                            color: Colors.orangeAccent,
+                            padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                            ),
+                            onPressed: () {
+                              signIn();
+                            },
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgotPassword()));
-                        },
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Text(
-                              "Forgot Password?",
-                              style: simpleTextStyle(),
-                            )),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      signIn();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xff007EF4),
-                              const Color(0xff2A75BC)
-                            ],
-                          )),
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        "Sign In",
-                        style: biggerTextStyle(),
-                        textAlign: TextAlign.center,
-                      ),
+                    verticalSpaceMedium,
+                     Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          TextLink(
+                            "Don't have an Account? Register Now",
+                            onPressed: () {
+                              widget.toggleView();
+                            },
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have account? ",
-                        style: simpleTextStyle(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.toggleView();
-                        },
-                        child: Text(
-                          "Register now",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
-              ),
+                  ],
+                ),
             ),
+          ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

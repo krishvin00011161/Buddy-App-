@@ -105,11 +105,7 @@ class _LoginViewState extends State<LoginView> {
                             'Forget Password',
                             onPressed: () {
                               // TODO: Handle navigation
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PasswordView(),
-                                  ));
+                            //  widget.toggleView();
                             },
                           ),
                         )
