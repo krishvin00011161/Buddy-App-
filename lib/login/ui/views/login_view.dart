@@ -1,7 +1,6 @@
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:buddyappfirebase/login/ui/views/password_view.dart';
-import 'package:buddyappfirebase/login/ui/views/start_view.dart';
 import 'package:buddyappfirebase/login/ui/widgets/text_link.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
 import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/login/ui/widgets/route_transition.dart';
+
+
+import '../../../Authentication/services/auth.dart';
+
 
 
 
@@ -40,7 +42,13 @@ class _LoginViewState extends State<LoginView> {
   String email = "";
   String password = "";
 
+  AuthService authService = new AuthService();
 
+  final formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
+
+ 
 
 
 
@@ -127,6 +135,8 @@ class _LoginViewState extends State<LoginView> {
                               borderRadius: new BorderRadius.circular(25.0),
                             ),
                             onPressed: () async {
+
+                              
                               try {
                                 model.login(
                                   email: emailController.text,

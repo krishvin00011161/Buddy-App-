@@ -7,6 +7,8 @@ class DatabaseMethods {
     Firestore.instance.collection("users").add(userData).catchError((e) {
       print(e.toString());
     });
+   
+    
   }
 
   getUserInfo(String email) async {

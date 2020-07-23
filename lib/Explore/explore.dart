@@ -1,8 +1,9 @@
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../home/screens/MainHomeView.dart';
-import '../message/message.dart';
+
 
 
 class ExplorePage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _ExplorePageState extends State<ExplorePage> {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessageScreen()),
+            builder: (context) => ChatRoom()),
           );
       }
       },

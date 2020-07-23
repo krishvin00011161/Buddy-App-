@@ -1,3 +1,8 @@
+import 'package:buddyappfirebase/Message/helper/authenticate.dart';
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/services/database.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/login/constants/route_names.dart';
 import 'package:buddyappfirebase/login/services/navigation_service.dart';
@@ -9,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../Explore/explore.dart';
-import '../../message/message.dart';
 
 //Dk
 
@@ -23,12 +27,32 @@ class _MainHomeViewState extends State<MainHomeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Stream chatRooms;
 
   logout() {
     googleSignIn.signOut();
-    _navigationService.navigateTo(StartViewRoute);
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Authenticate()),
+  );
   }
 
+  @override
+  void initState() {
+    getUserInfogetChats();
+    super.initState();
+  }
+
+  getUserInfogetChats() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(() {
+        chatRooms = snapshots;
+        print(
+            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
+      });
+    });
+  }
 
 
   Scaffold home() { // This is responsible for the Home View
@@ -89,7 +113,7 @@ class _MainHomeViewState extends State<MainHomeView> {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessageScreen()),
+            builder: (context) => ChatRoom()),
           );
       }
       },

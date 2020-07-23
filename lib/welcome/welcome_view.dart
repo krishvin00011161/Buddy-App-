@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
 
+import 'setup_class.dart';
+
 // This class Shows images that are in the welcome view
 
 class WelcomeView extends StatefulWidget {
@@ -199,7 +201,12 @@ class _WelcomeViewState extends State<WelcomeView> {
                       isTeacherPressed = true;
                       isStudentPressed = false;
                       // // Todo
-                      _navigationService.navigateTo(SetUpViewRoute);
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Setup(), // fix later
+                      ),
+                    );
                     });
                     print(isTeacherPressed);
                   },

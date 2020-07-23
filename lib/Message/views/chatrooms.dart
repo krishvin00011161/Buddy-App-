@@ -1,11 +1,12 @@
 // import 'dart:html';
 
-import 'package:buddyappfirebase/message/constant_val.dart';
-import 'package:buddyappfirebase/testMessage/helper/authenticate.dart';
-import 'package:buddyappfirebase/testMessage/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/testMessage/helper/theme.dart';
-import 'package:buddyappfirebase/testMessage/services/auth.dart';
-import 'package:buddyappfirebase/testMessage/views/search.dart';
+import 'package:buddyappfirebase/Authentication/services/auth.dart';
+import 'package:buddyappfirebase/Message/helper/authenticate.dart';
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/helper/theme.dart';
+import 'package:buddyappfirebase/Message/views/search.dart';
+
 import 'package:flutter/material.dart';
 
 import '../services/database.dart';

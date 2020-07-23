@@ -91,12 +91,12 @@ class _StartViewState extends State<StartView> {
               height: 70,
               child: RaisedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          SignUpView(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //       //  SignUpView(),
+                  //   ),
+                  // );
                 },
                 child: Text(
                   'SIGN UP',

@@ -1,12 +1,12 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
-import 'package:buddyappfirebase/message/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:buddyappfirebase/login/services/firestoreService.dart';
+
 
 class ProfileView extends StatelessWidget {
   int _currentIndex = 0;
@@ -64,7 +64,7 @@ class ProfileView extends StatelessWidget {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessageScreen()),
+            builder: (context) => ChatRoom()),
           );
       }
       },
@@ -105,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
+    //getData();
   }
 
   @override
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
   ListView Profile(double height) {
-    getData();
+    //getData();
     return ListView(
         children: [
           Padding(
@@ -211,15 +211,15 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void getData() {
-    Firestore.instance.collection("users").document(FirestoreService.id).get().then((value){
-      print(value.data);
-      setState(() {
-        _name = value.data['fullName'];
-      });
-    });
+  // void getData() {
+  //   Firestore.instance.collection("users").document(FirestoreService.id).get().then((value){
+  //     print(value.data);
+  //     setState(() {
+  //       _name = value.data['fullName'];
+  //     });
+  //   });
 
-  }
+  // }
 
 
 }

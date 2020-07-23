@@ -1,5 +1,4 @@
-import 'package:buddyappfirebase/login/models/emailuser.dart';
-import 'package:buddyappfirebase/login/services/firestoreService.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -40,11 +39,11 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      await FirestoreService.createUser(EmailUser( // where i call it
-        id: authResult.user.uid,
-        email: email,
-        fullName: fullName,
-      ));
+      // await FirestoreService.createUser(EmailUser( // where i call it very important
+      //   id: authResult.user.uid,
+      //   email: email,
+      //   fullName: fullName,
+      // ));
       return authResult.user != null;
     } catch (e) {
       return e.message;

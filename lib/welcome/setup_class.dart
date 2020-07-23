@@ -7,8 +7,9 @@ import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:buddyappfirebase/login/services/firestoreService.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../Authentication/services/auth.dart';
 
 
 
@@ -111,7 +112,7 @@ class _SetupState extends State<Setup> {
       ),
     );
   }
-
+  // Changed to UID
   // gets info from input and updates firestore
   void updateInfo() async{
     final HashMap<String, String> classes = HashMap();
@@ -126,8 +127,8 @@ class _SetupState extends State<Setup> {
     if (classDocument == null || !classDocument.exists) {
       // adds class for user
       classes[className.text] = classCode.text;
-      Firestore.instance.collection('users').document(FirestoreService.id).updateData({'classes' : classes});
-      Firestore.instance.collection('users').document(FirestoreService.id).updateData({'userRole' : 'teacher'});
+      Firestore.instance.collection('users').document(AuthService.idNew).updateData({'classes' : classes});
+      Firestore.instance.collection('users').document(AuthService.idNew).updateData({'userRole' : 'teacher'});
 
       // adds class to classes collection
       Firestore.instance.collection('classes').document(className.text).setData({
@@ -135,7 +136,7 @@ class _SetupState extends State<Setup> {
         'users' : userList
       });
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => MainHomeView()

@@ -1,5 +1,6 @@
-import 'package:buddyappfirebase/testMessage/models/user.dart';
-import 'package:buddyappfirebase/testMessage/views/chat.dart';
+
+import 'package:buddyappfirebase/Message/models/user.dart';
+import 'package:buddyappfirebase/Message/views/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,15 +10,20 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  static String idNew;
+  static String id;
+
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(uid: user.uid, id: user.providerId) : null;
   }
 
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(String email, String password, User user) async { // Sign In should not look at this.
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+      
+      
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -25,11 +31,13 @@ class AuthService {
     }
   }
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
+  Future signUpWithEmailAndPassword(String email, String password, User user) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+      idNew = user.uid;
+      id = result.user.providerId;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

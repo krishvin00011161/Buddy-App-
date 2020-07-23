@@ -1,13 +1,15 @@
-import 'package:buddyappfirebase/testMessage/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/testMessage/helper/theme.dart';
-import 'package:buddyappfirebase/testMessage/services/auth.dart';
-import 'package:buddyappfirebase/testMessage/services/database.dart';
-import 'package:buddyappfirebase/testMessage/views/chatrooms.dart';
-import 'package:buddyappfirebase/testMessage/widget/widget.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/models/user.dart';
+import 'package:buddyappfirebase/Message/services/database.dart';
+
+import 'package:buddyappfirebase/Authentication/services/auth.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/Message/views/forgot_password.dart';
+import 'package:buddyappfirebase/Message/widget/widget.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'forgot_password.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -36,7 +38,7 @@ class _SignInState extends State<SignIn> {
 
       await authService
           .signInWithEmailAndPassword(
-              emailEditingController.text, passwordEditingController.text)
+              emailEditingController.text, passwordEditingController.text, User())
           .then((result) async {
         if (result != null)  {
           QuerySnapshot userInfoSnapshot =
@@ -154,19 +156,7 @@ class _SignInState extends State<SignIn> {
                   SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white),
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      "Sign In with Google",
-                      style:
-                          TextStyle(fontSize: 17, color: CustomTheme.textColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  
                   SizedBox(
                     height: 16,
                   ),

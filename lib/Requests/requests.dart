@@ -1,8 +1,8 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
-import 'package:buddyappfirebase/message/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +66,7 @@ class _RequestsViewState extends State<RequestsView> {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessageScreen()),
+            builder: (context) => ChatRoom()),
           );
       }
       },

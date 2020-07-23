@@ -16,11 +16,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: LoginView(),
       );
-    case SignUpViewRoute:
-      return _getPageRoute(
-        routeName: settings.name,
-        viewToShow: SignUpView(),
-      );
+    // case SignUpViewRoute:
+    //   return _getPageRoute(
+    //     routeName: settings.name,
+    //     viewToShow: SignUpView(),
+    //   );
     case WelcomeViewRoute:
       return _getPageRoute(
         routeName: settings.name,
