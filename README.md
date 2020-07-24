@@ -6,6 +6,14 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
+
+[1.0.2] - 7/24/20 - David Kim
+[bb4ab9c4233927cf60f561a619972212e0a68f0d]
+
+Added
+- Reset Password
+- Bug Fix on ChatRoom
+
 [1.0.1] - 7/23/20 - David Kim
 [7c6df18d09ebb0a5067129e076340358e52331ba]
 
