@@ -1,22 +1,13 @@
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/Message/views/forgot_password.dart';
-import 'package:buddyappfirebase/Message/widget/widget.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../home/animation/FadeAnimation.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../../login/ui/shared/ui_helpers.dart';
-import '../../login/ui/shared/ui_helpers.dart';
 import '../../login/ui/widgets/text_link.dart';
-import '../../welcome/welcome_view.dart';
 
 
 class SignIn extends StatefulWidget {

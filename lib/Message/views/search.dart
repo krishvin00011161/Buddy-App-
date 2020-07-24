@@ -84,14 +84,14 @@ class _SearchState extends State<Search> {
               Text(
                 userName,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 16
                 ),
               ),
               Text(
                 userEmail,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 16
                 ),
               )
@@ -149,7 +149,7 @@ class _SearchState extends State<Search> {
           children: [
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              color: Color(0x54FFFFFF),
+              color: Colors.blueGrey,//Color(0x54FFFFFF),
               child: Row(
                 children: [
                   Expanded(
@@ -159,10 +159,10 @@ class _SearchState extends State<Search> {
                       decoration: InputDecoration(
                         hintText: "search username ...",
                         hintStyle: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 16,
                         ),
-                        border: InputBorder.none
+                        //border: InputBorder.none
                       ),
                     ),
                   ),
@@ -176,8 +176,8 @@ class _SearchState extends State<Search> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              const Color(0x36FFFFFF),
-                              const Color(0x0FFFFFFF)
+                              const Color(0x1544d1), //Color(0x36FFFFFF),
+                              const Color(0x1544d1) //Color(0x0FFFFFFF)
                             ],
                             begin: FractionalOffset.topLeft,
                             end: FractionalOffset.bottomRight
@@ -185,8 +185,13 @@ class _SearchState extends State<Search> {
                           borderRadius: BorderRadius.circular(40)
                         ),
                         padding: EdgeInsets.all(12),
-                        child: Image.asset("assets/images/search_white.png",
-                          height: 25, width: 25,)),
+                        child: Icon(
+                          Icons.search,
+                          size: 25,
+                          color: Colors.black,
+                        )),
+                        //Image.asset("assets/images/search_white.png",
+                          //height: 25, width: 25,)),
                   )
                 ],
               ),

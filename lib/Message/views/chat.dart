@@ -88,11 +88,11 @@ class _ChatState extends State<Chat> {
                     Expanded(
                         child: TextField(
                           controller: messageEditingController,
-                          style: simpleTextStyle(),
+                          style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                               hintText: "Message ...",
                               hintStyle: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 16,
                               ),
                               border: InputBorder.none
@@ -118,8 +118,7 @@ class _ChatState extends State<Chat> {
                               borderRadius: BorderRadius.circular(40)
                           ),
                           padding: EdgeInsets.all(12),
-                          child: Image.asset("assets/images/send.png",
-                            height: 25, width: 25,)),
+                          child: Icon(Icons.send, size: 25,)),
                     ),
                   ],
                 ),

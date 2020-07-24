@@ -6,9 +6,13 @@ import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/views/search.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../Explore/explore.dart';
+import '../../home/screens/MainHomeView.dart';
+import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';
 import 'chat.dart';
 
@@ -25,6 +29,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Stream chatRooms;
 
+  int _currentIndex = 0;
   
 
   Widget chatRoomsList() {
@@ -46,7 +51,9 @@ class _ChatRoomState extends State<ChatRoom> {
                     chatRoomId: snapshot.data.documents[index].data["chatRoomId"], // chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
                   );
                 })
-            : Container();
+            : Container(
+              
+            );
       },
     );
   }
@@ -68,34 +75,84 @@ class _ChatRoomState extends State<ChatRoom> {
     });
   }
 
+  AppBar chatRoomAppbar() {
+    bool isSearching = false;
+
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Messages",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          "assets/images/logo.png",
-          height: 40,
-        ),
-        elevation: 0.0,
-        centerTitle: false,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              AuthService().signOut();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => Authenticate()));
-            },
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
+      appBar: chatRoomAppbar(),
+      drawer: CustomDrawers(),
+      bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
+          currentIndex: _currentIndex,
+          //activeColor: Theme.of(context).primaryColor,
+          items: [
+          BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home,
+            color: _currentIndex == 0 ? Theme.of(context).primaryColor : Colors.grey,
+          ),
+          title: Text(""),
+          
+          ),
+          BottomNavigationBarItem(
+          icon: Icon(
+            Icons.search,
+            color: _currentIndex == 1 ? Theme.of(context).primaryColor : Colors.grey
+          ),
+          title: Text(""),
+          ),
+          BottomNavigationBarItem(
+          icon: Icon(
+            Icons.chat,
+            color: _currentIndex == 2 ? Theme.of(context).primaryColor : Colors.grey
+          ),
+          title: Text(""),
           )
-        ],
-      ),
+      ],
+      onTap: (index) {
+        if (index == 0) {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainHomeView()),
+          );
+
+          
+      } else if (index == 1) {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ExplorePage()),
+          );
+      } else {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatRoom()),
+          );
+      }
+      },
+    ),
+    
       body: Container(
         child: chatRoomsList(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
+        child: Icon(Icons.search, color: Colors.black,),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Search()));
@@ -133,7 +190,7 @@ class ChatRoomsTile extends StatelessWidget {
               child: Text(userName.substring(0, 1),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black, //white
                       fontSize: 16,
                       fontFamily: 'OverpassRegular',
                       fontWeight: FontWeight.w300)),
