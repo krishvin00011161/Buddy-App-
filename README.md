@@ -6,6 +6,12 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
+[1.0.1] - 7/23/20 - David Kim
+[7c6df18d09ebb0a5067129e076340358e52331ba]
+
+Added
+- Login Redesign
+
 [1.0.0] - 7/22/20 - David Kim
 [c2d82b3ebfd11d0fe887c3e1e9309c5155c82fb4]
 
