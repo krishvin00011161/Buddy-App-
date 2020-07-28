@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:flutter/material.dart';
-
-import '../../login/ui/shared/ui_helpers.dart';
 import '../services/auth.dart';
-import 'signin.dart';
 
 class Reset extends StatefulWidget {
   @override
@@ -18,19 +15,19 @@ class _ResetState extends State<Reset> {
 
   bool isLoading = false;
 
-  String _warning, _email;
+  
 
   reset() async {
     if (formKey.currentState.validate()) {
       setState(() {
         isLoading = true;
       });
-    
-    await authService
-        .resetPass(emailEditingController.text)
-        .then((result) async {
-      Navigator.pop(context);
-    });
+
+      await authService
+          .resetPass(emailEditingController.text)
+          .then((result) async {
+        Navigator.pop(context);
+      });
     }
   }
 

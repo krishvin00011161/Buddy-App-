@@ -2,13 +2,12 @@ import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
+import 'package:buddyappfirebase/home/widgets/text_link.dart';
+import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../home/screens/MainHomeView.dart';
-import '../../login/ui/shared/ui_helpers.dart';
-import '../../login/ui/widgets/text_link.dart';
-
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -39,7 +38,7 @@ class _SignInState extends State<SignIn> {
           .signInWithEmailAndPassword(
               emailEditingController.text, passwordEditingController.text)
           .then((result) async {
-        if (result != null)  {
+        if (result != null) {
           QuerySnapshot userInfoSnapshot =
               await DatabaseMethods().getUserInfo(emailEditingController.text);
 
@@ -61,7 +60,6 @@ class _SignInState extends State<SignIn> {
     }
   }
 
- 
   Scaffold body() {
     return Scaffold(
       body: isLoading
@@ -69,17 +67,16 @@ class _SignInState extends State<SignIn> {
               child: Center(child: CircularProgressIndicator()),
             )
           : SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: Form(
-              key: formKey,
-              child: Column(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: Form(
+                key: formKey,
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     verticalSpaceLarge,
                     verticalSpaceLarge,
-                   
                     FadeAnimation(
                       1.3,
                       TextFormField(
@@ -111,8 +108,9 @@ class _SignInState extends State<SignIn> {
                             'Forget Password',
                             onPressed: () {
                               Navigator.push(
-                               context,
-                              MaterialPageRoute(builder: (context) => Reset()),
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Reset()),
                               );
                             },
                           ),
@@ -120,7 +118,6 @@ class _SignInState extends State<SignIn> {
                       ],
                     ),
                     verticalSpaceMedium,
-                    
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +145,7 @@ class _SignInState extends State<SignIn> {
                       ],
                     ),
                     verticalSpaceMedium,
-                     Row(
+                    Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -165,8 +162,8 @@ class _SignInState extends State<SignIn> {
                     ),
                   ],
                 ),
+              ),
             ),
-          ),
     );
   }
 

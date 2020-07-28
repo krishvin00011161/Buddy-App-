@@ -1,18 +1,10 @@
 import 'dart:collection';
-
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
-import 'package:buddyappfirebase/login/locator.dart';
-import 'package:buddyappfirebase/login/services/navigation_service.dart';
-import 'package:buddyappfirebase/login/ui/shared/ui_helpers.dart';
+import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import '../Authentication/services/auth.dart';
-
-
-
 
 // This is for students setup
 
@@ -22,16 +14,14 @@ class SetUpStudent extends StatefulWidget {
 }
 
 class _SetUpStudentState extends State<SetUpStudent> {
-  final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController className = new TextEditingController();
   TextEditingController classCode = new TextEditingController();
   String documentID;
 
   getUser() async {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      return user.uid;
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.uid;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +44,14 @@ class _SetUpStudentState extends State<SetUpStudent> {
               },
             ),
             verticalSpaceLarge,
-            TextFormField( //Todo  Have to change the outline of textfield to blue
+            TextFormField(
+              //Todo  Have to change the outline of textfield to blue
               controller: className,
               decoration: InputDecoration(
-                labelText: 'Class Name',
-                labelStyle: TextStyle(
-                  color: Colors.blueAccent,
-                )
-              ),
+                  labelText: 'Class Name',
+                  labelStyle: TextStyle(
+                    color: Colors.blueAccent,
+                  )),
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please make a class code.';
@@ -72,11 +62,10 @@ class _SetUpStudentState extends State<SetUpStudent> {
             TextFormField(
               controller: classCode,
               decoration: InputDecoration(
-                labelText: 'Class Code',
-                labelStyle: TextStyle(
-                  color: Colors.blueAccent,
-                )
-              ),
+                  labelText: 'Class Code',
+                  labelStyle: TextStyle(
+                    color: Colors.blueAccent,
+                  )),
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please make a class code.';
@@ -115,33 +104,44 @@ class _SetUpStudentState extends State<SetUpStudent> {
   }
 
   // Needs to know how
-   // changed to AuthService.idNew
+  // changed to AuthService.idNew
   //gets info from input and updates firestore
-  void updateInfo() async{
+  void updateInfo() async {
     final HashMap<String, String> classes = HashMap();
 
     // checks if class exists and if class code is correct
-    DocumentReference documentReference = Firestore.instance.collection("classes").document(className.text);
+    DocumentReference documentReference =
+        Firestore.instance.collection("classes").document(className.text);
     documentReference.get().then((datasnapshot) {
       if (datasnapshot.exists && datasnapshot.data['code'] == classCode.text) {
         // adds class for user
         classes[className.text] = classCode.text;
-        Firestore.instance.collection('users').document(AuthService.idNew).updateData({'classes' : classes});
-        Firestore.instance.collection('users').document(AuthService.idNew).updateData({'userRole' : 'student'});
+        Firestore.instance
+            .collection('users')
+            .document(AuthService.idNew)
+            .updateData({'classes': classes});
+        Firestore.instance
+            .collection('users')
+            .document(AuthService.idNew)
+            .updateData({'userRole': 'student'});
 
         // adds user's id to the class's user array
-        Firestore.instance.collection('classes').document(className.text).updateData({"users": FieldValue.arrayUnion([AuthService.idNew])}); // this works
+        Firestore.instance
+            .collection('classes')
+            .document(className.text)
+            .updateData({
+          "users": FieldValue.arrayUnion([AuthService.idNew])
+        }); // this works
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => MainHomeView()
-          ),
+          MaterialPageRoute(builder: (context) => MainHomeView()),
         );
-      }else {
+      } else {
         AlertDialog inUse = AlertDialog(
           title: Text("Class not found"),
-          content: Text("Please make sure the class name and the class code are correct."),
+          content: Text(
+              "Please make sure the class name and the class code are correct."),
         );
 
         // show the dialog
@@ -154,9 +154,4 @@ class _SetUpStudentState extends State<SetUpStudent> {
       }
     });
   }
-
-
-
-
-
 }

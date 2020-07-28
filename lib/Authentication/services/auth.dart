@@ -1,9 +1,6 @@
-
 import 'package:buddyappfirebase/Message/models/user.dart';
-import 'package:buddyappfirebase/Message/views/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 
 // This needs work
 
@@ -17,13 +14,13 @@ class AuthService {
     return user != null ? User(uid: user.uid, id: user.providerId) : null;
   }
 
-  Future signInWithEmailAndPassword(String email, String password) async { // Sign In should not look at this.
+  Future signInWithEmailAndPassword(String email, String password) async {
+    // Sign In should not look at this.
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      
-      
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -31,7 +28,8 @@ class AuthService {
     }
   }
 
-  Future signUpWithEmailAndPassword(String email, String password, User user) async {
+  Future signUpWithEmailAndPassword(
+      String email, String password, User user) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -54,26 +52,6 @@ class AuthService {
     }
   }
 
-  Future<FirebaseUser> signInWithGoogle(BuildContext context) async {
-    final GoogleSignIn _googleSignIn = new GoogleSignIn();
-
-    final GoogleSignInAccount googleSignInAccount =
-        await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-        idToken: googleSignInAuthentication.idToken,
-        accessToken: googleSignInAuthentication.accessToken);
-
-    AuthResult result = await _auth.signInWithCredential(credential);
-    FirebaseUser userDetails = result.user;
-
-    if (result == null) {
-    } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
-    }
-  }
 
   Future signOut() async {
     try {

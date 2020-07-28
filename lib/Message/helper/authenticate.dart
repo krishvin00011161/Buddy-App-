@@ -2,8 +2,6 @@ import 'package:buddyappfirebase/Authentication/screens/signin.dart';
 import 'package:buddyappfirebase/Authentication/screens/signup.dart';
 import 'package:flutter/material.dart';
 
-// This needs a change
-
 class Authenticate extends StatefulWidget {
   @override
   _AuthenticateState createState() => _AuthenticateState();

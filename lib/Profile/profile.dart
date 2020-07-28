@@ -1,12 +1,9 @@
 import 'package:buddyappfirebase/Explore/explore.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
-import 'package:buddyappfirebase/home/widgets/custom_app_bar.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class ProfileView extends StatelessWidget {
   int _currentIndex = 0;
@@ -15,63 +12,59 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
         home: Scaffold(
-          appBar: ProfileAppbar(),
-          drawer: CustomDrawers(),
-          body: ProfilePage(),
-          bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
-          currentIndex: _currentIndex,
-          //activeColor: Theme.of(context).primaryColor,
-          items: [
-          BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: _currentIndex == 0 ? Theme.of(context).primaryColor : Colors.grey,
-          ),
-          title: Text(""),
-          
-          ),
-          BottomNavigationBarItem(
-          icon: Icon(
-            Icons.search,
-            color: _currentIndex == 1 ? Theme.of(context).primaryColor : Colors.grey
-          ),
-          title: Text(""),
-          ),
-          BottomNavigationBarItem(
-          icon: Icon(
-            Icons.chat,
-            color: _currentIndex == 2 ? Theme.of(context).primaryColor : Colors.grey
-          ),
-          title: Text(""),
-          )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainHomeView()),
-          );
+            appBar: ProfileAppbar(),
+            drawer: CustomDrawers(),
+            body: ProfilePage(),
+            bottomNavigationBar: CupertinoTabBar(
+              // Code reuse make some class Reminder
+              currentIndex: _currentIndex,
+              //activeColor: Theme.of(context).primaryColor,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                    color: _currentIndex == 0
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey,
+                  ),
+                  title: Text(""),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search,
+                      color: _currentIndex == 1
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey),
+                  title: Text(""),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat,
+                      color: _currentIndex == 2
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey),
+                  title: Text(""),
+                )
+              ],
+              onTap: (index) {
+                if (index == 0) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainHomeView()),
+                  );
+                } else if (index == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ExplorePage()),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatRoom()),
+                  );
+                }
+              },
+            )));
+  }
 
-          
-      } else if (index == 1) {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ExplorePage()),
-          );
-      } else {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatRoom()),
-          );
-      }
-      },
-    )
-  )
-  );
-}
   AppBar ProfileAppbar() {
     bool isSearching = false;
 
@@ -87,7 +80,6 @@ class ProfileView extends StatelessWidget {
       ),
     );
   }
-  
 }
 
 class ProfilePage extends StatefulWidget {
@@ -110,105 +102,91 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    double height =  MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Profile(height)
-    );
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(body: Profile(height));
   }
-
-
 
   ListView Profile(double height) {
     //getData();
-    return ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
+    return ListView(children: [
+      Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Text(
+          "$_name",
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+      Container(
+          height: 120,
+          child: Center(
+            child: CircleAvatar(
+              radius: 60,
+              backgroundImage: NetworkImage(
+                "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png",
+              ),
+            ),
+          )),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+            color: Colors.transparent,
+            onPressed: () {},
             child: Text(
-              "$_name",
+              'EDIT PROFILE',
               style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
+                fontSize: 17,
+                color: Colors.blueAccent,
               ),
             ),
           ),
-          Container(
-              height: 120,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: NetworkImage(
-                    "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png",
-                  ),
-                ),
-              )
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-
-            children: <Widget>[
-              FlatButton(
-                color: Colors.transparent,
-                onPressed: () {
-
-                },
-                child: Text(
-                  'EDIT PROFILE',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.blueAccent,
-                  ),
-                ),
-              ),
+        ],
+      ),
+      Divider(),
+      DefaultTabController(
+          length: 3,
+          initialIndex: 0,
+          child: Column(
+            children: [
+              TabBar(
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.blueAccent,
+                  tabs: [
+                    Tab(
+                      child: Text(
+                        '$_classCount\nClasses',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Tab(
+                      child: Text(
+                        '$_questionCount\nQuestions',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Tab(
+                      child: Text(
+                        '$_answerCount\nAnswers',
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ]),
+              Container(
+                  height: 250,
+                  child: TabBarView(
+                    children: [
+                      Center(child: Text('fsfafffasa')),
+                      Center(child: Text('afahefafre')),
+                      Center(child: Text('fsaafaegde')),
+                    ],
+                  ))
             ],
-          ),
-
-          Divider(),
-          DefaultTabController(
-              length: 3,
-              initialIndex: 0,
-              child: Column(
-                children: [
-                  TabBar(
-                      unselectedLabelColor: Colors.grey,
-                      labelColor: Colors.blueAccent,
-                      tabs: [
-                        Tab(
-                          child: Text(
-                              '$_classCount\nClasses',
-                              textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Tab(
-                          child: Text(
-                            '$_questionCount\nQuestions',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Tab(
-                          child: Text(
-                            '$_answerCount\nAnswers',
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ]
-                  ),
-                  Container(
-                      height: 250,
-                      child: TabBarView(
-                        children: [
-                          Center(child: Text('fsfafffasa')),
-                          Center(child: Text('afahefafre')),
-                          Center(child: Text('fsaafaegde')),
-                        ],
-                      )
-                  )
-                ],
-              )
-          )
-        ]
-    );
+          ))
+    ]);
   }
 
   // void getData() {
@@ -220,6 +198,5 @@ class _ProfilePageState extends State<ProfilePage> {
   //   });
 
   // }
-
 
 }

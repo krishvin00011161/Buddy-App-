@@ -1,8 +1,7 @@
 import 'dart:collection';
 
-class EmailUser { 
+class EmailUser {
   // Class for Email user when creating new user throw firebase
-  
 
   final DateTime timestamp = DateTime.now();
   final String id;
@@ -13,11 +12,10 @@ class EmailUser {
 
   final HashMap<String, String> classes = HashMap();
 
-
   EmailUser({
-    this.id, 
-    this.fullName, 
-    this.email, 
+    this.id,
+    this.fullName,
+    this.email,
     this.userRole,
     this.photoUrl,
   });
@@ -28,16 +26,17 @@ class EmailUser {
         email = data['email'],
         userRole = data['userRole'],
         photoUrl = data['photoUrl'];
-        
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'fullName': fullName,
       'email': email,
       'userRole': userRole,
-      'timestamp' : timestamp,
-      'classes' : classes,
-      'photoUrl' : "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
+      'timestamp': timestamp,
+      'classes': classes,
+      'photoUrl':
+          "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
     };
   }
 }

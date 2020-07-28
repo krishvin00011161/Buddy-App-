@@ -1,6 +1,3 @@
-import 'dart:io';
-
-
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/widget/widget.dart';
@@ -19,22 +16,24 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
-  Widget chatMessages(){
+  Widget chatMessages() {
     return StreamBuilder(
       stream: chats,
-      builder: (context, snapshot){
-        return snapshot.hasData ?  ListView.builder(
-          itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index){
-              return MessageTile(
-                message: snapshot.data.documents[index].data["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
-              );
-            }) : Container();
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return MessageTile(
+                    message: snapshot.data.documents[index].data["message"],
+                    sendByMe: Constants.myName ==
+                        snapshot.data.documents[index].data["sendBy"],
+                  );
+                })
+            : Container();
       },
     );
   }
@@ -44,9 +43,7 @@ class _ChatState extends State<Chat> {
       Map<String, dynamic> chatMessageMap = {
         "sendBy": Constants.myName,
         "message": messageEditingController.text,
-        'time': DateTime
-            .now()
-            .millisecondsSinceEpoch,
+        'time': DateTime.now().millisecondsSinceEpoch,
       };
 
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
@@ -75,11 +72,9 @@ class _ChatState extends State<Chat> {
         child: Stack(
           children: [
             chatMessages(),
-            Container(alignment: Alignment.bottomCenter,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+            Container(
+              alignment: Alignment.bottomCenter,
+              width: MediaQuery.of(context).size.width,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 color: Color(0x54FFFFFF),
@@ -87,18 +82,19 @@ class _ChatState extends State<Chat> {
                   children: [
                     Expanded(
                         child: TextField(
-                          controller: messageEditingController,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                              hintText: "Message ...",
-                              hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                              border: InputBorder.none
+                      controller: messageEditingController,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          hintText: "Message ...",
+                          hintStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
-                        )),
-                    SizedBox(width: 16,),
+                          border: InputBorder.none),
+                    )),
+                    SizedBox(
+                      width: 16,
+                    ),
                     GestureDetector(
                       onTap: () {
                         addMessage();
@@ -113,12 +109,13 @@ class _ChatState extends State<Chat> {
                                     const Color(0x0FFFFFFF)
                                   ],
                                   begin: FractionalOffset.topLeft,
-                                  end: FractionalOffset.bottomRight
-                              ),
-                              borderRadius: BorderRadius.circular(40)
-                          ),
+                                  end: FractionalOffset.bottomRight),
+                              borderRadius: BorderRadius.circular(40)),
                           padding: EdgeInsets.all(12),
-                          child: Icon(Icons.send, size: 25,)),
+                          child: Icon(
+                            Icons.send,
+                            size: 25,
+                          )),
                     ),
                   ],
                 ),
@@ -129,7 +126,6 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
-
 }
 
 class MessageTile extends StatelessWidget {
@@ -138,50 +134,38 @@ class MessageTile extends StatelessWidget {
 
   MessageTile({@required this.message, @required this.sendByMe});
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-          top: 8,
-          bottom: 8,
-          left: sendByMe ? 0 : 24,
-          right: sendByMe ? 24 : 0),
+          top: 8, bottom: 8, left: sendByMe ? 0 : 24, right: sendByMe ? 24 : 0),
       alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: sendByMe
-            ? EdgeInsets.only(left: 30)
-            : EdgeInsets.only(right: 30),
-        padding: EdgeInsets.only(
-            top: 17, bottom: 17, left: 20, right: 20),
+        margin:
+            sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
+        padding: EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
         decoration: BoxDecoration(
-            borderRadius: sendByMe ? BorderRadius.only(
-                topLeft: Radius.circular(23),
-                topRight: Radius.circular(23),
-                bottomLeft: Radius.circular(23)
-            ) :
-            BorderRadius.only(
-        topLeft: Radius.circular(23),
-          topRight: Radius.circular(23),
-          bottomRight: Radius.circular(23)),
+            borderRadius: sendByMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomLeft: Radius.circular(23))
+                : BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomRight: Radius.circular(23)),
             gradient: LinearGradient(
-              colors: sendByMe ? [
-                const Color(0xff007EF4),
-                const Color(0xff2A75BC)
-              ]
-                  : [
-                const Color(0x1AFFFFFF),
-                const Color(0x1AFFFFFF)
-              ],
-            )
-        ),
+              colors: sendByMe
+                  ? [const Color(0xff007EF4), const Color(0xff2A75BC)]
+                  : [const Color(0x1AFFFFFF), const Color(0x1AFFFFFF)],
+            )),
         child: Text(message,
             textAlign: TextAlign.start,
             style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontFamily: 'OverpassRegular',
-            fontWeight: FontWeight.w300)),
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'OverpassRegular',
+                fontWeight: FontWeight.w300)),
       ),
     );
   }

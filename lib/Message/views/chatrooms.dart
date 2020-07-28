@@ -1,22 +1,15 @@
-// import 'dart:html';
-
-import 'package:buddyappfirebase/Authentication/services/auth.dart';
-import 'package:buddyappfirebase/Message/helper/authenticate.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/views/search.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
 import '../../Explore/explore.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';
 import 'chat.dart';
 
-// This needs work
 
 class ChatRoom extends StatefulWidget {
   @override
@@ -24,36 +17,36 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
-
   DatabaseMethods databaseMethods = new DatabaseMethods(); // added
 
   Stream chatRooms;
 
   int _currentIndex = 0;
-  
 
   Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRooms,
       builder: (context, snapshot) {
-      
         return snapshot.hasData
             ? ListView.builder(
-               
-                itemCount: snapshot.data.documents.length, // This probably the error
+                itemCount:
+                    snapshot.data.documents.length, // This probably the error
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
-                    userName: snapshot.data.documents[index].data['chatRoomId']  //userName: snapshot.data.documents[index].data['chatRoomId'] 
+                    userName: snapshot
+                        .data
+                        .documents[index]
+                        .data[
+                            'chatRoomId'] //userName: snapshot.data.documents[index].data['chatRoomId']
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
-                    chatRoomId: snapshot.data.documents[index].data["chatRoomId"], // chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
+                    chatRoomId: snapshot.data.documents[index].data[
+                        "chatRoomId"], // chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
                   );
                 })
-            : Container(
-              
-            );
+            : Container();
       },
     );
   }
@@ -96,63 +89,62 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       appBar: chatRoomAppbar(),
       drawer: CustomDrawers(),
-      bottomNavigationBar: CupertinoTabBar( // Code reuse make some class Reminder
-          currentIndex: _currentIndex,
-          //activeColor: Theme.of(context).primaryColor,
-          items: [
+      bottomNavigationBar: CupertinoTabBar(
+        // Code reuse make some class Reminder
+        currentIndex: _currentIndex,
+        //activeColor: Theme.of(context).primaryColor,
+        items: [
           BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: _currentIndex == 0 ? Theme.of(context).primaryColor : Colors.grey,
-          ),
-          title: Text(""),
-          
-          ),
-          BottomNavigationBarItem(
-          icon: Icon(
-            Icons.search,
-            color: _currentIndex == 1 ? Theme.of(context).primaryColor : Colors.grey
-          ),
-          title: Text(""),
+            icon: Icon(
+              Icons.home,
+              color: _currentIndex == 0
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey,
+            ),
+            title: Text(""),
           ),
           BottomNavigationBarItem(
-          icon: Icon(
-            Icons.chat,
-            color: _currentIndex == 2 ? Theme.of(context).primaryColor : Colors.grey
+            icon: Icon(Icons.search,
+                color: _currentIndex == 1
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey),
+            title: Text(""),
           ),
-          title: Text(""),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat,
+                color: _currentIndex == 2
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey),
+            title: Text(""),
           )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainHomeView()),
-          );
-
-          
-      } else if (index == 1) {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ExplorePage()),
-          );
-      } else {
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatRoom()),
-          );
-      }
-      },
-    ),
-    
+        ],
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainHomeView()),
+            );
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ExplorePage()),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatRoom()),
+            );
+          }
+        },
+      ),
       body: Container(
         child: chatRoomsList(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search, color: Colors.black,),
+        child: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Search()));
@@ -166,15 +158,18 @@ class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
 
-  ChatRoomsTile({this.userName,@required this.chatRoomId});
+  ChatRoomsTile({this.userName, @required this.chatRoomId});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Chat(chatRoomId: chatRoomId,)
-        ));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Chat(
+                      chatRoomId: chatRoomId,
+                    )));
       },
       child: Container(
         color: Colors.black26,

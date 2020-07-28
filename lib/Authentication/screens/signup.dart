@@ -2,14 +2,12 @@ import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:buddyappfirebase/home/widgets/text_link.dart';
+import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
-import '../../login/ui/shared/ui_helpers.dart';
-import '../../login/ui/widgets/text_link.dart';
 import '../../welcome/welcome_view.dart';
 import '../services/auth.dart';
-
 
 class SignUp extends StatefulWidget {
   final Function toggleView;
@@ -33,8 +31,8 @@ class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   final DateTime timestamp = DateTime.now();
 
@@ -52,7 +50,11 @@ class _SignUpState extends State<SignUp> {
           Map<String, String> userDataMap = {
             "id": AuthService.idNew,
             // "id2": AuthService.id,
-            "userName": firstNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+            "userName": firstNameEditingController.text
+                    .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
+                ' ' +
+                lastNameEditingController.text
+                    .replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
             "userEmail": emailEditingController.text,
             "classes": "",
             "photoUrl":
@@ -65,7 +67,11 @@ class _SignUpState extends State<SignUp> {
 
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(
-              firstNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), "") + ' ' + lastNameEditingController.text.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+              firstNameEditingController.text
+                      .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
+                  ' ' +
+                  lastNameEditingController.text
+                      .replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           HelperFunctions.saveUserEmailSharedPreference(
               emailEditingController.text);
 
@@ -81,7 +87,6 @@ class _SignUpState extends State<SignUp> {
 
   Scaffold body() {
     return Scaffold(
-  
       body: isLoading
           ? Container(
               child: Center(
