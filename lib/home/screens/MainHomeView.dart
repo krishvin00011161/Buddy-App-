@@ -264,13 +264,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                       height: 225,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          questions(title: 'Canada'),
-                          questions(title: 'Italy'),
-                          questions(title: 'Greece'),
-                          questions(title: 'United States'),
-                          questionsAddButton(title: "")
-                        ],
+                        children: <Widget>[questionsAddButton(title: "")],
                       ),
                     )),
                 SizedBox(
@@ -656,24 +650,28 @@ class _MainHomeViewState extends State<MainHomeView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ComposeScreen()),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add_circle_outline,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                  )
-                ],
+              SizedBox(
+                height: 35,
+              ),
+              // Todo:
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ComposeScreen()),
+                    );
+                  },
+                  child: Icon(
+                    Icons.add_circle_outline,
+                    color: Colors.white,
+                    size: 100,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
               ),
             ],
           ),
