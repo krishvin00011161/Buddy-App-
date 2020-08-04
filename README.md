@@ -6,6 +6,16 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
+
+[1.0.4] - 8/4/20 - David Kim
+[c7bfe0cea0aa53a6b653f2e7aa2bd055a9013458]
+
+Added
+- Compose Screen full UI
+
+Modified
+- restructure code/cleaning
+
 [1.0.3] - 7/28/20 - David Kim
 [378acf62f0de3ae0373090f2ae244cb6b3e68420]
 
