@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:buddyappfirebase/Authentication/screens/signup.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -118,11 +119,11 @@ class _SetUpStudentState extends State<SetUpStudent> {
         classes[className.text] = classCode.text;
         Firestore.instance
             .collection('users')
-            .document(AuthService.idNew)
+            .document(SignUp.documentID) // changed AuthService.idNew
             .updateData({'classes': classes});
         Firestore.instance
             .collection('users')
-            .document(AuthService.idNew)
+            .document(SignUp.documentID) // changed
             .updateData({'userRole': 'student'});
 
         // adds user's id to the class's user array
@@ -130,7 +131,7 @@ class _SetUpStudentState extends State<SetUpStudent> {
             .collection('classes')
             .document(className.text)
             .updateData({
-          "users": FieldValue.arrayUnion([AuthService.idNew])
+          "users": FieldValue.arrayUnion([SignUp.documentID]) // changed
         }); // this works
 
         Navigator.pushReplacement(

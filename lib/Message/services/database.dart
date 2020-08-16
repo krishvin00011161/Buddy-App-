@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
-  Future<void> addUserInfo(userData) async {
+  Future<void> addUserInfo(userData) async { // Not Needed
     Firestore.instance.collection("users").add(userData).catchError((e) {
       print(e.toString());
     });
@@ -60,4 +60,6 @@ class DatabaseMethods {
         .where('users', arrayContains: itIsMyName)
         .snapshots();
   }
+
+  
 }

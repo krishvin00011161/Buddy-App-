@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:buddyappfirebase/Authentication/screens/signup.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -115,11 +116,11 @@ class _SetupState extends State<Setup> {
       classes[className.text] = classCode.text;
       Firestore.instance
           .collection('users')
-          .document(AuthService.idNew)
+          .document(SignUp.documentID) // changed
           .updateData({'classes': classes});
       Firestore.instance
           .collection('users')
-          .document(AuthService.idNew)
+          .document(SignUp.documentID) // changed
           .updateData({'userRole': 'teacher'});
 
       // adds class to classes collection

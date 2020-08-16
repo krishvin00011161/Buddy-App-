@@ -1,9 +1,12 @@
+
+
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
 import 'package:buddyappfirebase/home/widgets/text_link.dart';
 import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../welcome/welcome_view.dart';
@@ -12,6 +15,8 @@ import '../services/auth.dart';
 class SignUp extends StatefulWidget {
   final Function toggleView;
   SignUp(this.toggleView);
+
+  static String documentID = "";
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -47,24 +52,20 @@ class _SignUpState extends State<SignUp> {
               passwordEditingController.text, User())
           .then((result) {
         if (result != null) {
-          Map<String, String> userDataMap = {
-            "id": AuthService.idNew,
-            // "id2": AuthService.id,
-            "userName": firstNameEditingController.text
-                    .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
-                ' ' +
-                lastNameEditingController.text
-                    .replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-            "userEmail": emailEditingController.text,
-            "classes": "",
-            "photoUrl":
-                "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
-            "timeStamp": timestamp.toString(),
-            "userRole": "",
-          };
+          DocumentReference documentReference = Firestore.instance.collection('users').document();
+          documentReference.setData({
+          'id': documentReference.documentID, 
+          'userName': firstNameEditingController.text,
+          'userEmail': emailEditingController.text,
+          'classes': "",
+          'photoUrl': "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
+          'timeStamp': timestamp.toString(),
+          'userRole': "",
+          });
 
-          databaseMethods.addUserInfo(userDataMap);
-
+          SignUp.documentID = documentReference.documentID;
+            
+          
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(
               firstNameEditingController.text

@@ -1,16 +1,54 @@
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Notifications/notification.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Requests/requests.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../Message/helper/authenticate.dart';
 
-class CustomDrawers extends StatelessWidget {
+class CustomDrawers extends StatefulWidget {
+  @override
+  _CustomDrawersState createState() => _CustomDrawersState();
+}
+final usersRef = Firestore.instance.collection('users');
 
+class _CustomDrawersState extends State<CustomDrawers> {
+final FirebaseAuth _auth = FirebaseAuth.instance;
+  String _profileImg = "";
+  String _userName;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  void initState() { 
+    super.initState();
+    _getUserProfileImg();
+    _getUserInfogetChats();
+  }
+
+  _getUserInfogetChats() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(() {
+        _userName = Constants.myName;
+        
+      });
+    });
+  }
+
+  _getUserProfileImg() async {
+    final String id = "AqT9eOHoHicNswTAoCYP";
+    final DocumentSnapshot doc = await usersRef.document(id).get();
+     setState(() {
+       _profileImg = doc.data["photoUrl"];
+     });
+
+    print(doc.documentID);
+     // may help
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +57,7 @@ class CustomDrawers extends StatelessWidget {
         children: <Widget>[
           new UserAccountsDrawerHeader(
             accountName: Text(
-              "Guy",
+              "$_userName",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -29,7 +67,7 @@ class CustomDrawers extends StatelessWidget {
             accountEmail: Text("Friends: 30"),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage(
-                    "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png")),
+                    "$_profileImg")),
           ),
           ListTile(
             leading: Icon(Icons.account_box),

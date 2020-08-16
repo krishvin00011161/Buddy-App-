@@ -5,6 +5,7 @@ import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,19 +23,14 @@ class _MainHomeViewState extends State<MainHomeView> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
+  String _profileImg = "";
 
-  // logout() {
-  //   googleSignIn.signOut();
-  //   Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => Authenticate()),
-  // );
-  // }
 
   @override
   void initState() {
     getUserInfogetChats();
     super.initState();
+    _getUserProfileImg();
   }
 
   getUserInfogetChats() async {
@@ -47,6 +43,18 @@ class _MainHomeViewState extends State<MainHomeView> {
       });
     });
   }
+
+  _getUserProfileImg() async {
+    final String id = "AqT9eOHoHicNswTAoCYP";
+    final DocumentSnapshot doc = await usersRef.document(id).get();
+     setState(() {
+       _profileImg = doc.data["photoUrl"];
+     });
+
+    print(doc.documentID);
+     // may help
+  }
+
 
   Scaffold home() {
     // This is responsible for the Home View
@@ -120,7 +128,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       leading: new IconButton(
         icon: CircleAvatar(
           backgroundImage: NetworkImage(
-              "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+              "$_profileImg"),
         ),
         onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),

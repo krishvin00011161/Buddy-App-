@@ -1,7 +1,17 @@
+import 'dart:convert';
+
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Profile/editProfile.dart';
+import 'package:buddyappfirebase/emailuser.dart';
+import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/home/homeUser.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -73,7 +83,7 @@ class ProfileView extends StatelessWidget {
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
       title: Text(
-        "Requests",
+        "Profile",
         style: TextStyle(
           color: Colors.grey,
         ),
@@ -86,28 +96,64 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
-
+final usersRef = Firestore.instance.collection('users');
 class _ProfilePageState extends State<ProfilePage> {
-  String _name = "Cool Guy";
-  String _classCount = "0";
+  String _name = "";
+  int _classCount = 0;
   String _questionCount = "1";
   String _answerCount = "999999";
+  String _profileImg = "";
+  Stream chatRooms;
+  String _className;
+  List<dynamic> users;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //getData();
+    getUserName();
+    getUserProfileImg();
+    getUserClass();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    return Scaffold(body: Profile(height));
+  // gets user name
+  getUserName() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(() {
+        _name = Constants.myName;     
+      });
+    });
   }
 
+  // gets user profile
+  getUserProfileImg() async {
+    final String id = "AqT9eOHoHicNswTAoCYP";
+    final DocumentSnapshot doc = await usersRef.document(id).get();
+     setState(() {
+       _profileImg = doc.data["photoUrl"];
+     });
+
+    print(doc.documentID);
+    return _profileImg;
+
+     // may help
+  }
+
+
+  // gets user class
+  getUserClass() async {
+    final String id = "AqT9eOHoHicNswTAoCYP";
+    final DocumentSnapshot doc = await usersRef.document(id).get();
+    setState(() {
+      _classCount = 1;
+      _className = doc.data["classes"];
+    });
+  }
+
+
+  
   ListView Profile(double height) {
-    //getData();
     return ListView(children: [
       Padding(
         padding: EdgeInsets.all(16.0),
@@ -125,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: CircleAvatar(
               radius: 60,
               backgroundImage: NetworkImage(
-                "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png",
+                "$_profileImg",
               ),
             ),
           )),
@@ -135,7 +181,12 @@ class _ProfilePageState extends State<ProfilePage> {
         children: <Widget>[
           FlatButton(
             color: Colors.transparent,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditProfile()),
+              );
+            },
             child: Text(
               'EDIT PROFILE',
               style: TextStyle(
@@ -179,9 +230,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 250,
                   child: TabBarView(
                     children: [
-                      Center(child: Text('fsfafffasa')),
-                      Center(child: Text('afahefafre')),
-                      Center(child: Text('fsaafaegde')),
+                      Center(child: 
+                            ListTile(
+                              title: Text("$_className"),
+                            ),    
+                      ),
+                      Center(child: Text('Not Made Yet')),
+                      Center(child: Text('Not Made yet')),
                     ],
                   ))
             ],
@@ -189,14 +244,11 @@ class _ProfilePageState extends State<ProfilePage> {
     ]);
   }
 
-  // void getData() {
-  //   Firestore.instance.collection("users").document(FirestoreService.id).get().then((value){
-  //     print(value.data);
-  //     setState(() {
-  //       _name = value.data['fullName'];
-  //     });
-  //   });
-
-  // }
-
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Profile(height)
+      );
+  }
 }
