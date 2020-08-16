@@ -6,6 +6,11 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
+[1.0.5] - 8/16/20 - David Kim
+[6ccee7afffbd489cf4e1e97ddd085031]
+Added 
+   - Profile Functionality
+   - Role and Class Bug fix
 
 [1.0.4] - 8/4/20 - David Kim
 [c7bfe0cea0aa53a6b653f2e7aa2bd055a9013458]
