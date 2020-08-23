@@ -6,7 +6,7 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
-[1.0.5] - 8/23/20 - David Kim
+[1.0.6] - 8/23/20 - David Kim
 [b89fd6d4da7393bbe1a8d91fb902a502a0978edc]
 Added
    - Profile Functionality Complete
