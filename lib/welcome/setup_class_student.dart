@@ -5,7 +5,7 @@ import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Authentication/services/auth.dart';
+
 
 // This is for students setup
 

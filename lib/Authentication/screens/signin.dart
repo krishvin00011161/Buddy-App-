@@ -47,6 +47,8 @@ class _SignInState extends State<SignIn> {
               userInfoSnapshot.documents[0].data["userName"]);
           HelperFunctions.saveUserEmailSharedPreference(
               userInfoSnapshot.documents[0].data["userEmail"]);
+          HelperFunctions.saveUserIDSharedPreference(
+              userInfoSnapshot.documents[0].data['id']);
 
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainHomeView()));

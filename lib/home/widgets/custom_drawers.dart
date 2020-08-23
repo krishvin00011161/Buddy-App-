@@ -5,6 +5,8 @@ import 'package:buddyappfirebase/Notifications/notification.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Requests/requests.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
+import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,34 +22,34 @@ final usersRef = Firestore.instance.collection('users');
 class _CustomDrawersState extends State<CustomDrawers> {
 final FirebaseAuth _auth = FirebaseAuth.instance;
   String _profileImg = "";
-  String _userName;
+  String _name;
 
   @override
   void initState() { 
     super.initState();
     _getUserProfileImg();
-    _getUserInfogetChats();
+    _getUserName();
   }
 
-  _getUserInfogetChats() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(() {
-        _userName = Constants.myName;
-        
-      });
-    });
-  }
-
+  
   _getUserProfileImg() async {
-    final String id = "AqT9eOHoHicNswTAoCYP";
-    final DocumentSnapshot doc = await usersRef.document(id).get();
-     setState(() {
-       _profileImg = doc.data["photoUrl"];
-     });
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    print(doc.documentID);
-     // may help
+    (doc.data["photoUrl"] != null) ?  setState(() {
+       _profileImg = doc.data["photoUrl"];
+     }) : circularProgress();
+     
+  }
+
+  _getUserName() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["userName"] != null) ?  setState(() {
+       _name = doc.data["userName"];
+     }) : circularProgress();
+     
   }
 
   @override
@@ -57,7 +59,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
         children: <Widget>[
           new UserAccountsDrawerHeader(
             accountName: Text(
-              "$_userName",
+              "$_name",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,

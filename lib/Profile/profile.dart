@@ -1,14 +1,12 @@
-import 'dart:convert';
-
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:buddyappfirebase/Explore/explore.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Profile/Widget/Classes.dart';
 import 'package:buddyappfirebase/Profile/editProfile.dart';
-import 'package:buddyappfirebase/emailuser.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/home/homeUser.dart';
+import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -96,63 +94,68 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
 final usersRef = Firestore.instance.collection('users');
+
 class _ProfilePageState extends State<ProfilePage> {
   String _name = "";
-  int _classCount = 0;
+  String name = EditProfile.profileName;
   String _questionCount = "1";
-  String _answerCount = "999999";
+  String _answerCount = "0";
   String _profileImg = "";
   Stream chatRooms;
   String _className;
   List<dynamic> users;
+  String className;
+  String code;
+  Map values = {};
+  int amountOfClasses = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserName();
-    getUserProfileImg();
-    getUserClass();
+    _getUserName();
+    _getUserProfileImg();
+    _getClasses();
   }
 
-  // gets user name
-  getUserName() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(() {
-        _name = Constants.myName;     
-      });
-    });
+  _getUserProfileImg() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["photoUrl"] != null)
+        ? setState(() {
+            _profileImg = doc.data["photoUrl"];
+          })
+        : circularProgress();
   }
 
-  // gets user profile
-  getUserProfileImg() async {
-    final String id = "AqT9eOHoHicNswTAoCYP";
-    final DocumentSnapshot doc = await usersRef.document(id).get();
-     setState(() {
-       _profileImg = doc.data["photoUrl"];
-     });
+  _getUserName() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    print(doc.documentID);
-    return _profileImg;
-
-     // may help
+    (doc.data["userName"] != null)
+        ? setState(() {
+            _name = doc.data["userName"];
+          })
+        : circularProgress();
   }
 
-
-  // gets user class
-  getUserClass() async {
-    final String id = "AqT9eOHoHicNswTAoCYP";
-    final DocumentSnapshot doc = await usersRef.document(id).get();
+  _getClasses() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
     setState(() {
-      _classCount = 1;
-      _className = doc.data["classes"];
+      values = doc.data["classes"];
+      amountOfClasses = values.length;
     });
+
+    print(values);
   }
 
-
-  
   ListView Profile(double height) {
     return ListView(children: [
       Padding(
@@ -183,8 +186,8 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.transparent,
             onPressed: () {
               Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => EditProfile()),
+                context,
+                MaterialPageRoute(builder: (context) => EditProfile()),
               );
             },
             child: Text(
@@ -209,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   tabs: [
                     Tab(
                       child: Text(
-                        '$_classCount\nClasses',
+                        '$amountOfClasses\nClasses',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -230,10 +233,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 250,
                   child: TabBarView(
                     children: [
-                      Center(child: 
-                            ListTile(
-                              title: Text("$_className"),
-                            ),    
+                      Center(
+                        child: ListView.builder(
+                          itemCount: values.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            String key = values.keys.elementAt(index);
+                            return new Column(
+                              children: <Widget>[
+                                new ListTile(
+                                  title: new Text("$key"),
+                                  subtitle: new Text("Code: ${values[key]}"),
+                                ),
+                                new Divider(
+                                  height: 2.0,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                       Center(child: Text('Not Made Yet')),
                       Center(child: Text('Not Made yet')),
@@ -247,8 +264,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Profile(height)
-      );
+    return Scaffold(body: Profile(height));
   }
 }

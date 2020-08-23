@@ -3,6 +3,8 @@ import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,14 +47,13 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   _getUserProfileImg() async {
-    final String id = "AqT9eOHoHicNswTAoCYP";
-    final DocumentSnapshot doc = await usersRef.document(id).get();
-     setState(() {
-       _profileImg = doc.data["photoUrl"];
-     });
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    print(doc.documentID);
-     // may help
+    (doc.data["photoUrl"] != null) ?  setState(() {
+       _profileImg = doc.data["photoUrl"];
+     }) : circularProgress();
+     
   }
 
 
@@ -318,16 +319,15 @@ class _MainHomeViewState extends State<MainHomeView> {
             children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: Flexible(
-                    child: Text(
+                child: Text(
                   title,
                   style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold)),
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold)),
                   textAlign: TextAlign.left,
-                )),
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -368,7 +368,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                         children: [
                           CircleAvatar(
                             backgroundImage: NetworkImage(
-                                "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                "$_profileImg"),
                           ),
                           SizedBox(width: 10),
                           Expanded(
@@ -392,31 +392,31 @@ class _MainHomeViewState extends State<MainHomeView> {
                             children: [
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage(""),
+                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage(""),
+                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage(""),
+                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage(""),
+                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage(""),
+                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),

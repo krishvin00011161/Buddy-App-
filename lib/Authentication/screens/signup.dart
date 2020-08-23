@@ -75,7 +75,8 @@ class _SignUpState extends State<SignUp> {
                       .replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           HelperFunctions.saveUserEmailSharedPreference(
               emailEditingController.text);
-
+          HelperFunctions.saveUserIDSharedPreference(documentReference.documentID);
+        
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

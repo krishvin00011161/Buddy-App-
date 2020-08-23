@@ -116,7 +116,7 @@ class _SettingsViewState extends State<SettingsView> {
       return parsed.map<HomeUser>((json) => HomeUser.fromJson(json)).toList();
     }
 
-    List<HomeUser> users = new List<HomeUser>();
+    //List<HomeUser> users = new List<HomeUser>();
     return AppBar(
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.grey),

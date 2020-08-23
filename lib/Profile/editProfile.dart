@@ -1,5 +1,9 @@
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
+import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EditProfile extends StatefulWidget {
@@ -9,6 +13,7 @@ class EditProfile extends StatefulWidget {
 
   EditProfile({this.profileId});
 
+  static String profileName = "";
   @override
   _EditProfileState createState() => _EditProfileState();
 }
@@ -18,24 +23,43 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController bioController = TextEditingController();
   bool isLoading = false;
   User user;
+  String _profileImg = "";
+  String _name = "";
+
 
   @override
   void initState() {
     super.initState();
     getUser();
+    _getUserProfileImg();
+    _getUserName();
   }
 
   getUser() async {
     setState(() {
       isLoading = true;
     });
-    // DocumentSnapshot doc = await usersRef.document(widget.currentUserId).get();
-    // user = User.fromDocument(doc);
-    // displayNameController.text = user.displayName;
-    // bioController.text = user.bio;
-    // setState(() {
-    //   isLoading = false;
-    // });
+  }
+
+  _getUserProfileImg() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["photoUrl"] != null) ?  setState(() {
+       _profileImg = doc.data["photoUrl"];
+     }) : circularProgress();
+     isLoading = false;
+  }
+
+   _getUserName() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["userName"] != null) ?  setState(() {
+       _name = doc.data["userName"];
+       EditProfile.profileName = doc.data["userName"];
+     }) : circularProgress();
+     isLoading = false;
   }
 
   Column buildDisplayNameField() {
@@ -45,7 +69,7 @@ class _EditProfileState extends State<EditProfile> {
         Padding(
             padding: EdgeInsets.only(top: 12.0),
             child: Text(
-              "Display Name",
+              "Display Name: $_name",
               style: TextStyle(color: Colors.grey),
             )),
         TextField(
@@ -58,25 +82,16 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Column buildBioField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 12.0),
-            child: Text(
-              "Bio",
-              style: TextStyle(color: Colors.grey),
-            )),
-        TextField(
-          controller: bioController,
-          decoration: InputDecoration(
-            hintText: "Update Bio",
-          ),
-        )
-      ],
-    );
+  updateData() async {
+     _getUserName();
+    Firestore.instance
+          .collection('users')
+          .document(Constants.myId) // changed
+          .updateData({'userName': displayNameController.text});
+    _getUserName();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +116,9 @@ class _EditProfileState extends State<EditProfile> {
         ],
       ),
       body: 
-      //isLoading
-          //? circularProgress()
-          //: 
+      isLoading
+          ? circularProgress()
+          : 
           ListView(
               children: <Widget>[
                 Container(
@@ -116,8 +131,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         child: CircleAvatar(
                           radius: 50.0,
-                          //backgroundImage:
-                             // CachedNetworkImageProvider(user.photoUrl),
+                          backgroundImage: NetworkImage("$_profileImg"),
                         ),
                       ),
                       Padding(
@@ -125,29 +139,19 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           children: <Widget>[
                             buildDisplayNameField(),
-                            buildBioField(),
                           ],
                         ),
                       ),
                       RaisedButton(
-                        onPressed: () => print('update profile data'),
+                        onPressed: () {
+                          updateData();
+                        },
                         child: Text(
                           "Update Profile",
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: FlatButton.icon(
-                          onPressed: () => print('logout'),
-                          icon: Icon(Icons.cancel, color: Colors.red),
-                          label: Text(
-                            "Logout",
-                            style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
                         ),
                       ),

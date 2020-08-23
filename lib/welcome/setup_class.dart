@@ -4,7 +4,6 @@ import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Authentication/services/auth.dart';
 
 // This class is responsible for teachers setup
 
