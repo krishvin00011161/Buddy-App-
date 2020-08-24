@@ -1,3 +1,10 @@
+import 'dart:collection';
+
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/Widget/progress.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +17,54 @@ class ComposeScreen extends StatefulWidget {
 
 class _ComposeScreenState extends State<ComposeScreen> {
   TextEditingController composeEditingController = new TextEditingController();
+
+  String _profileImg;
+  String _name;
+  final DateTime timestamp = DateTime.now();
+
+  @override
+  void initState() { 
+    super.initState();
+    _getUserProfileImg();
+    _getUserName();
+  }
+
+  // gets the profile
+  _getUserProfileImg() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["photoUrl"] != null) ?  setState(() {
+       _profileImg = doc.data["photoUrl"];
+     }) : circularProgress();
+  }
+
+  // gets the username
+  _getUserName() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["userName"] != null) ?  setState(() {
+       _name = doc.data["userName"];
+     }) : circularProgress();
+  }
+
+  
+  final HashMap<String, String> totalAnswer = HashMap();
+  final userList = [];
+
+
+    // Creates the question
+  _createQuestion() async { // figure out how to deal with multiple answers later.
+    DocumentReference documentReference = Firestore.instance.collection('questions').document();
+          documentReference.setData({
+          'question' : composeEditingController.text,
+          'id': documentReference.documentID, 
+          'userId' : Constants.myId,
+          'userName': _name,
+          'timeStamp': timestamp.toString(),
+          });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +88,9 @@ class _ComposeScreenState extends State<ComposeScreen> {
               color: Colors.lightBlue[200],
             ),
             onPressed: () {
+              _createQuestion();
               print(composeEditingController.text);
+              Navigator.pop(context);
             },
           )
         ],
@@ -47,7 +104,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
                   padding: const EdgeInsets.all(12.0),
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(
-                        "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                        "$_profileImg"),
                   ),
                 ),
                 SizedBox(

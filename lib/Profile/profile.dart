@@ -113,11 +113,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getUserName();
     _getUserProfileImg();
     _getClasses();
+    print(_getUsersQuestion(Constants.myId));
   }
 
   _getUserProfileImg() async {
@@ -156,6 +156,20 @@ class _ProfilePageState extends State<ProfilePage> {
     print(values);
   }
 
+  _getUsersQuestion(String id) async {
+    return await Firestore.instance
+      .collection('questions')
+      .where('id', arrayContains: id)
+      .snapshots();
+  }
+
+  // getUserChats(String itIsMyName) async {
+  //   return await Firestore.instance
+  //       .collection("chatRoom")
+  //       .where('users', arrayContains: itIsMyName)
+  //       .snapshots();
+  // }
+
   ListView Profile(double height) {
     return ListView(children: [
       Padding(
@@ -169,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       Container(
-          height: 120,
+        height: 120,
           child: Center(
             child: CircleAvatar(
               radius: 60,
