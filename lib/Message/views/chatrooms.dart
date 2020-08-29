@@ -69,16 +69,20 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   AppBar chatRoomAppbar() {
-    bool isSearching = false;
-
     return AppBar(
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
+      bottom: PreferredSize(
+      child: Container(
+         color: Colors.grey,
+         height: 1.0,
+      ),
+      preferredSize: Size.fromHeight(1.0)),
       title: Text(
         "Messages",
         style: TextStyle(
-          color: Colors.grey,
+          color: Colors.black,
         ),
       ),
     );
@@ -172,13 +176,14 @@ class ChatRoomsTile extends StatelessWidget {
                     )));
       },
       child: Container(
-        color: Colors.black26,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        color: Colors.transparent,
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
         child: Row(
           children: [
             Container(
-              height: 30,
-              width: 30,
+              height: 50,
+              width: 50,
+              padding: EdgeInsets.all(11),
               decoration: BoxDecoration(
                   color: CustomTheme.colorAccent,
                   borderRadius: BorderRadius.circular(30)),
@@ -186,9 +191,9 @@ class ChatRoomsTile extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black, //white
-                      fontSize: 16,
+                      fontSize: 20,
                       fontFamily: 'OverpassRegular',
-                      fontWeight: FontWeight.w300)),
+                      fontWeight: FontWeight.w600)),
             ),
             SizedBox(
               width: 12,
@@ -196,10 +201,10 @@ class ChatRoomsTile extends StatelessWidget {
             Text(userName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    color: Colors.black,
+                    fontSize: 20,
                     fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
+                    fontWeight: FontWeight.w400))
           ],
         ),
       ),

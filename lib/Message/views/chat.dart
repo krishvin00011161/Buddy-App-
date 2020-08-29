@@ -1,6 +1,5 @@
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/Message/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -64,20 +63,40 @@ class _ChatState extends State<Chat> {
     super.initState();
   }
 
+  AppBar chatAppbar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      bottom: PreferredSize(
+      child: Container(
+         color: Colors.grey,
+         height: 1.0,
+      ),
+      preferredSize: Size.fromHeight(1.0)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: chatAppbar(),
       body: Container(
         child: Stack(
           children: [
             chatMessages(),
             Container(
+              padding: EdgeInsets.only(left: 10),
               alignment: Alignment.bottomCenter,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width - 10,
+              height: MediaQuery.of(context).size.height - 88,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                color: Color(0x54FFFFFF),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(width: 1.5, color: Colors.grey
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 3),
                 child: Row(
                   children: [
                     Expanded(
@@ -102,16 +121,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                           height: 40,
                           width: 40,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    const Color(0x36FFFFFF),
-                                    const Color(0x0FFFFFFF)
-                                  ],
-                                  begin: FractionalOffset.topLeft,
-                                  end: FractionalOffset.bottomRight),
-                              borderRadius: BorderRadius.circular(40)),
-                          padding: EdgeInsets.all(12),
+                          padding: EdgeInsets.only(left: 12),
                           child: Icon(
                             Icons.send,
                             size: 25,

@@ -1,6 +1,7 @@
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/widget/widget.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'chat.dart';
@@ -125,7 +126,6 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
       body: isLoading
           ? Container(
               child: Center(
@@ -136,16 +136,36 @@ class _SearchState extends State<Search> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    color: Colors.blueGrey, //Color(0x54FFFFFF),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                    color: Colors.transparent, //Color(0x54FFFFFF)
                     child: Row(
                       children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ChatRoom()),
+                            );
+                          },
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              padding: EdgeInsets.only(right: 20, top: 1),
+                              child: Icon(
+                                Icons.chevron_left,
+                                size: 35,
+                                color: Colors.black,
+                              )),
+                        ),
                         Expanded(
                           child: TextField(
                             controller: searchEditingController,
-                            style: simpleTextStyle(),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
                             decoration: InputDecoration(
-                              hintText: "search username ...",
+                              hintText: "Search username ...",
                               hintStyle: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
