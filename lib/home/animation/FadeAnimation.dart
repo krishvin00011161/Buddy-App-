@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 
+// This class is responisble for Animation on Home screen
 class FadeAnimation extends StatelessWidget {
   final double delay;
   final Widget child;

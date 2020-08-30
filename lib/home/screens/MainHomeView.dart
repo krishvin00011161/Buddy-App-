@@ -11,11 +11,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../Explore/explore.dart';
 
-//Dk
-
+// This class is responsible for the home page
 class MainHomeView extends StatefulWidget {
   @override
   _MainHomeViewState createState() => _MainHomeViewState();
@@ -26,36 +24,70 @@ class _MainHomeViewState extends State<MainHomeView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
   String _profileImg = "";
-
+  String _name = "";
+  List questionValues = [];
+  int amountOfQuestions = 0;
 
   @override
   void initState() {
-    getUserInfogetChats();
     super.initState();
+    getUser();
     _getUserProfileImg();
+    _getUserName();
+    _getUserQuestion();
   }
 
-  getUserInfogetChats() async {
+  // This is a debugging call, tells what user is auto logined
+  getUser() async {
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
     DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
       setState(() {
         chatRooms = snapshots;
-        print(
-            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
+        print("this is name  ${Constants.myName}");
       });
     });
   }
 
+  // This gets the profile Img url
   _getUserProfileImg() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["photoUrl"] != null) ?  setState(() {
-       _profileImg = doc.data["photoUrl"];
-     }) : circularProgress();
-     
+    (doc.data["photoUrl"] != null)
+        ? setState(() {
+            _profileImg = doc.data["photoUrl"];
+          })
+        : circularProgress();
   }
 
+  // gets user name
+  _getUserName() async {
+    Constants.myId = await HelperFunctions
+        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
+
+    (doc.data["userName"] != null)
+        ? setState(() {
+            _name = doc.data["userName"];
+          })
+        : circularProgress();
+  }
+
+  // gets question
+  _getUserQuestion() async {
+    Constants.myId = await HelperFunctions
+        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    final DocumentSnapshot docQuestion =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
+    setState(() {
+      questionValues = docQuestion.data["questions"];
+      amountOfQuestions = questionValues.length;
+    });
+
+    //print(values);
+  }
 
   Scaffold home() {
     // This is responsible for the Home View
@@ -128,8 +160,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       elevation: 0,
       leading: new IconButton(
         icon: CircleAvatar(
-          backgroundImage: NetworkImage(
-              "$_profileImg"),
+          backgroundImage: NetworkImage("$_profileImg"),
         ),
         onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
@@ -268,14 +299,36 @@ class _MainHomeViewState extends State<MainHomeView> {
                   height: 20,
                 ),
                 FadeAnimation(
-                    1.4,
-                    Container(
-                      height: 225,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[questionsAddButton(title: "")],
-                      ),
-                    )),
+                  1.4,
+                  Container(
+                    height: 225,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      reverse: false,
+                      itemCount: questionValues.length,
+                      itemBuilder: (context, int index) {
+                        // Logic
+                        // If 1 == 2 false, 2 == 2 true then create question widget then question add button
+                        if (index+1 == questionValues.length) {
+                          return Row(
+                            children: <Widget>[
+                              questions(questionContent: questionValues[index]),
+                              questionsAddButton(),
+                            ],
+                          );
+                        }
+
+                        return new Row(
+                          children: <Widget>[
+                            questions(questionContent: questionValues[index]),
+                            
+                          ],
+                        );
+                      },
+                    
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 80,
                 ),
@@ -287,6 +340,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     );
   }
 
+  // This Widget creates the Yellow rectangular tiles
   Widget groups({title}) {
     // Makes Rectangles belongs in the groups section
     return AspectRatio(
@@ -322,10 +376,10 @@ class _MainHomeViewState extends State<MainHomeView> {
                 child: Text(
                   title,
                   style: GoogleFonts.roboto(
-                  textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold)),
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold)),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -367,8 +421,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "$_profileImg"),
+                            backgroundImage: NetworkImage("$_profileImg"),
                           ),
                           SizedBox(width: 10),
                           Expanded(
@@ -392,31 +445,36 @@ class _MainHomeViewState extends State<MainHomeView> {
                             children: [
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
                               CircleAvatar(
                                 radius: 12,
-                                backgroundImage: NetworkImage("https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
                                 backgroundColor: Colors.blue,
                               ),
                               SizedBox(width: 7),
@@ -481,7 +539,8 @@ class _MainHomeViewState extends State<MainHomeView> {
     );
   }
 
-  Widget questions({title}) {
+  // This Widget creates the Blue Question tiles
+  Widget questions({String questionContent}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
       aspectRatio: 4 / 3,
@@ -513,8 +572,7 @@ class _MainHomeViewState extends State<MainHomeView> {
               Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
+                    backgroundImage: NetworkImage("$_profileImg"),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -531,7 +589,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                                     child: RichText(
                                   text: TextSpan(children: [
                                     TextSpan(
-                                      text: "Sean Kernan",
+                                      text: "$_name",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 22.0,
@@ -565,7 +623,7 @@ class _MainHomeViewState extends State<MainHomeView> {
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  "What is the most fact about people you know",
+                  "$questionContent",
                   style: GoogleFonts.roboto(
                       textStyle: TextStyle(
                           color: Colors.white,
@@ -629,6 +687,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     );
   }
 
+  // This widget creates a empty Blue Question tile with a plus logo
   Widget questionsAddButton({title}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
@@ -694,5 +753,3 @@ class _MainHomeViewState extends State<MainHomeView> {
     return home();
   }
 }
-
-// get rid of fillers

@@ -131,7 +131,7 @@ class _SetUpStudentState extends State<SetUpStudent> {
             .collection('classes')
             .document(className.text)
             .updateData({
-          "users": FieldValue.arrayUnion([SignUp.documentID]) // changed
+          "users": FieldValue.arrayUnion([SignUp.documentID]) // changed // important
         }); // this works
 
         Navigator.pushReplacement(

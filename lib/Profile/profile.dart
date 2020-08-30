@@ -100,16 +100,15 @@ final usersRef = Firestore.instance.collection('users');
 class _ProfilePageState extends State<ProfilePage> {
   String _name = "";
   String name = EditProfile.profileName;
-  String _questionCount = "1";
-  String _answerCount = "0";
   String _profileImg = "";
   Stream chatRooms;
-  String _className;
   List<dynamic> users;
   String className;
   String code;
   Map values = {};
   int amountOfClasses = 0;
+  List questionValues = [];
+  int amountOfQuestions = 0;
 
   @override
   void initState() {
@@ -117,11 +116,12 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUserName();
     _getUserProfileImg();
     _getClasses();
-    print(_getUsersQuestion(Constants.myId));
+    _getUserQuestion();
   }
-
+  
+  // gets the profile img
   _getUserProfileImg() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
     final DocumentSnapshot doc =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
 
@@ -132,8 +132,9 @@ class _ProfilePageState extends State<ProfilePage> {
         : circularProgress();
   }
 
+  // gets user name
   _getUserName() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
     final DocumentSnapshot doc =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
 
@@ -144,31 +145,32 @@ class _ProfilePageState extends State<ProfilePage> {
         : circularProgress();
   }
 
+  // gets classes
   _getClasses() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc =
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    final DocumentSnapshot doc1 =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
     setState(() {
-      values = doc.data["classes"];
+      values = doc1.data["classes"];
       amountOfClasses = values.length;
     });
 
     print(values);
   }
 
-  _getUsersQuestion(String id) async {
-    return await Firestore.instance
-      .collection('questions')
-      .where('id', arrayContains: id)
-      .snapshots();
+  // gets question
+  _getUserQuestion() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    final DocumentSnapshot docQuestion =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
+    setState(() {
+      questionValues = docQuestion.data["questions"];
+      amountOfQuestions = questionValues.length;
+    });
+
+    print(values);
   }
 
-  // getUserChats(String itIsMyName) async {
-  //   return await Firestore.instance
-  //       .collection("chatRoom")
-  //       .where('users', arrayContains: itIsMyName)
-  //       .snapshots();
-  // }
 
   ListView Profile(double height) {
     return ListView(children: [
@@ -232,13 +234,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Tab(
                       child: Text(
-                        '$_questionCount\nQuestions',
+                        '$amountOfQuestions\nQuestions',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Tab(
                       child: Text(
-                        '$_answerCount\nAnswers',
+                        '$amountOfQuestions\nAnswers',
                         textAlign: TextAlign.center,
                       ),
                     )
@@ -248,6 +250,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: TabBarView(
                     children: [
                       Center(
+                        // Creates a ListView.builder
+                        // *important - this list view builder uses MAP Data
                         child: ListView.builder(
                           itemCount: values.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -266,7 +270,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                       ),
-                      Center(child: Text('Not Made Yet')),
+                      Center(child: ListView.builder(
+                          // Creates a ListView.builder
+                        // *important - this list view builder uses List Data
+                          itemCount: questionValues.length,
+                          itemBuilder: (context, int index) {
+                            return new Column(
+                              children: <Widget>[
+                                new ListTile(
+                                  title: new Text("${questionValues[index]}"), 
+                                ),
+                                new Divider(
+                                  height: 2.0,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                       Center(child: Text('Not Made yet')),
                     ],
                   ))

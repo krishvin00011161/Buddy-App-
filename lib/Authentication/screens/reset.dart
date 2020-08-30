@@ -2,27 +2,29 @@ import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 
+
+// This class is responsible for Resetting password
 class Reset extends StatefulWidget {
   @override
   _ResetState createState() => _ResetState();
 }
 
 class _ResetState extends State<Reset> {
+  //Fields
   TextEditingController emailEditingController = new TextEditingController();
   AuthService authService = new AuthService();
-
   final formKey = GlobalKey<FormState>();
-
   bool isLoading = false;
 
   
-
+  // The main Functionality of Reset
   reset() async {
     if (formKey.currentState.validate()) {
       setState(() {
         isLoading = true;
       });
 
+      // Refer Auth.dart for Documentation
       await authService
           .resetPass(emailEditingController.text)
           .then((result) async {
@@ -31,8 +33,7 @@ class _ResetState extends State<Reset> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Scaffold _body() {
     return Scaffold(
       body: Form(
         key: formKey,
@@ -97,5 +98,10 @@ class _ResetState extends State<Reset> {
         ),
       ),
     );
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return _body();
   }
 }

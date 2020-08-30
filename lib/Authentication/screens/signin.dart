@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../home/screens/MainHomeView.dart';
 
+// This class is responsible for Sign IN function
 class SignIn extends StatefulWidget {
   final Function toggleView;
 
@@ -19,15 +20,15 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  // Fields
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
-
   AuthService authService = new AuthService();
-
   final formKey = GlobalKey<FormState>();
-
   bool isLoading = false;
 
+
+  // Refer to auth.dart for documentation
   signIn() async {
     if (formKey.currentState.validate()) {
       setState(() {
@@ -39,9 +40,11 @@ class _SignInState extends State<SignIn> {
               emailEditingController.text, passwordEditingController.text)
           .then((result) async {
         if (result != null) {
+          // If sign in with email is Successful
           QuerySnapshot userInfoSnapshot =
               await DatabaseMethods().getUserInfo(emailEditingController.text);
 
+          // Saves userName, email, and Document ID
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(
               userInfoSnapshot.documents[0].data["userName"]);
@@ -55,7 +58,6 @@ class _SignInState extends State<SignIn> {
         } else {
           setState(() {
             isLoading = false;
-            //show snackbar
           });
         }
       });

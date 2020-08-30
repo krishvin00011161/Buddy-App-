@@ -1,9 +1,9 @@
 import 'dart:collection';
-
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,20 +50,32 @@ class _ComposeScreenState extends State<ComposeScreen> {
   }
 
   
-  final HashMap<String, String> totalAnswer = HashMap();
-  final userList = [];
-
+ 
+  final questionList = [];
+  final HashMap<String, String> questions = HashMap();
+  
 
     // Creates the question
-  _createQuestion() async { // figure out how to deal with multiple answers later.
+  _createQuestion() async { 
     DocumentReference documentReference = Firestore.instance.collection('questions').document();
           documentReference.setData({
-          'question' : composeEditingController.text,
-          'id': documentReference.documentID, 
+          'questionContent' : composeEditingController.text,
+          'questionId': documentReference.documentID, 
           'userId' : Constants.myId,
           'userName': _name,
           'timeStamp': timestamp.toString(),
           });
+    
+    // Puts in the question in Users collection in an array
+    Firestore.instance
+      .collection('users')
+      .document(Constants.myId)
+      .updateData({'questions' : FieldValue.arrayUnion([composeEditingController.text])});
+      
+
+    
+      
+
   }
 
   @override
@@ -78,7 +90,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
           },
           child: Icon(
             Icons.cancel,
-            color: Colors.lightBlue[200], //Color(0x5EC4F2),
+            color: Colors.lightBlue[200], 
           ),
         ),
         actions: <Widget>[
@@ -90,7 +102,10 @@ class _ComposeScreenState extends State<ComposeScreen> {
             onPressed: () {
               _createQuestion();
               print(composeEditingController.text);
-              Navigator.pop(context);
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainHomeView()),
+              );
             },
           )
         ],

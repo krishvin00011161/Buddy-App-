@@ -1,5 +1,4 @@
-
-
+import 'package:buddyappfirebase/Authentication/widgets/TextEditingControllers.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
@@ -12,6 +11,7 @@ import '../../home/animation/FadeAnimation.dart';
 import '../../welcome/welcome_view.dart';
 import '../services/auth.dart';
 
+// This class is responsible for Sign Up
 class SignUp extends StatefulWidget {
   final Function toggleView;
   SignUp(this.toggleView);
@@ -23,12 +23,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController emailEditingController = new TextEditingController();
-  TextEditingController passwordEditingController = new TextEditingController();
-  TextEditingController firstNameEditingController =
-      new TextEditingController();
-  TextEditingController lastNameEditingController = new TextEditingController();
-  TextEditingController usernameEditingController = new TextEditingController();
 
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
@@ -36,10 +30,8 @@ class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   final DateTime timestamp = DateTime.now();
+  final questionList = [];
 
   signUp() async {
     if (formKey.currentState.validate()) {
@@ -47,34 +39,39 @@ class _SignUpState extends State<SignUp> {
         isLoading = true;
       });
 
+    
+
       await authService
-          .signUpWithEmailAndPassword(emailEditingController.text,
-              passwordEditingController.text, User())
+          .signUpWithEmailAndPassword(TextEditingControllers.emailEditingController.text,
+              TextEditingControllers.passwordEditingController.text, User())
           .then((result) {
         if (result != null) {
+          // if sign up works, then create a new user using these fields
           DocumentReference documentReference = Firestore.instance.collection('users').document();
           documentReference.setData({
           'id': documentReference.documentID, 
-          'userName': firstNameEditingController.text,
-          'userEmail': emailEditingController.text,
+          'userName': TextEditingControllers.firstNameEditingController.text,
+          'userEmail': TextEditingControllers.emailEditingController.text,
           'classes': "",
           'photoUrl': "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
           'timeStamp': timestamp.toString(),
           'userRole': "",
+          'questions': questionList,
           });
 
           SignUp.documentID = documentReference.documentID;
             
+          // Saves username, documentID or UserId, and user email 
           
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(
-              firstNameEditingController.text
+              TextEditingControllers.firstNameEditingController.text
                       .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
                   ' ' +
-                  lastNameEditingController.text
+                  TextEditingControllers.lastNameEditingController.text
                       .replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           HelperFunctions.saveUserEmailSharedPreference(
-              emailEditingController.text);
+              TextEditingControllers.emailEditingController.text);
           HelperFunctions.saveUserIDSharedPreference(documentReference.documentID);
         
           Navigator.pushReplacement(
@@ -83,7 +80,15 @@ class _SignUpState extends State<SignUp> {
                 builder: (context) => WelcomeView(),
               ));
         }
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WelcomeView(),
+              ));
+          Navigator.pop(context);
       });
+      
+
     }
   }
 
@@ -112,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'First Name',
                         ),
-                        controller: firstNameEditingController,
+                        controller: TextEditingControllers.firstNameEditingController,
                       ),
                     ),
                     FadeAnimation(
@@ -121,7 +126,7 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'Last Name',
                         ),
-                        controller: lastNameEditingController,
+                        controller: TextEditingControllers.lastNameEditingController,
                       ),
                     ),
                     verticalSpaceSmall,
@@ -131,7 +136,7 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'EMAIL',
                         ),
-                        controller: emailEditingController,
+                        controller: TextEditingControllers.emailEditingController,
                       ),
                     ),
                     verticalSpaceSmall,
@@ -141,11 +146,22 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'PASSWORD',
                         ),
-                        controller: passwordEditingController,
+                        controller: TextEditingControllers.passwordEditingController,
                         obscureText: true,
                       ),
                     ),
-                    verticalSpaceMedium,
+                    verticalSpaceSmall,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeAnimation(
+                          1.3,
+                          Text(AuthService.errormessage, style: TextStyle(color: Colors.red[500]),),
+                        )
+                      ],
+                    ),
+                    verticalSpaceSmall,
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +198,9 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: new BorderRadius.circular(25.0),
                             ),
                             onPressed: () {
+
                               signUp();
+                              
                             },
                           ),
                         ),
@@ -194,6 +212,7 @@ class _SignUpState extends State<SignUp> {
             ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

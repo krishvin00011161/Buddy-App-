@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:buddyappfirebase/home/homeUser.dart';
+import 'package:buddyappfirebase/home/widgets/homeUser.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
