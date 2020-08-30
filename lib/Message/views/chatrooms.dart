@@ -4,7 +4,7 @@ import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/views/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../Explore/explore.dart';
+import '../../Explore/screen/explore.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';

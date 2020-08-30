@@ -1,7 +1,7 @@
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
-import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

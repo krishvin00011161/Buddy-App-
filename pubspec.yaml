@@ -30,8 +30,6 @@ dependencies:
   provider: ^3.2.0
     # provider architecture
   provider_architecture: ^1.0.3
-    # google sign in package
-  google_sign_in: ^4.4.1
     # Button Designs
   flutter_signin_button: ^1.0.0
 
@@ -86,15 +84,9 @@ flutter:
     - assets/images/wow.jpg
     - assets/images/sad.png
     - assets/images/img_not_available.jpeg
-    - assets/images/mimi1.gif
-    - assets/images/mimi2.gif
-    - assets/images/mimi3.gif
-    - assets/images/mimi4.gif
-    - assets/images/mimi5.gif
-    - assets/images/mimi6.gif
-    - assets/images/mimi7.gif
-    - assets/images/mimi8.gif
-    - assets/images/mimi9.gif
     - assets/images/explore.jpg
     - assets/images/connect.jpg
     - assets/images/setup.jpg
+    - assets/images/img.png
+    - assets/images/chem.jpeg
+    - assets/images/card_dog_1.png
