@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,6 +65,8 @@ class _ComposeScreenState extends State<ComposeScreen> {
           'userName': _name,
           'timeStamp': timestamp.toString(),
           });
+
+    
     
     // Puts in the question in Users collection in an array
     Firestore.instance

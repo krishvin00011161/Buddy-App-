@@ -5,7 +5,7 @@ import 'package:buddyappfirebase/Notifications/notification.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Requests/requests.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
-import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

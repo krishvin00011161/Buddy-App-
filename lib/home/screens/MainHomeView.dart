@@ -3,7 +3,7 @@ import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
@@ -11,7 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../Explore/explore.dart';
+import '../../Explore/screen/explore.dart';
 
 // This class is responsible for the home page
 class MainHomeView extends StatefulWidget {
@@ -304,11 +304,12 @@ class _MainHomeViewState extends State<MainHomeView> {
                     height: 225,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      reverse: false,
                       itemCount: questionValues.length,
                       itemBuilder: (context, int index) {
                         // Logic
                         // If 1 == 2 false, 2 == 2 true then create question widget then question add button
+                        //print(questionValues.length);
+                       // print(index);
                         if (index+1 == questionValues.length) {
                           return Row(
                             children: <Widget>[

@@ -1,4 +1,4 @@
-import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';

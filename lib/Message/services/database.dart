@@ -61,5 +61,13 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  getLatestQuestions(String userName) {
+    return Firestore.instance
+        .collection('questions')
+        .where('userName', isEqualTo: userName)
+        .orderBy('timeStamp', descending: true)
+        .getDocuments();
+  }
+
   
 }

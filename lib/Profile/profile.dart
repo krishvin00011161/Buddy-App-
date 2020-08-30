@@ -1,17 +1,20 @@
-import 'package:buddyappfirebase/Explore/explore.dart';
+import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Profile/Widget/Classes.dart';
 import 'package:buddyappfirebase/Profile/editProfile.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/Widget/firebaseReferences.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../Message/services/database.dart';
+import '../Message/services/database.dart';
 
 class ProfileView extends StatelessWidget {
   int _currentIndex = 0;
@@ -109,6 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
   int amountOfClasses = 0;
   List questionValues = [];
   int amountOfQuestions = 0;
+  QuerySnapshot searchResultSnapshot;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
 
   @override
   void initState() {
@@ -117,6 +122,8 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUserProfileImg();
     _getClasses();
     _getUserQuestion();
+    _getUserQ("David");
+  
   }
   
   // gets the profile img
@@ -170,6 +177,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
     print(values);
   }
+  var questions;
+
+  _getUserQ(String userName) async {
+    DatabaseMethods().getLatestQuestions('userName')
+    .then((QuerySnapshot doc) {
+      if (doc.documents.isNotEmpty) {
+        questions = doc.documents[0].data;
+        print(questions);
+      }
+    }); 
+  }
+
+    
+
+  
 
 
   ListView Profile(double height) {
@@ -274,6 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           // Creates a ListView.builder
                         // *important - this list view builder uses List Data
                           itemCount: questionValues.length,
+                          reverse: true,
                           itemBuilder: (context, int index) {
                             return new Column(
                               children: <Widget>[
