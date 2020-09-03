@@ -308,9 +308,16 @@ class _MainHomeViewState extends State<MainHomeView> {
                       itemBuilder: (context, int index) {
                         // Logic
                         // If 1 == 2 false, 2 == 2 true then create question widget then question add button
-                        //print(questionValues.length);
+                        print(questionValues.length);
                        // print(index);
-                        if (index+1 == questionValues.length) {
+                        if (questionValues.length == 0) {
+                          return Row(
+                            children: [
+                              questionsAddButton(),
+                            ],
+                          );
+                        }
+                         else if (index+1 == questionValues.length) {
                           return Row(
                             children: <Widget>[
                               questions(questionContent: questionValues[index]),
