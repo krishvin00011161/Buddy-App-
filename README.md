@@ -6,6 +6,13 @@ A new Flutter application.
 
 Record any 'major changes' after each update. Please use this format:
 
+[1.0.8] - 9/5/20 - David Kim
+[67c873d1ed826f5d37276de3a2ff71b935bf4a5f]
+
+Added
+   - Form explore cards by database
+   - Database function structuring
+
 [1.0.7] - 8/29/20 - David Kim, Aaron Ni
 [5dbe9e5419eee0029477428ffcede1d0bef35f58, 0f06aed3fac4b6beacd459bf9d621a166c6edce4]
 
