@@ -43,6 +43,14 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  getQuestions(String searchField) async {
+    return Firestore.instance
+      .collection('questions')
+      .where('questionContent', isEqualTo: searchField)
+      .getDocuments();
+
+  }
+
   Future<void> addMessage(String chatRoomId, chatMessageData) {
     Firestore.instance
         .collection("chatRoom")

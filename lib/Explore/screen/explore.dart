@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/Explore/Widget/search_explore_card.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,8 @@ class _ExplorePageState extends State<ExplorePage> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _profileImg = "";
+  Map values = {};
+  int amountOfClasses = 0;
 
   CupertinoTabBar tabBar() {
     return CupertinoTabBar(
@@ -75,19 +78,24 @@ class _ExplorePageState extends State<ExplorePage> {
   void initState() {
     super.initState();
     _getUserProfileImg();
+    _getClasses();
   }
 
   // This gets the profile Img url
   _getUserProfileImg() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
+    FirebaseMethods().getUserProfileImg();
+    setState(() {
+      _profileImg = FirebaseMethods.profileImgUrl.toString();
+    });
+  }
 
-    (doc.data["photoUrl"] != null)
-        ? setState(() {
-            _profileImg = doc.data["photoUrl"];
-          })
-        : circularProgress();
+  // gets classes
+  _getClasses() async {
+    FirebaseMethods().getUserClasses();
+    setState(() {
+      values = FirebaseMethods.classValues;
+      amountOfClasses = FirebaseMethods.amountOfClasses;
+    });
   }
 
   SingleChildScrollView exploreBody() {
@@ -133,79 +141,82 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "Calculus",
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "Chemistry",
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "Speech",
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "Biology",
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(11.5),
-                    child: Text(
-                      "Recommended",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 18),
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "History",
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/card_dog_1.png',
-                      title: "Statistics",
-                    ),
-                  ),
-                ],
+          Container(
+            height: 180,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: amountOfClasses,
+                itemBuilder: (context, int index) {
+                  String key = values.keys.elementAt(index);
+               
+                      return Row(
+                        children: <Widget>[
+                          classes(nameOfCourse: "$key"),
+                        ],
+                      );
+                    
+                  
+                }),
+          ),
+          Container(
+            height: 180,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: amountOfClasses-2,
+                itemBuilder: (context, int index) {
+                  String key = values.keys.elementAt(index+2);  
+                      return Row(
+                        children: <Widget>[
+                          classes(nameOfCourse: "$key"),
+                        ],
+                      );
+                }),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(11.5),
+                child: Text(
+                  "Recommended",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18),
+                  maxLines: 1,
+                ),
               ),
             ],
+          ),
+          Container(
+            height: 180,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: amountOfClasses,
+                itemBuilder: (context, int index) {
+                  String key = values.keys.elementAt(index);
+               
+                      return Row(
+                        children: <Widget>[
+                          classes(nameOfCourse: "$key"),
+                        ],
+                      );
+                    
+                  
+                }),
+          ),
+          Container(
+            height: 180,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: amountOfClasses-2,
+                itemBuilder: (context, int index) {
+                  String key = values.keys.elementAt(index+2);  
+                      return Row(
+                        children: <Widget>[
+                          classes(nameOfCourse: "$key"),
+                        ],
+                      );
+                }),
           ),
         ],
       ),
@@ -226,7 +237,8 @@ class _ExplorePageState extends State<ExplorePage> {
         ),
         title: Text(
           "Explore",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 31, color: Colors.black),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 31, color: Colors.black),
         ));
   }
 
@@ -243,5 +255,15 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return exploreView();
+  }
+
+  Widget classes({String nameOfCourse}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExploreCard(
+        imgScr: 'assets/images/card_dog_1.png',
+        title: nameOfCourse,
+      ),
+    );
   }
 }

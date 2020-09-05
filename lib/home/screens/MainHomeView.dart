@@ -1,4 +1,5 @@
-import 'package:buddyappfirebase/Explore/screen/composeScreen.dart';
+import 'package:buddyappfirebase/home/screens/composeScreen.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
@@ -31,62 +32,35 @@ class _MainHomeViewState extends State<MainHomeView> {
   @override
   void initState() {
     super.initState();
-    getUser();
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
-  }
 
-  // This is a debugging call, tells what user is auto logined
-  getUser() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(() {
-        chatRooms = snapshots;
-        print("this is name  ${Constants.myName}");
-      });
-    });
   }
 
   // This gets the profile Img url
   _getUserProfileImg() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
-
-    (doc.data["photoUrl"] != null)
-        ? setState(() {
-            _profileImg = doc.data["photoUrl"];
-          })
-        : circularProgress();
+    FirebaseMethods().getUserProfileImg();
+    setState(() {
+      _profileImg = FirebaseMethods.profileImgUrl.toString();
+    });
   }
 
   // gets user name
   _getUserName() async {
-    Constants.myId = await HelperFunctions
-        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
-    final DocumentSnapshot doc =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
-
-    (doc.data["userName"] != null)
-        ? setState(() {
-            _name = doc.data["userName"];
-          })
-        : circularProgress();
+   FirebaseMethods().getUserName();
+    setState(() {
+      _name = FirebaseMethods.userName.toString();
+    });
   }
 
   // gets question
   _getUserQuestion() async {
-    Constants.myId = await HelperFunctions
-        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
-    final DocumentSnapshot docQuestion =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
+    FirebaseMethods().getUserQuestions();
     setState(() {
-      questionValues = docQuestion.data["questions"];
-      amountOfQuestions = questionValues.length;
+      questionValues = FirebaseMethods.questionValues.toList();
+      amountOfQuestions = FirebaseMethods.amountOfQuestions.toInt();
     });
-
-    //print(values);
   }
 
   Scaffold home() {
@@ -308,16 +282,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                       itemBuilder: (context, int index) {
                         // Logic
                         // If 1 == 2 false, 2 == 2 true then create question widget then question add button
-                        print(questionValues.length);
-                       // print(index);
-                        if (questionValues.length == 0) {
-                          return Row(
-                            children: [
-                              questionsAddButton(),
-                            ],
-                          );
-                        }
-                         else if (index+1 == questionValues.length) {
+                         if (index+1 == questionValues.length) {
                           return Row(
                             children: <Widget>[
                               questions(questionContent: questionValues[index]),
@@ -325,11 +290,10 @@ class _MainHomeViewState extends State<MainHomeView> {
                             ],
                           );
                         }
-
                         return new Row(
                           children: <Widget>[
-                            questions(questionContent: questionValues[index]),
-                            
+                            questionsAddButton(),
+
                           ],
                         );
                       },

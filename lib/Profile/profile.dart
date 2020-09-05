@@ -1,7 +1,7 @@
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Profile/Widget/Classes.dart';
 import 'package:buddyappfirebase/Profile/editProfile.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
@@ -12,8 +12,6 @@ import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../Message/services/database.dart';
 import '../Message/services/database.dart';
 
 class ProfileView extends StatelessWidget {
@@ -154,15 +152,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // gets classes
   _getClasses() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
-    final DocumentSnapshot doc1 =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
+    FirebaseMethods().getUserClasses();
     setState(() {
-      values = doc1.data["classes"];
-      amountOfClasses = values.length;
+      values = FirebaseMethods.classValues;
+      amountOfClasses = amountOfClasses;
     });
-
-    print(values);
   }
 
   // gets question
