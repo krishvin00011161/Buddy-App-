@@ -27,7 +27,6 @@ class _SignInState extends State<SignIn> {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-
   // Refer to auth.dart for documentation
   signIn() async {
     if (formKey.currentState.validate()) {
@@ -55,10 +54,27 @@ class _SignInState extends State<SignIn> {
 
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainHomeView()));
+          
+      
         } else {
           setState(() {
             isLoading = false;
           });
+
+          AlertDialog inUse = AlertDialog(
+            title: Text("Wrong Credentials"),
+            content: Text("Please try again."),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          );
+
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return inUse;
+            },
+          );
         }
       });
     }

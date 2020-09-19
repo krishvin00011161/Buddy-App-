@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
@@ -23,62 +24,70 @@ class _ComposeScreenState extends State<ComposeScreen> {
   final DateTime timestamp = DateTime.now();
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _getUserProfileImg();
     _getUserName();
+    FirebaseMethods().getUserQuestions();
   }
 
   // gets the profile
   _getUserProfileImg() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["photoUrl"] != null) ?  setState(() {
-       _profileImg = doc.data["photoUrl"];
-     }) : circularProgress();
+    (doc.data["photoUrl"] != null)
+        ? setState(() {
+            _profileImg = doc.data["photoUrl"];
+          })
+        : circularProgress();
   }
 
   // gets the username
   _getUserName() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["userName"] != null) ?  setState(() {
-       _name = doc.data["userName"];
-     }) : circularProgress();
+    (doc.data["userName"] != null)
+        ? setState(() {
+            _name = doc.data["userName"];
+          })
+        : circularProgress();
   }
 
-  
- 
   final questionList = [];
   final HashMap<String, String> questions = HashMap();
+
+  String id = Constants.myId;
+
+  // Creates the question
+  _createQuestion() async {
+    DocumentReference documentReference =
+        Firestore.instance.collection('questions').document();
+    documentReference.setData({
+      'userId': Constants.myId,
+    });
+    Firestore.instance.collection('users').document(Constants.myId).updateData({
+      'questions': FieldValue.arrayUnion([composeEditingController.text])
+    });
   
-
-    // Creates the question
-  _createQuestion() async { 
-    DocumentReference documentReference = Firestore.instance.collection('questions').document();
-          documentReference.setData({
-          'questionContent' : composeEditingController.text,
-          'questionId': documentReference.documentID, 
-          'userId' : Constants.myId,
-          'userName': _name,
-          'timeStamp': timestamp.toString(),
-          });
-
-    
-    
-    // Puts in the question in Users collection in an array
-    Firestore.instance
-      .collection('users')
-      .document(Constants.myId)
-      .updateData({'questions' : FieldValue.arrayUnion([composeEditingController.text])});
-      
-
-    
-      
-
+    _createQuestion1();
   }
+
+    _createQuestion1() async {
+      DocumentReference doc =
+          Firestore.instance.collection('questions/$id/questions').document();
+      doc.setData({
+        'questionContent': composeEditingController.text,
+        'questionId': doc.documentID,
+        'userName': _name,
+        'timeStamp': timestamp.toString(),
+      });
+    }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +101,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
           },
           child: Icon(
             Icons.cancel,
-            color: Colors.lightBlue[200], 
+            color: Colors.lightBlue[200],
           ),
         ),
         actions: <Widget>[
@@ -105,8 +114,8 @@ class _ComposeScreenState extends State<ComposeScreen> {
               _createQuestion();
               print(composeEditingController.text);
               Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MainHomeView()),
+                context,
+                MaterialPageRoute(builder: (context) => MainHomeView()),
               );
             },
           )
@@ -120,8 +129,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "$_profileImg"),
+                    backgroundImage: NetworkImage("$_profileImg"),
                   ),
                 ),
                 SizedBox(

@@ -35,7 +35,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
-
   }
 
   // This gets the profile Img url
@@ -48,7 +47,7 @@ class _MainHomeViewState extends State<MainHomeView> {
 
   // gets user name
   _getUserName() async {
-   FirebaseMethods().getUserName();
+    FirebaseMethods().getUserName();
     setState(() {
       _name = FirebaseMethods.userName.toString();
     });
@@ -278,26 +277,21 @@ class _MainHomeViewState extends State<MainHomeView> {
                     height: 225,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
+                      reverse: true,
                       itemCount: questionValues.length,
                       itemBuilder: (context, int index) {
                         // Logic
                         // If 1 == 2 false, 2 == 2 true then create question widget then question add button
-                         if (index+1 == questionValues.length) {
+                        print(questionValues.length);
+                        print(index);
+                        if (questionValues.length >= 1) {
                           return Row(
                             children: <Widget>[
                               questions(questionContent: questionValues[index]),
-                              questionsAddButton(),
                             ],
                           );
                         }
-                        return new Row(
-                          children: <Widget>[
-                            questionsAddButton(),
-
-                          ],
-                        );
                       },
-                    
                     ),
                   ),
                 ),
@@ -572,6 +566,26 @@ class _MainHomeViewState extends State<MainHomeView> {
                                 )),
                                 flex: 5,
                               ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                radius: 13,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(Icons.add),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ComposeScreen()),
+                                    );
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -650,67 +664,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     ),
                   )
                 ],
-              ),
-            ],
-          ),
-        ),
-        // this is responsible for the inside
-      ), // overall container
-    );
-  }
-
-  // This widget creates a empty Blue Question tile with a plus logo
-  Widget questionsAddButton({title}) {
-    // Makes rectangles belongs in the questions section
-    return AspectRatio(
-      aspectRatio: 4 / 3,
-      child: Container(
-        margin: EdgeInsets.only(right: 15),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xF1C40F),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 4,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
-                Color(0x5EC4F2).withOpacity(1), //Colors.black.withOpacity(.8),
-                Color(0x5EC4F2).withOpacity(1), //Colors.black.withOpacity(.2),
-              ])),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 35,
-              ),
-              // Todo:
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ComposeScreen()),
-                    );
-                  },
-                  child: Icon(
-                    Icons.add_circle_outline,
-                    color: Colors.white,
-                    size: 100,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
               ),
             ],
           ),

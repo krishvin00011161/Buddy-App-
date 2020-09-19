@@ -11,6 +11,7 @@ class FirebaseMethods {
   static int amountOfQuestions;
   static Map classValues = {};
   static int amountOfClasses = 0;
+  static String email;
   
 
    // This gets the profile Img url
@@ -57,6 +58,16 @@ class FirebaseMethods {
       if (docClasses.data['classes'] != null) {
         classValues = docClasses.data["classes"];
         amountOfClasses = classValues.length;
+      }
+  }
+
+  getUserEmail() async {
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    final DocumentSnapshot docEmail =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
+      if (docEmail.data['userEmail'] != null) {
+        email = docEmail.data["userEmail"];
+        
       }
   }
 

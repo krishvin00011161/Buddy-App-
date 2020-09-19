@@ -1,5 +1,6 @@
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 
 // This needs work
@@ -31,6 +32,16 @@ class AuthService {
     }
   }
 
+  AlertDialog i() {
+    return AlertDialog(
+            title: Text("Email already in use"),
+            content: Text("Please try a different email"),
+   );
+  }
+ 
+
+          
+
 
   // Sign Up functionality
   Future signUpWithEmailAndPassword(
@@ -39,12 +50,11 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      idNew = user.uid;
-      id = result.user.providerId;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
-      AuthService.errormessage = e.String();
+      
+      
       return null;
     }
   }

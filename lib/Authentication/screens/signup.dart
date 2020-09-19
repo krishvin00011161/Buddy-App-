@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/Authentication/widgets/TextEditingControllers.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
@@ -23,7 +24,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
 
@@ -31,7 +31,7 @@ class _SignUpState extends State<SignUp> {
   bool isLoading = false;
 
   final DateTime timestamp = DateTime.now();
-  final questionList = [];
+  final questionList = ["Start Of Question"];
 
   signUp() async {
     if (formKey.currentState.validate()) {
@@ -39,56 +39,77 @@ class _SignUpState extends State<SignUp> {
         isLoading = true;
       });
 
-    
-
       await authService
-          .signUpWithEmailAndPassword(TextEditingControllers.emailEditingController.text,
-              TextEditingControllers.passwordEditingController.text, User())
+          .signUpWithEmailAndPassword(
+              TextEditingControllers.emailEditingController.text,
+              TextEditingControllers.passwordEditingController.text,
+              User())
           .then((result) {
         if (result != null) {
           // if sign up works, then create a new user using these fields
-          DocumentReference documentReference = Firestore.instance.collection('users').document();
+          DocumentReference documentReference =
+              Firestore.instance.collection('users').document();
           documentReference.setData({
-          'id': documentReference.documentID, 
-          'userName': TextEditingControllers.firstNameEditingController.text,
-          'userEmail': TextEditingControllers.emailEditingController.text,
-          'classes': "",
-          'photoUrl': "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
-          'timeStamp': timestamp.toString(),
-          'userRole': "",
-          'questions': questionList,
+            'id': documentReference.documentID,
+            'userName': TextEditingControllers.firstNameEditingController.text,
+            'userEmail': TextEditingControllers.emailEditingController.text,
+            'classes': "",
+            'photoUrl':
+                "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
+            'timeStamp': timestamp.toString(),
+            'userRole': "",
+            'questions': questionList,
           });
 
           SignUp.documentID = documentReference.documentID;
-            
-          // Saves username, documentID or UserId, and user email 
-          
+
+          // Saves username, documentID or UserId, and user email
+
           HelperFunctions.saveUserLoggedInSharedPreference(true);
-          HelperFunctions.saveUserNameSharedPreference(
-              TextEditingControllers.firstNameEditingController.text
-                      .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
-                  ' ' +
-                  TextEditingControllers.lastNameEditingController.text
-                      .replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+          HelperFunctions.saveUserNameSharedPreference(TextEditingControllers
+                  .firstNameEditingController.text
+                  .replaceAll(new RegExp(r"\s+\b|\b\s"), "") +
+              ' ' +
+              TextEditingControllers.lastNameEditingController.text
+                  .replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           HelperFunctions.saveUserEmailSharedPreference(
               TextEditingControllers.emailEditingController.text);
-          HelperFunctions.saveUserIDSharedPreference(documentReference.documentID);
-        
+          HelperFunctions.saveUserIDSharedPreference(
+              documentReference.documentID);
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => WelcomeView(),
               ));
-        }
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WelcomeView(),
-              ));
-          Navigator.pop(context);
-      });
-      
+        } else if (result == null) {
+          AlertDialog inUse = AlertDialog(
+            title: Text("Wrong Credentials"),
+            content: Text(
+                "Please try a different email or write a stronger password"),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            actions: [
+              FlatButton(
+                child: new Text("Ok"),
+                textColor: Colors.greenAccent,
+                onPressed: () {
+                  widget.toggleView();
+                },
+              ),
+            ],
+          );
 
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return inUse;
+            },
+          );
+          
+        }
+      });
     }
   }
 
@@ -117,7 +138,8 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'First Name',
                         ),
-                        controller: TextEditingControllers.firstNameEditingController,
+                        controller:
+                            TextEditingControllers.firstNameEditingController,
                       ),
                     ),
                     FadeAnimation(
@@ -126,7 +148,8 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'Last Name',
                         ),
-                        controller: TextEditingControllers.lastNameEditingController,
+                        controller:
+                            TextEditingControllers.lastNameEditingController,
                       ),
                     ),
                     verticalSpaceSmall,
@@ -136,7 +159,8 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'EMAIL',
                         ),
-                        controller: TextEditingControllers.emailEditingController,
+                        controller:
+                            TextEditingControllers.emailEditingController,
                       ),
                     ),
                     verticalSpaceSmall,
@@ -146,7 +170,8 @@ class _SignUpState extends State<SignUp> {
                         decoration: InputDecoration(
                           labelText: 'PASSWORD',
                         ),
-                        controller: TextEditingControllers.passwordEditingController,
+                        controller:
+                            TextEditingControllers.passwordEditingController,
                         obscureText: true,
                       ),
                     ),
@@ -157,7 +182,10 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         FadeAnimation(
                           1.3,
-                          Text(AuthService.errormessage, style: TextStyle(color: Colors.red[500]),),
+                          Text(
+                            AuthService.errormessage,
+                            style: TextStyle(color: Colors.red[500]),
+                          ),
                         )
                       ],
                     ),
@@ -198,9 +226,7 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: new BorderRadius.circular(25.0),
                             ),
                             onPressed: () {
-
                               signUp();
-                              
                             },
                           ),
                         ),
@@ -212,7 +238,6 @@ class _SignUpState extends State<SignUp> {
             ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
