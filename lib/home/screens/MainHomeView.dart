@@ -1,14 +1,10 @@
+import 'package:buddyappfirebase/Message/views/search.dart';
 import 'package:buddyappfirebase/home/screens/composeScreen.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
-import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
+import 'package:buddyappfirebase/home/screens/searchHome.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -149,8 +145,15 @@ class _MainHomeViewState extends State<MainHomeView> {
                   color: Colors.grey,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
-              hintText: "Ask a question",
-              suffixIcon: Icon(Icons.search)),
+              hintText:
+                  "Find User", // implment function to find the user like the mssage but remove the button
+              suffixIcon: Icon(Icons.search)
+              
+              ),
+              onTap: () {
+                Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SearchHome()));
+              },
         ),
       ),
     );
@@ -550,8 +553,10 @@ class _MainHomeViewState extends State<MainHomeView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
+                              SizedBox(width: 7,),
                               Expanded(
                                 child: Container(
+                                  
                                     child: RichText(
                                   text: TextSpan(children: [
                                     TextSpan(
