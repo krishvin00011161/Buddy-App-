@@ -1,4 +1,5 @@
 import 'package:buddyappfirebase/Explore/Widget/search_explore_card.dart';
+import 'package:buddyappfirebase/Explore/explore_functionality/searchQuestions.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,13 +16,60 @@ class ExplorePage extends StatefulWidget {
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
+Widget questResult(data){
 
+  return Card(
+    elevation: 2.0,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+    child: Container(
+      child: Center(
+        child: Text(data['questionContent'],
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color : Colors.black,
+          fontSize: 12.0,
+        )),
+
+      ),
+    ),
+  );
+}
 class _ExplorePageState extends State<ExplorePage> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _profileImg = "";
   Map values = {};
   int amountOfClasses = 0;
+  var queryResultData = [];
+  var tempSearchStore = [];
+  initiateSearch(value) {
+    var capValue = value.substring(0, 1).toUpperCase() + value.substring(1);
+
+    if (value.length == 0) {
+      setState(() {
+        queryResultData = [];
+        tempSearchStore = [];
+      });
+    }
+    var capitalized = value.substring(0, 1).toUpperCase() + value.substring(1);
+    if (queryResultData.length == 0 && value.length == 1) {
+      SearchQuestion().searchQuest(value).then((QuerySnapshot docs) {
+        for (int i = 0; i < docs.documents.length; ++i) {
+          queryResultData.add(docs.documents[i].data);
+        }
+      });
+    }
+    else {
+      tempSearchStore = [];
+      queryResultData.forEach((element) {
+        if (element['questionContent'].startsWith(capitalized)) {
+          setState(() {
+            tempSearchStore.add(element);
+          });
+        }
+      });
+    }
+  }
 
   CupertinoTabBar tabBar() {
     return CupertinoTabBar(
@@ -111,6 +159,9 @@ class _ExplorePageState extends State<ExplorePage> {
             child: Container(
               width: 350,
               child: TextField(
+                onChanged: (val){
+                  initiateSearch(val);
+                },
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(8.0),
                     border: new OutlineInputBorder(
@@ -126,6 +177,19 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
           ),
+          SizedBox(height: 10),
+          GridView.count(
+            crossAxisCount: 2,
+            crossAxisSpacing: 4,
+            padding: EdgeInsets.only(left: 10, right: 10),
+            shrinkWrap: true,
+            primary: false,
+            children: tempSearchStore.map((element){
+              return questResult(element);
+            }).toList()),
+
+
+
           Row(
             children: [
               Padding(
