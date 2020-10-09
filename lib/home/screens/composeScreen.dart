@@ -68,20 +68,24 @@ class _ComposeScreenState extends State<ComposeScreen> {
         Firestore.instance.collection('questions').document();
     documentReference.setData({
       'userId': Constants.myId,
-      'questionId': documentReference.documentID,
-      'userName': _name,
-      'timeStamp': timestamp.toString(),
-      'questionContent' : composeEditingController.text,
-      'Likes' : 0,
     });
     Firestore.instance.collection('users').document(Constants.myId).updateData({
       'questions': FieldValue.arrayUnion([composeEditingController.text])
     });
   
-
+    _createQuestion1();
   }
 
-
+    _createQuestion1() async {
+      DocumentReference doc =
+          Firestore.instance.collection('questions/$id/questions').document();
+      doc.setData({
+        'questionContent': composeEditingController.text,
+        'questionId': doc.documentID,
+        'userName': _name,
+        'timeStamp': timestamp.toString(),
+      });
+    }
 
  
 

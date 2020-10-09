@@ -104,24 +104,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
                   MaterialPageRoute(builder: (context) => NotificationView()));
             },
           ),
-          Divider(
-            height: 10.0,
-          ),
-          ListTile(
-            leading: Icon(Icons.mail),
-            title: Text(
-              "Requests",
-              style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {
-              // Navigator push
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RequestsView()));
-            },
-          ),
+         
           Divider(
             height: 10.0,
           ),

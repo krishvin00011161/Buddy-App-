@@ -1,4 +1,3 @@
-import 'package:buddyappfirebase/Message/views/search.dart';
 import 'package:buddyappfirebase/home/screens/composeScreen.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
@@ -145,16 +144,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                   color: Colors.grey,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
-              hintText:
-                  "Find User", // implment function to find the user like the mssage but remove the button
-              suffixIcon: Icon(Icons.search)
-              
-              ),
+              hintText: "Find User",
+              suffixIcon: Icon(Icons.search)),
               onTap: () {
                 Navigator.push(
               context, MaterialPageRoute(builder: (context) => SearchHome()));
               },
         ),
+
       ),
     );
   }
@@ -553,10 +550,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              SizedBox(width: 7,),
                               Expanded(
                                 child: Container(
-                                  
                                     child: RichText(
                                   text: TextSpan(children: [
                                     TextSpan(

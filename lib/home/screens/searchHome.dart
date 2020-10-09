@@ -2,6 +2,7 @@ import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/widget/widget.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/Message/views/chat.dart';
@@ -144,7 +145,7 @@ class _SearchState extends State<SearchHome> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ChatRoom()),
+                              MaterialPageRoute(builder: (context) => MainHomeView()),
                             );
                           },
                           child: Container(
