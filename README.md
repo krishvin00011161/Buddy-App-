@@ -5,6 +5,15 @@ A new Flutter application.
 # Changelog
 
 Record any 'major changes' after each update. Please use this format:
+[1.1.0] - 10/9/20 - David Kim
+[a9f1644c3297e45cd23e4c3ea1c695f55afe]
+
+Added
+   - Group Chat Unfinished
+   - IOS Icons
+Modfied
+   - back to working code
+
 
 [1.0.8] - 9/5/20 - David Kim
 [67c873d1ed826f5d37276de3a2ff71b935bf4a5f]
