@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
   final String chatRoomId;
+  static String lastChat = "";
 
   Chat({this.chatRoomId});
 
@@ -30,6 +31,7 @@ class _ChatState extends State<Chat> {
                     message: snapshot.data.documents[index].data["message"],
                     sendByMe: Constants.myName ==
                         snapshot.data.documents[index].data["sendBy"],
+                      lastChat: Chat.lastChat = snapshot.data.documents[index].data["message"],
                   );
                 })
             : Container();
@@ -141,8 +143,10 @@ class _ChatState extends State<Chat> {
 class MessageTile extends StatelessWidget {
   final String message;
   final bool sendByMe;
+  final String lastChat;
+  final String lastTime;
 
-  MessageTile({@required this.message, @required this.sendByMe});
+  MessageTile({@required this.message, @required this.sendByMe, this.lastChat,this.lastTime});
 
   @override
   Widget build(BuildContext context) {

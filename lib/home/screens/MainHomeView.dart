@@ -1,9 +1,14 @@
+import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/helper/theme.dart';
+import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/home/screens/composeScreen.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/screens/searchHome.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +28,8 @@ class _MainHomeViewState extends State<MainHomeView> {
   String _name = "";
   List questionValues = [];
   int amountOfQuestions = 0;
+  Stream<QuerySnapshot> chats;
+  String message;
 
   @override
   void initState() {
@@ -30,6 +37,24 @@ class _MainHomeViewState extends State<MainHomeView> {
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
+    getUserInfogetChats();
+    DatabaseMethods().getChats("Aaron_David").then((val) {
+      setState(() {
+        chats = val;
+      });
+    });
+    chatMessages();
+    print(message);
+  }
+
+  getUserInfogetChats() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(() {
+        chatRooms = snapshots;
+       
+      });
+    });
   }
 
   // This gets the profile Img url
@@ -55,6 +80,27 @@ class _MainHomeViewState extends State<MainHomeView> {
       questionValues = FirebaseMethods.questionValues.toList();
       amountOfQuestions = FirebaseMethods.amountOfQuestions.toInt();
     });
+  }
+
+  Widget chatMessages() {
+    return StreamBuilder(
+      stream: chats,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  message = snapshot.data.documents[index].data["messages"][snapshot.data.documents.length-1];
+                  // return MessageTile(
+                  //   message: snapshot.data.documents[index].data["message"],
+                  //   sendByMe: Constants.myName ==
+                  //       snapshot.data.documents[index].data["sendBy"],
+                  //     lastChat: Chat.lastChat = snapshot.data.documents[index].data["message"],
+                  // );
+                })
+            : Container();
+      },
+    );
   }
 
   Scaffold home() {
@@ -146,12 +192,11 @@ class _MainHomeViewState extends State<MainHomeView> {
                   fontWeight: FontWeight.bold),
               hintText: "Find User",
               suffixIcon: Icon(Icons.search)),
-              onTap: () {
-                Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SearchHome()));
-              },
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SearchHome()));
+          },
         ),
-
       ),
     );
   }
@@ -198,51 +243,41 @@ class _MainHomeViewState extends State<MainHomeView> {
                   height: 20,
                 ),
                 FadeAnimation(
-                    1.4,
-                    Container(
-                      height: 280,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          groups(title: 'U.S. History'),
-                          groups(title: 'Chemistry'),
-                          groups(title: 'Greece'),
-                        ],
-                      ),
-                    )),
+                  1.4,
+                  Container(
+                    height: 280,
+                    child: StreamBuilder(
+                        stream: chatRooms,
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data.documents.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return groups(
+                                        title: snapshot.data.documents[index]
+                                            .data['chatRoomId']
+                                            .toString()
+                                            .replaceAll("_", "")
+                                            .replaceAll(Constants.myName, ""),
+                                        messageContent: "Hi",
+                                        chatRoomId: snapshot
+                                            .data
+                                            .documents[index]
+                                            .data["chatRoomId"],
+                                            name: snapshot.data.documents[index]
+                                            .data['chatRoomId']
+                                            .toString()
+                                            .replaceAll("_", "")
+                                            .replaceAll(Constants.myName, ""),
+                                            );
+                                  })
+                              : groups(title: "Hello");
+                        })),
+                  ),
                 SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 60,
-                    ),
-                    Container(
-                      height: 4,
-                      width: 35,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Container(
-                      height: 4,
-                      width: 35,
-                      color: Colors.grey[300],
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Container(
-                      height: 4,
-                      width: 35,
-                      color: Colors.grey[300],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 Row(
                   children: <Widget>[
@@ -298,7 +333,9 @@ class _MainHomeViewState extends State<MainHomeView> {
                 SizedBox(
                   height: 80,
                 ),
+              
               ],
+                
             ),
           )
         ],
@@ -307,7 +344,12 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   // This Widget creates the Yellow rectangular tiles
-  Widget groups({title}) {
+  Widget groups(
+      {String title,
+      String messageContent,
+      String chatRoomId,
+      String photoUrl,
+      String name}) {
     // Makes Rectangles belongs in the groups section
     return AspectRatio(
       aspectRatio: 10 / 9.3,
@@ -354,7 +396,7 @@ class _MainHomeViewState extends State<MainHomeView> {
               ),
               Container(
                 width: 250.0,
-                height: 170.0,
+                height: 150.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
@@ -395,7 +437,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Yo, Send me the Answers to the HW",
+                                  messageContent,
                                   style: TextStyle(fontSize: 16),
                                   maxLines: 3,
                                 ),
@@ -407,45 +449,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                       SizedBox(height: 10),
                       Column(
                         children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundImage: NetworkImage(
-                                    "https://picturecorrect-wpengine.netdna-ssl.com/wp-content/uploads/2014/03/portrait-photography.jpg"),
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                            ],
-                          ),
                           SizedBox(
                             height: 10,
                           ),
@@ -453,24 +456,26 @@ class _MainHomeViewState extends State<MainHomeView> {
                             children: [
                               CircleAvatar(
                                 radius: 8,
-                                backgroundColor: Colors.blue,
+                                backgroundImage: NetworkImage("$_profileImg"),
                               ),
                               SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 8,
-                                backgroundColor: Colors.blue,
+                              
+                              Container(
+                                height: 18,
+                                width: 18,
+                               // padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: CustomTheme.colorAccent,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Text(name.substring(0, 1),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, //white
+                                        fontSize: 15,
+                                        fontFamily: 'OverpassRegular',
+                                        fontWeight: FontWeight.w600)),
                               ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 8,
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 7),
-                              CircleAvatar(
-                                radius: 8,
-                                backgroundColor: Colors.blue,
-                              ),
-                              SizedBox(width: 30),
+                              SizedBox(width: 75),
                               Container(
                                 height: 20.0,
                                 width: 80,

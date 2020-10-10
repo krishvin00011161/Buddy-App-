@@ -14,6 +14,7 @@ import 'chat.dart';
 class ChatRoom extends StatefulWidget {
   @override
   _ChatRoomState createState() => _ChatRoomState();
+  
 }
 
 class _ChatRoomState extends State<ChatRoom> {
@@ -23,15 +24,19 @@ class _ChatRoomState extends State<ChatRoom> {
 
   int _currentIndex = 0;
 
+  int chatCount = 0;
+
   Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRooms,
       builder: (context, snapshot) {
+        
         return snapshot.hasData
             ? ListView.builder(
-                itemCount:
-                    snapshot.data.documents.length, // This probably the error
-                shrinkWrap: true,
+                
+                itemCount: snapshot.data.documents.length, 
+                
+               shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
                     userName: snapshot
@@ -45,8 +50,9 @@ class _ChatRoomState extends State<ChatRoom> {
                     chatRoomId: snapshot.data.documents[index].data[
                         "chatRoomId"], // chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
                   );
-                })
+                }) 
             : Container();
+            
       },
     );
   }
