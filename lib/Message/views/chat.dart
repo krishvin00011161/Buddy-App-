@@ -3,11 +3,14 @@ import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../Authentication/widgets/TextEditingControllers.dart';
+
 // This needs work
 
 class Chat extends StatefulWidget {
   final String chatRoomId;
-  static String lastChat = "";
+  static String lastChat = ""; // Used in MainHomeView.dart and carry information about last message in the chat
+  static int lastTime; // Used in MainHomeView.dart and carry information about last message in the chat
 
   Chat({this.chatRoomId});
 
@@ -19,7 +22,7 @@ class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
-  Widget chatMessages() {
+  Widget chatMessages() { // This creates the message bubbles in chat
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot) {
@@ -31,7 +34,10 @@ class _ChatState extends State<Chat> {
                     message: snapshot.data.documents[index].data["message"],
                     sendByMe: Constants.myName ==
                         snapshot.data.documents[index].data["sendBy"],
-                      lastChat: Chat.lastChat = snapshot.data.documents[index].data["message"],
+                    lastChat: Chat.lastChat =
+                        snapshot.data.documents[index].data["message"],
+                    lastTime: Chat.lastTime =
+                        snapshot.data.documents[index].data["time"],
                   );
                 })
             : Container();
@@ -63,19 +69,42 @@ class _ChatState extends State<Chat> {
       });
     });
     super.initState();
+    print(Chat.lastTime);
   }
+
+  updateChatName(String text) { // Update the Name of the chat
+    Firestore.instance
+          .collection('chatRoom')
+          .document(widget.chatRoomId) 
+          .updateData({'chatRoomName': text});
+   
+  }
+  String chatName;
 
   AppBar chatAppbar() {
     return AppBar(
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
-      bottom: PreferredSize(
-      child: Container(
-         color: Colors.grey,
-         height: 1.0,
+      title: TextFormField(
+        decoration: InputDecoration(
+          hintText: "Enter Chat Name",
+          labelText: chatName,
+        ),
+        controller: TextEditingControllers.chatNameEditingController,
+        onChanged: (text) {
+          updateChatName(text);
+          setState(() {
+            chatName = text;
+          });
+        },
       ),
-      preferredSize: Size.fromHeight(1.0)),
+      bottom: PreferredSize(
+          child: Container(
+            color: Colors.grey,
+            height: 1.0,
+          ),
+          preferredSize: Size.fromHeight(1.0)),
     );
   }
 
@@ -95,8 +124,7 @@ class _ChatState extends State<Chat> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 1.5, color: Colors.grey
-                  ),
+                  border: Border.all(width: 1.5, color: Colors.grey),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 3),
                 child: Row(
@@ -144,9 +172,13 @@ class MessageTile extends StatelessWidget {
   final String message;
   final bool sendByMe;
   final String lastChat;
-  final String lastTime;
+  final int lastTime;
 
-  MessageTile({@required this.message, @required this.sendByMe, this.lastChat,this.lastTime});
+  MessageTile(
+      {@required this.message,
+      @required this.sendByMe,
+      this.lastChat,
+      this.lastTime});
 
   @override
   Widget build(BuildContext context) {

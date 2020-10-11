@@ -4,6 +4,7 @@ import 'package:buddyappfirebase/Message/widget/widget.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../home/screens/MainHomeView.dart';
 import 'chat.dart';
 
 class Search extends StatefulWidget {
@@ -60,6 +61,7 @@ class _SearchState extends State<Search> {
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId": chatRoomId,
+      "chatRoomName": "",
     };
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
@@ -70,6 +72,9 @@ class _SearchState extends State<Search> {
             builder: (context) => Chat(
                   chatRoomId: chatRoomId,
                 )));
+    MainHomeView(
+      chatRoomId: chatRoomId,
+    );
   }
 
   Widget userTile(String userName, String userEmail) {
@@ -144,7 +149,8 @@ class _SearchState extends State<Search> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ChatRoom()),
+                              MaterialPageRoute(
+                                  builder: (context) => ChatRoom()),
                             );
                           },
                           child: Container(

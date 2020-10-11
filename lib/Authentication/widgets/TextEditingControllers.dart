@@ -6,4 +6,5 @@ class TextEditingControllers {
   static final TextEditingController firstNameEditingController = new TextEditingController();
   static final TextEditingController lastNameEditingController = new TextEditingController();
   static final TextEditingController usernameEditingController = new TextEditingController();
+  static final TextEditingController chatNameEditingController = new TextEditingController();
 }

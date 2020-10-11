@@ -2,6 +2,7 @@ import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
+import 'package:buddyappfirebase/Message/views/chat.dart';
 import 'package:buddyappfirebase/home/screens/composeScreen.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
@@ -12,10 +13,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
+import '../../Message/views/chatrooms.dart';
+
 
 // This class is responsible for the home page
 class MainHomeView extends StatefulWidget {
+  // Getting fed the chatroomId Data from Search.dart
+  final String chatRoomId;  
+  MainHomeView({this.chatRoomId});
+
   @override
   _MainHomeViewState createState() => _MainHomeViewState();
 }
@@ -28,7 +36,7 @@ class _MainHomeViewState extends State<MainHomeView> {
   String _name = "";
   List questionValues = [];
   int amountOfQuestions = 0;
-  Stream<QuerySnapshot> chats;
+  Stream<QuerySnapshot> chats; // Data of all chat
   String message;
 
   @override
@@ -37,14 +45,17 @@ class _MainHomeViewState extends State<MainHomeView> {
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
-    getUserInfogetChats();
-    DatabaseMethods().getChats("Aaron_David").then((val) {
+    getUserInfogetChats(); // getting the user info of chat
+    // I have a bug, I am trying to get the last chat of from a ChatRoom
+    // This code down here gets the Chat data from a certain chat room.
+    // This code needs to be ran multiple times if we want to show the last message from multiple chatrooms
+    // I am not sure how to get mutliple chatroomid and Run this piece of code.
+    DatabaseMethods().getChats(widget.chatRoomId).then((val) { 
       setState(() {
         chats = val;
       });
     });
     chatMessages();
-    print(message);
   }
 
   getUserInfogetChats() async {
@@ -52,7 +63,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
       setState(() {
         chatRooms = snapshots;
-       
       });
     });
   }
@@ -82,7 +92,35 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
   }
 
-  Widget chatMessages() {
+  String readTimestamp(int timestamp) { // This converts timestamp in a human readable form
+    var now = DateTime.now();
+    var format = DateFormat('HH:mm a');
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var diff = now.difference(date);
+    var time = '';
+
+    if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 0) {
+      time = format.format(date);
+    } else if (diff.inDays > 0 && diff.inDays < 7) {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + ' DAY AGO';
+      } else {
+        time = diff.inDays.toString() + ' DAYS AGO';
+      }
+    } else {
+      if (diff.inDays == 7) {
+        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+      } else {
+        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+      }
+    }
+    return time;
+  }
+
+  Widget chatMessages() { // Gets the chat? I am not quite sure
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot) {
@@ -90,13 +128,9 @@ class _MainHomeViewState extends State<MainHomeView> {
             ? ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  message = snapshot.data.documents[index].data["messages"][snapshot.data.documents.length-1];
-                  // return MessageTile(
-                  //   message: snapshot.data.documents[index].data["message"],
-                  //   sendByMe: Constants.myName ==
-                  //       snapshot.data.documents[index].data["sendBy"],
-                  //     lastChat: Chat.lastChat = snapshot.data.documents[index].data["message"],
-                  // );
+                  setState(() {
+                    message = snapshot.data.documents[index].data["message"];
+                  });
                 })
             : Container();
       },
@@ -201,6 +235,8 @@ class _MainHomeViewState extends State<MainHomeView> {
     );
   }
 
+  int numberOfGroups = 0;
+
   SingleChildScrollView homeBody() {
     // Anything body related
     return SingleChildScrollView(
@@ -219,7 +255,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                   FadeAnimation(
                     1,
                     Text(
-                      "Groups 3",
+                      "Groups",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -237,6 +273,9 @@ class _MainHomeViewState extends State<MainHomeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom()));
+                    }
                   ),
                 ]),
                 SizedBox(
@@ -244,38 +283,40 @@ class _MainHomeViewState extends State<MainHomeView> {
                 ),
                 FadeAnimation(
                   1.4,
-                  Container(
-                    height: 280,
-                    child: StreamBuilder(
-                        stream: chatRooms,
-                        builder: (context, snapshot) {
-                          return snapshot.hasData
-                              ? ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data.documents.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return groups(
+                  Container( // Important ****
+                      height: 280,
+                      child: StreamBuilder(
+                          stream: chatRooms,
+                          initialData: "",
+                          builder: (context, snapshot) {
+                            return snapshot.hasData
+                                ? ListView.builder( // This Builder builds the yellow rectangles. Gets the data from Chatrooms
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data.documents.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return groups(
                                         title: snapshot.data.documents[index]
-                                            .data['chatRoomId']
-                                            .toString()
-                                            .replaceAll("_", "")
-                                            .replaceAll(Constants.myName, ""),
-                                        messageContent: "Hi",
+                                            .data['chatRoomName']
+                                            .toString(),
+                                        messageContent:
+                                            Chat.lastChat.toString(),
+                                        time: readTimestamp(Chat.lastTime),
                                         chatRoomId: snapshot
                                             .data
                                             .documents[index]
                                             .data["chatRoomId"],
-                                            name: snapshot.data.documents[index]
+                                        name: snapshot.data.documents[index]
                                             .data['chatRoomId']
                                             .toString()
                                             .replaceAll("_", "")
                                             .replaceAll(Constants.myName, ""),
-                                            );
-                                  })
-                              : groups(title: "Hello");
-                        })),
-                  ),
+                                            
+                                      );
+                                    })
+                                : groups(title: "Hello");
+                          })),
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -312,7 +353,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     height: 225,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      reverse: true,
                       itemCount: questionValues.length,
                       itemBuilder: (context, int index) {
                         // Logic
@@ -333,9 +373,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                 SizedBox(
                   height: 80,
                 ),
-              
               ],
-                
             ),
           )
         ],
@@ -349,163 +387,177 @@ class _MainHomeViewState extends State<MainHomeView> {
       String messageContent,
       String chatRoomId,
       String photoUrl,
-      String name}) {
+      String name,
+      String time}) {
     // Makes Rectangles belongs in the groups section
-    return AspectRatio(
+    return AspectRatio(g
       aspectRatio: 10 / 9.3,
-      child: Container(
-        width: 100,
-        padding: EdgeInsets.all(4.0),
-        margin: EdgeInsets.only(right: 15),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Color(0xF1C40F),
-        ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Chat(
+                  chatRoomId: chatRoomId,
+                )));
+        },
         child: Container(
-          padding: EdgeInsets.all(20),
+          width: 100,
+          padding: EdgeInsets.all(4.0),
+          margin: EdgeInsets.only(right: 15),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 4,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xF1C40F),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 4,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
+                  Color(0xF1C40F)
+                      .withOpacity(1), //Colors.black.withOpacity(.8),
+                  Color(0xF1C40F)
+                      .withOpacity(1), //Colors.black.withOpacity(.2),
+                ])),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    title,
+                    style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold)),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ],
-              gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
-                Color(0xF1C40F).withOpacity(1), //Colors.black.withOpacity(.8),
-                Color(0xF1C40F).withOpacity(1), //Colors.black.withOpacity(.2),
-              ])),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  title,
-                  style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold)),
-                  textAlign: TextAlign.left,
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 250.0,
-                height: 150.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: -10,
-                      blurRadius: 0,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.transparent,
-                ),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 5.0),
-                  padding: const EdgeInsets.all(15.0),
+                Container(
+                  width: 250.0,
+                  height: 150.0,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(9.0),
+                    borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.grey[300],
-                          blurRadius: 5.0,
-                          offset: Offset(0, 3))
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: -10,
+                        blurRadius: 0,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
                     ],
+                    color: Colors.transparent,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage("$_profileImg"),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 5.0),
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(9.0),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[300],
+                            blurRadius: 5.0,
+                            offset: Offset(0, 3))
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage("$_profileImg"),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    messageContent,
+                                    style: TextStyle(fontSize: 16),
+                                    maxLines: 3,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
                               children: [
-                                Text(
-                                  messageContent,
-                                  style: TextStyle(fontSize: 16),
-                                  maxLines: 3,
+                                CircleAvatar(
+                                  radius: 8,
+                                  backgroundImage: NetworkImage("$_profileImg"),
+                                ),
+                                SizedBox(width: 7),
+                                Container(
+                                  height: 18,
+                                  width: 18,
+                                  // padding: EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                      color: CustomTheme.colorAccent,
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Text(name.substring(0, 1),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black, //white
+                                          fontSize: 15,
+                                          fontFamily: 'OverpassRegular',
+                                          fontWeight: FontWeight.w600)),
+                                ),
+                                SizedBox(width: 75),
+                                Container(
+                                  height: 20.0,
+                                  width: 80,
+                                  color: Colors.transparent,
+                                  child: new Container(
+                                      decoration: new BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: new BorderRadius.only(
+                                            topLeft:
+                                                const Radius.circular(10.0),
+                                            topRight:
+                                                const Radius.circular(10.0),
+                                            bottomLeft:
+                                                const Radius.circular(10.0),
+                                            bottomRight:
+                                                const Radius.circular(10.0),
+                                          )),
+                                      child: new Center(
+                                        child: new Text(time),
+                                      )),
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 8,
-                                backgroundImage: NetworkImage("$_profileImg"),
-                              ),
-                              SizedBox(width: 7),
-                              
-                              Container(
-                                height: 18,
-                                width: 18,
-                               // padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                    color: CustomTheme.colorAccent,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Text(name.substring(0, 1),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black, //white
-                                        fontSize: 15,
-                                        fontFamily: 'OverpassRegular',
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              SizedBox(width: 75),
-                              Container(
-                                height: 20.0,
-                                width: 80,
-                                color: Colors.transparent,
-                                child: new Container(
-                                    decoration: new BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: new BorderRadius.only(
-                                          topLeft: const Radius.circular(10.0),
-                                          topRight: const Radius.circular(10.0),
-                                          bottomLeft:
-                                              const Radius.circular(10.0),
-                                          bottomRight:
-                                              const Radius.circular(10.0),
-                                        )),
-                                    child: new Center(
-                                      child: new Text("11:26 pm"),
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ), // this is responsible for the inside
+              ],
+            ),
+          ), // this is responsible for the inside
+        ),
       ), // overall container
     );
   }

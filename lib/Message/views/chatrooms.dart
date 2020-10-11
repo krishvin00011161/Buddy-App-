@@ -48,7 +48,8 @@ class _ChatRoomState extends State<ChatRoom> {
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
                     chatRoomId: snapshot.data.documents[index].data[
-                        "chatRoomId"], // chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
+                        "chatRoomId"], 
+                        chatRoomName: snapshot.data != null ?  snapshot.data.documents[index].data['chatRoomName'] : "",
                   );
                 }) 
             : Container();
@@ -167,8 +168,9 @@ class _ChatRoomState extends State<ChatRoom> {
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
+  final String chatRoomName;
 
-  ChatRoomsTile({this.userName, @required this.chatRoomId});
+  ChatRoomsTile({this.userName, @required this.chatRoomId, this.chatRoomName});
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +206,7 @@ class ChatRoomsTile extends StatelessWidget {
             SizedBox(
               width: 12,
             ),
-            Text(userName,
+            Text(chatRoomName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: Colors.black,
