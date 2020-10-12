@@ -1,5 +1,4 @@
 import 'package:buddyappfirebase/Authentication/widgets/TextEditingControllers.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';

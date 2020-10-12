@@ -18,7 +18,8 @@ class ComposeScreen extends StatefulWidget {
 
 class _ComposeScreenState extends State<ComposeScreen> {
   TextEditingController composeEditingController = new TextEditingController();
-
+  TextEditingController categoriesEditingController = new TextEditingController();
+  TextEditingController classesEditingController = new TextEditingController();
   String _profileImg;
   String _name;
   final DateTime timestamp = DateTime.now();
@@ -68,26 +69,16 @@ class _ComposeScreenState extends State<ComposeScreen> {
         Firestore.instance.collection('questions').document();
     documentReference.setData({
       'userId': Constants.myId,
+      'questionContent': composeEditingController.text,
+      'questionId': documentReference.documentID,
+      'userName': _name,
+      'timeStamp': timestamp.toString(),
+      'categories': categoriesEditingController.text,
+      'classes': classesEditingController.text,
+      'like' : "",
+      'reply' : "",
     });
-    Firestore.instance.collection('users').document(Constants.myId).updateData({
-      'questions': FieldValue.arrayUnion([composeEditingController.text])
-    });
-  
-    _createQuestion1();
   }
-
-    _createQuestion1() async {
-      DocumentReference doc =
-          Firestore.instance.collection('questions/$id/questions').document();
-      doc.setData({
-        'questionContent': composeEditingController.text,
-        'questionId': doc.documentID,
-        'userName': _name,
-        'timeStamp': timestamp.toString(),
-      });
-    }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +103,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
             ),
             onPressed: () {
               _createQuestion();
-              print(composeEditingController.text);
+              
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => MainHomeView()),
@@ -139,7 +130,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "What's Happening?",
+                      hintText: "What is 2+2?",
                       focusColor: Colors.black,
                     ),
                     controller: composeEditingController,
@@ -147,6 +138,54 @@ class _ComposeScreenState extends State<ComposeScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                  "Categories",
+                  style: TextStyle(color: Colors.black),
+                )),
+                SizedBox(
+                  width: 3,
+                ),
+                Flexible(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Ex: Chemistry",
+                      focusColor: Colors.black,
+                    ),
+                    controller: categoriesEditingController,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                  "Classes",
+                  style: TextStyle(color: Colors.black),
+                )),
+                SizedBox(
+                  width: 3,
+                ),
+                Flexible(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Ex: Hon Chemistry",
+                      focusColor: Colors.black,
+                    ),
+                    controller: classesEditingController,
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

@@ -121,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _getClasses();
     _getUserQuestion();
     _getUserQ("David");
-  
+    initiateSearch();
   }
   
   // gets the profile img
@@ -181,6 +181,66 @@ class _ProfilePageState extends State<ProfilePage> {
         print(questions);
       }
     }); 
+  }
+
+
+  TextEditingController searchEditingController = new TextEditingController();
+
+  bool isLoading = false;
+  bool haveUserSearched = false;
+
+  initiateSearch() async {
+    if (searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods
+          .searchMyQuestions(Constants.myName)
+          .then((snapshot) {
+        searchResultSnapshot = snapshot;
+        print("$searchResultSnapshot");
+        setState(() {
+          isLoading = false;
+          haveUserSearched = true;
+        });
+      });
+    }
+  }
+
+  Widget userList() {
+    return haveUserSearched
+        ? ListView.builder(
+           // shrinkWrap: true,
+            itemCount: searchResultSnapshot.documents.length,
+            itemBuilder: (context, index) {
+              return userTile(
+                searchResultSnapshot.documents[index].data["questionContent"],
+              );
+          
+            })
+        : Container();
+  }
+
+  Widget userTile( String content) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                content,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Divider(height: 3.0,)
+              
+            ],
+          ),
+          
+        ],
+      ),
+    );
   }
 
     
@@ -244,19 +304,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   tabs: [
                     Tab(
                       child: Text(
-                        '$amountOfClasses\nClasses',
+                        'Classes',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Tab(
                       child: Text(
-                        '$amountOfQuestions\nQuestions',
+                        'Questions',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Tab(
                       child: Text(
-                        '$amountOfQuestions\nAnswers',
+                        'Answers',
                         textAlign: TextAlign.center,
                       ),
                     )
@@ -286,24 +346,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                       ),
-                      Center(child: ListView.builder(
-                          // Creates a ListView.builder
-                        // *important - this list view builder uses List Data
-                          itemCount: questionValues.length,
-                          reverse: true,
-                          itemBuilder: (context, int index) {
-                            return new Column(
-                              children: <Widget>[
-                                new ListTile(
-                                  title: new Text("${questionValues[index]}"), 
-                                ),
-                                new Divider(
-                                  height: 2.0,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                       Center(
+                      child: userList(),
                       ),
                       Center(child: Text('Not Made yet')),
                     ],

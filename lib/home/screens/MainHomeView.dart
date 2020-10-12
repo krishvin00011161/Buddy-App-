@@ -15,13 +15,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
+import '../../Message/services/database.dart';
+import '../../Message/services/database.dart';
 import '../../Message/views/chatrooms.dart';
-
+import '../../Profile/profile.dart';
 
 // This class is responsible for the home page
 class MainHomeView extends StatefulWidget {
   // Getting fed the chatroomId Data from Search.dart
-  final String chatRoomId;  
+  final String chatRoomId;
   MainHomeView({this.chatRoomId});
 
   @override
@@ -50,12 +52,13 @@ class _MainHomeViewState extends State<MainHomeView> {
     // This code down here gets the Chat data from a certain chat room.
     // This code needs to be ran multiple times if we want to show the last message from multiple chatrooms
     // I am not sure how to get mutliple chatroomid and Run this piece of code.
-    DatabaseMethods().getChats(widget.chatRoomId).then((val) { 
+    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
       setState(() {
         chats = val;
       });
     });
     chatMessages();
+    initiateSearch();
   }
 
   getUserInfogetChats() async {
@@ -92,7 +95,8 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
   }
 
-  String readTimestamp(int timestamp) { // This converts timestamp in a human readable form
+  String readTimestamp(int timestamp) {
+    // This converts timestamp in a human readable form
     var now = DateTime.now();
     var format = DateFormat('HH:mm a');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
@@ -120,7 +124,8 @@ class _MainHomeViewState extends State<MainHomeView> {
     return time;
   }
 
-  Widget chatMessages() { // Gets the chat? I am not quite sure
+  Widget chatMessages() {
+    // Gets the chat? I am not quite sure
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot) {
@@ -134,6 +139,71 @@ class _MainHomeViewState extends State<MainHomeView> {
                 })
             : Container();
       },
+    );
+  }
+
+  TextEditingController searchEditingController = new TextEditingController();
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  bool isLoading = false;
+  bool haveUserSearched = false;
+  QuerySnapshot searchResultSnapshot;
+
+  initiateSearch() async {
+    if (searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods
+          .searchMyQuestions(Constants.myName)
+          .then((snapshot) {
+        searchResultSnapshot = snapshot;
+        print("$searchResultSnapshot");
+        setState(() {
+          isLoading = false;
+          haveUserSearched = true;
+        });
+      });
+    }
+  }
+
+  Widget userList() {
+    return haveUserSearched
+        ? ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: searchResultSnapshot.documents.length,
+            itemBuilder: (context, index) {
+              return Row(
+                children: <Widget>[
+                  questions(questionContent: searchResultSnapshot.documents[index].data["questionContent"])
+                 
+                ],
+              );
+              // return userTile(
+              //   searchResultSnapshot.documents[index].data["questionContent"],
+              // );
+            })
+        : Container();
+  }
+
+  Widget userTile(String content) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                content,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Divider(
+                height: 3.0,
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -265,32 +335,37 @@ class _MainHomeViewState extends State<MainHomeView> {
                   ),
                   Spacer(),
                   GestureDetector(
-                    child: Text(
-                      "See all >",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
+                      child: Text(
+                        "See all >",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom()));
-                    }
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatRoom()));
+                      }),
                 ]),
                 SizedBox(
                   height: 20,
                 ),
                 FadeAnimation(
                   1.4,
-                  Container( // Important ****
+                  Container(
+                      // Important ****
                       height: 280,
                       child: StreamBuilder(
                           stream: chatRooms,
                           initialData: "",
                           builder: (context, snapshot) {
                             return snapshot.hasData
-                                ? ListView.builder( // This Builder builds the yellow rectangles. Gets the data from Chatrooms
+                                ? ListView.builder(
+                                    // This Builder builds the yellow rectangles. Gets the data from Chatrooms
                                     scrollDirection: Axis.horizontal,
                                     itemCount: snapshot.data.documents.length,
                                     shrinkWrap: true,
@@ -311,7 +386,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .toString()
                                             .replaceAll("_", "")
                                             .replaceAll(Constants.myName, ""),
-                                            
                                       );
                                     })
                                 : groups(title: "Hello");
@@ -341,6 +415,12 @@ class _MainHomeViewState extends State<MainHomeView> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileView()));
+                      },
                     ),
                   ],
                 ),
@@ -351,23 +431,25 @@ class _MainHomeViewState extends State<MainHomeView> {
                   1.4,
                   Container(
                     height: 225,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: questionValues.length,
-                      itemBuilder: (context, int index) {
-                        // Logic
-                        // If 1 == 2 false, 2 == 2 true then create question widget then question add button
-                        print(questionValues.length);
-                        print(index);
-                        if (questionValues.length >= 1) {
-                          return Row(
-                            children: <Widget>[
-                              questions(questionContent: questionValues[index]),
-                            ],
-                          );
-                        }
-                      },
-                    ),
+                    child: userList(),
+                    // child: ListView.builder(
+                    //   shrinkWrap: true,
+                    //   scrollDirection: Axis.horizontal,
+                    //   itemCount: 1, //searchResultSnapshot.documents.length,
+                    //   itemBuilder: (context, index) {
+                    //     userList();
+                    //     // // Logic
+                    //     // // If 1 == 2 false, 2 == 2 true then create question widget then question add button
+                    //     // print(index);
+                    //     // if (questionValues.length >= 1) {
+                    //     //   return Row(
+                    //     //     children: <Widget>[
+                    //     //       //questions(questionContent: searchResultSnapshot.documents[index].data["questionContent"])
+                    //     //     ],
+                    //     //   );
+                    //     // }
+                    //   },
+                    // ),
                   ),
                 ),
                 SizedBox(
@@ -390,16 +472,16 @@ class _MainHomeViewState extends State<MainHomeView> {
       String name,
       String time}) {
     // Makes Rectangles belongs in the groups section
-    return AspectRatio(g
+    return AspectRatio(
       aspectRatio: 10 / 9.3,
       child: InkWell(
         onTap: () {
           Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Chat(
-                  chatRoomId: chatRoomId,
-                )));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Chat(
+                        chatRoomId: chatRoomId,
+                      )));
         },
         child: Container(
           width: 100,
@@ -626,23 +708,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                               SizedBox(
                                 width: 20,
                               ),
-                              CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                radius: 13,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.add),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ComposeScreen()),
-                                    );
-                                  },
-                                ),
-                              ),
+                              
                             ],
                           ),
                         ),

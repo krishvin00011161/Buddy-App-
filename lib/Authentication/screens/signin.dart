@@ -46,7 +46,7 @@ class _SignInState extends State<SignIn> {
           // Saves userName, email, and Document ID
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(
-              userInfoSnapshot.documents[0].data["userName"]);
+              userInfoSnapshot.documents[0].data['userName']);
           HelperFunctions.saveUserEmailSharedPreference(
               userInfoSnapshot.documents[0].data["userEmail"]);
           HelperFunctions.saveUserIDSharedPreference(

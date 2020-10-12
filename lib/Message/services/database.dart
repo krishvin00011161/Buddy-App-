@@ -24,6 +24,34 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  searchMyQuestions(String name) {
+    return Firestore.instance
+      .collection('questions')
+      .where('userName', isEqualTo: name)
+      .getDocuments(); 
+  }
+
+  searchQuestions(String question) {
+    return Firestore.instance
+      .collection('questions')
+      .where('questionContent', isEqualTo: question)
+      .getDocuments(); 
+  }
+
+  searchClassQuestions(String className) {
+    return Firestore.instance
+      .collection('questions')
+      .where('classes', isEqualTo: className)
+      .getDocuments(); 
+  }
+
+  searchTopicQuestions(String categories) {
+    return Firestore.instance
+      .collection('questions')
+      .where('categories', isEqualTo: categories)
+      .getDocuments(); 
+  }
+
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     Firestore.instance
         .collection("chatRoom")
@@ -51,6 +79,8 @@ class DatabaseMethods {
       .getDocuments();
 
   }
+
+  
 
   Future<void> addMessage(String chatRoomId, chatMessageData) {
     Firestore.instance
