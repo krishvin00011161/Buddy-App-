@@ -8,6 +8,7 @@ import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ComposeScreen extends StatefulWidget {
   ComposeScreen({Key key}) : super(key: key);
@@ -22,7 +23,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
   TextEditingController classesEditingController = new TextEditingController();
   String _profileImg;
   String _name;
-  final DateTime timestamp = DateTime.now();
+  final timestamp = DateTime.now().millisecondsSinceEpoch;
 
   @override
   void initState() {
@@ -30,7 +31,10 @@ class _ComposeScreenState extends State<ComposeScreen> {
     _getUserProfileImg();
     _getUserName();
     FirebaseMethods().getUserQuestions();
+    
   }
+
+ 
 
   // gets the profile
   _getUserProfileImg() async {
@@ -72,11 +76,11 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'questionContent': composeEditingController.text,
       'questionId': documentReference.documentID,
       'userName': _name,
-      'timeStamp': timestamp.toString(),
+      'timeStamp': timestamp,
       'categories': categoriesEditingController.text,
       'classes': classesEditingController.text,
-      'like' : "",
-      'reply' : "",
+      'like' : 0,
+      'reply' : 0,
     });
   }
 

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'home/screens/MainHomeView.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'welcome/welcome_view.dart';
+
 void main() {
   // Register all the models and services before the app starts
 
@@ -53,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "OverpassRegular",
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //home: Authenticate(),
+      // home: WelcomeView(),
       home: userIsLoggedIn != null
           ? userIsLoggedIn ? MainHomeView() : Authenticate()
           : Container(

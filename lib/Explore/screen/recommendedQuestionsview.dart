@@ -1,6 +1,8 @@
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../Message/services/database.dart';
 import '../../Message/views/chatrooms.dart';
@@ -26,11 +28,14 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
   bool haveUserSearched = false;
   int _currentIndex = 0;
   bool isSelected;
+  String _profileImg = "";
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     initiateSearch();
+    _getUserProfileImg();
   }
 
   initiateSearch() async {
@@ -50,65 +55,78 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
     }
   }
 
+   // This gets the profile Img url
+  _getUserProfileImg() async {
+    FirebaseMethods().getUserProfileImg();
+    setState(() {
+      _profileImg = FirebaseMethods.profileImgUrl.toString();
+    });
+  }
+
+
+   String readQuestionTimestamp(int timestamp) {
+    var format = DateFormat('H:mm y');
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var time = '';
+    time = DateFormat.yMMMd().format(date);
+    return time;
+  }
+
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
             itemCount: searchResultSnapshot.documents.length,
             itemBuilder: (context, index) {
-              return userTile(
-                searchResultSnapshot.documents[index].data["userName"],
-                searchResultSnapshot.documents[index].data["timeStamp"],
-                searchResultSnapshot.documents[index].data["questionContent"],
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Card(
+                    elevation: 5.0,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(searchResultSnapshot.documents[index].data["questionContent"]),
+                            Text(searchResultSnapshot.documents[index].data["userName"]),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(readQuestionTimestamp(searchResultSnapshot.documents[index].data["timeStamp"])),
+                            Text("Comment", style: TextStyle(color: Colors.blue),)
+                          ],
+                        ),
+                      ]),
+                    ),
+                  ),
+                ],
               );
             })
         : Container();
   }
 
-  Widget userTile(String userName, String timeStamp, String content) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                content,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-              Text(
-                userName,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-              Text(
-                timeStamp,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              )
-            ],
-          ),
-          Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(24)),
-              child: Text(
-                "Comment",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   AppBar appBar() {
     return AppBar(
+      iconTheme: new IconThemeData(color: Colors.grey),
+      backgroundColor: Colors.grey[100],
+      elevation: 0,
+      leading: new IconButton(
+        icon: CircleAvatar(
+          backgroundImage: NetworkImage("$_profileImg"),
+        ),
+        onPressed: () => _scaffoldKey.currentState.openDrawer(),
+      ),
+      
       title: GestureDetector(
-        child: Text(widget.categories),
+        child: Text(widget.categories, style: TextStyle(color: Colors.black),),
         onTap: () {
           initiateSearch();
         },
@@ -119,6 +137,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
   Scaffold body() {
     return Scaffold(
       appBar: appBar(),
+      key: _scaffoldKey,
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar(
         // Code reuse make some class Reminder

@@ -235,7 +235,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ExploreCard(
-                          imgScr: 'assets/images/card_dog_1.png',
+                          imgScr: 'assets/images/history.jpg',
                           title: "History",
                         ),
                       ),
@@ -248,7 +248,25 @@ class _ExplorePageState extends State<ExplorePage> {
                                   )),
                         );
                       }),
+                      GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExploreCard(
+                          imgScr: 'assets/images/chemistry.jpg',
+                          title: "Chemistry",
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RecommendedQuestionView(
+                                    categories: "Chemistry",
+                                  )),
+                        );
+                      }),
                 ],
+                
               ),
             ],
           ),
@@ -303,7 +321,7 @@ class _ExplorePageState extends State<ExplorePage> {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         child: ExploreCard(
-          imgScr: 'assets/images/card_dog_1.png',
+          imgScr: 'assets/images/coding.jpg',
           title: nameOfCourse,
         ),
         onTap: () {

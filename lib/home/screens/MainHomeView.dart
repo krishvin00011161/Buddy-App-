@@ -124,6 +124,14 @@ class _MainHomeViewState extends State<MainHomeView> {
     return time;
   }
 
+  String readQuestionTimestamp(int timestamp) {
+    var format = DateFormat('H:mm y');
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var time = '';
+    time = DateFormat.yMMMd().format(date);
+    return time;
+  }
+
   Widget chatMessages() {
     // Gets the chat? I am not quite sure
     return StreamBuilder(
@@ -153,9 +161,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods
-          .searchMyQuestions(Constants.myName)
-          .then((snapshot) {
+      await databaseMethods.searchMyQuestions("Tim").then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -174,13 +180,20 @@ class _MainHomeViewState extends State<MainHomeView> {
             itemBuilder: (context, index) {
               return Row(
                 children: <Widget>[
-                  questions(questionContent: searchResultSnapshot.documents[index].data["questionContent"])
-                 
+                  questions(
+                      questionContent: searchResultSnapshot
+                          .documents[index].data["questionContent"], 
+                  timestamp: searchResultSnapshot
+                          .documents[index].data["timeStamp"],
+                  likes: searchResultSnapshot.documents[index].data["like"],
+                  comments: searchResultSnapshot.documents[index].data['reply'],
+
+                          
+                 ),
+                  
+                          
                 ],
               );
-              // return userTile(
-              //   searchResultSnapshot.documents[index].data["questionContent"],
-              // );
             })
         : Container();
   }
@@ -342,7 +355,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                         ),
-                        
                       ),
                       onTap: () {
                         Navigator.push(
@@ -432,24 +444,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                   Container(
                     height: 225,
                     child: userList(),
-                    // child: ListView.builder(
-                    //   shrinkWrap: true,
-                    //   scrollDirection: Axis.horizontal,
-                    //   itemCount: 1, //searchResultSnapshot.documents.length,
-                    //   itemBuilder: (context, index) {
-                    //     userList();
-                    //     // // Logic
-                    //     // // If 1 == 2 false, 2 == 2 true then create question widget then question add button
-                    //     // print(index);
-                    //     // if (questionValues.length >= 1) {
-                    //     //   return Row(
-                    //     //     children: <Widget>[
-                    //     //       //questions(questionContent: searchResultSnapshot.documents[index].data["questionContent"])
-                    //     //     ],
-                    //     //   );
-                    //     // }
-                    //   },
-                    // ),
                   ),
                 ),
                 SizedBox(
@@ -645,7 +639,7 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   // This Widget creates the Blue Question tiles
-  Widget questions({String questionContent}) {
+  Widget questions({String questionContent, int timestamp, int likes, int comments}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
       aspectRatio: 4 / 3,
@@ -685,7 +679,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
+                          padding: const EdgeInsets.only(top: 0.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -694,7 +688,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                                     child: RichText(
                                   text: TextSpan(children: [
                                     TextSpan(
-                                      text: "$_name",
+                                      text: "  $_name",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 22.0,
@@ -705,21 +699,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                                 )),
                                 flex: 5,
                               ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              
+
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            "Asked at 25, September 2020",
-                            style:
-                                TextStyle(fontSize: 14.0, color: Colors.white),
-                            maxLines: 1,
-                          ),
+                        Text(
+                          "    Asked at " + readQuestionTimestamp(timestamp) + "                           ",
+                          style: TextStyle(fontSize: 14.0, color: Colors.white),
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -756,13 +743,16 @@ class _MainHomeViewState extends State<MainHomeView> {
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Icon(Icons.thumb_up),
+                            child: Icon(
+                              Icons.thumb_up,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         TextSpan(
-                            text: ' 8',
+                            text: ' $likes',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20)),
+                                TextStyle(color: Colors.white, fontSize: 20)),
                       ],
                     ),
                   ),
@@ -776,13 +766,16 @@ class _MainHomeViewState extends State<MainHomeView> {
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Icon(Icons.chat),
+                            child: Icon(
+                              Icons.chat,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         TextSpan(
-                            text: '  2',
+                            text: '  $comments',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20)),
+                                TextStyle(color: Colors.white, fontSize: 20)),
                       ],
                     ),
                   )

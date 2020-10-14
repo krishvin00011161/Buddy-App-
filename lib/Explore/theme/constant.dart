@@ -16,6 +16,7 @@ const card6 = Color(0xFF15464E);
 const card7 = Color(0xFFB6DDDF);
 const card8 = Color(0xFF00B7B7);
 
+
 const appTitle = TextStyle(
   fontSize: 35,
   fontWeight: FontWeight.bold,

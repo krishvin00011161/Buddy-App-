@@ -1,5 +1,6 @@
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
+import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,10 @@ import '../../Authentication/widgets/TextEditingControllers.dart';
 
 class Chat extends StatefulWidget {
   final String chatRoomId;
-  static String lastChat = ""; // Used in MainHomeView.dart and carry information about last message in the chat
-  static int lastTime; // Used in MainHomeView.dart and carry information about last message in the chat
+  static String lastChat =
+      ""; // Used in MainHomeView.dart and carry information about last message in the chat
+  static int
+      lastTime; // Used in MainHomeView.dart and carry information about last message in the chat
 
   Chat({this.chatRoomId});
 
@@ -22,7 +25,8 @@ class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
-  Widget chatMessages() { // This creates the message bubbles in chat
+  Widget chatMessages() {
+    // This creates the message bubbles in chat
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot) {
@@ -72,13 +76,22 @@ class _ChatState extends State<Chat> {
     print(Chat.lastTime);
   }
 
-  updateChatName(String text) { // Update the Name of the chat
+  updateChatName(String text) {
+    // Update the Name of the chat
     Firestore.instance
-          .collection('chatRoom')
-          .document(widget.chatRoomId) 
-          .updateData({'chatRoomName': text});
-   
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'chatRoomName': text});
   }
+
+  deleteChat() {
+    // Update the Name of the chat
+    Firestore.instance
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .delete();
+  }
+
   String chatName;
 
   AppBar chatAppbar() {
@@ -87,10 +100,11 @@ class _ChatState extends State<Chat> {
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
       title: TextFormField(
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
-          hintText: "Enter Chat Name",
-          labelText: chatName,
-        ),
+            hintText: "Enter Chat Name",
+            //labelText: chatName,
+            border: InputBorder.none),
         controller: TextEditingControllers.chatNameEditingController,
         onChanged: (text) {
           updateChatName(text);
@@ -99,6 +113,19 @@ class _ChatState extends State<Chat> {
           });
         },
       ),
+      actions: <Widget>[
+        PopupMenuButton<String>(
+          onSelected: choiceAction,
+          itemBuilder: (BuildContext context) {
+            return Constants.choices.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+        )
+      ],
       bottom: PreferredSize(
           child: Container(
             color: Colors.grey,
@@ -106,6 +133,17 @@ class _ChatState extends State<Chat> {
           ),
           preferredSize: Size.fromHeight(1.0)),
     );
+  }
+
+  void choiceAction(String choice) {
+    if (choice == Constants.Settings) {
+      print('Settings');
+    } else if (choice == Constants.Subscribe) {
+      print("Delete");
+      deleteChat();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ChatRoom()));
+    }
   }
 
   @override

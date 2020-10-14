@@ -1,3 +1,4 @@
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
@@ -19,12 +20,19 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   DatabaseMethods databaseMethods = new DatabaseMethods(); // added
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
-
   int _currentIndex = 0;
-
   int chatCount = 0;
+  String _profileImg = "";
+
+  // This gets the profile Img url
+  _getUserProfileImg() async {
+    FirebaseMethods().getUserProfileImg();
+    setState(() {
+      _profileImg = FirebaseMethods.profileImgUrl.toString();
+    });
+  }
 
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -60,8 +68,9 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    getUserInfogetChats();
     super.initState();
+    getUserInfogetChats();
+    _getUserProfileImg();
   }
 
   getUserInfogetChats() async {
@@ -76,21 +85,20 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   AppBar chatRoomAppbar() {
+     // App bar
     return AppBar(
-      backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(color: Colors.grey),
-      elevation: 0.0,
-      bottom: PreferredSize(
-      child: Container(
-         color: Colors.grey,
-         height: 1.0,
+      iconTheme: new IconThemeData(color: Colors.grey),
+      backgroundColor: Colors.grey[100],
+      elevation: 0,
+      leading: new IconButton(
+        icon: CircleAvatar(
+          backgroundImage: NetworkImage("$_profileImg"),
+        ),
+        onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
-      preferredSize: Size.fromHeight(1.0)),
       title: Text(
         "Messages",
-        style: TextStyle(
-          color: Colors.black,
-        ),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -98,6 +106,7 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: chatRoomAppbar(),
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar(
@@ -153,7 +162,7 @@ class _ChatRoomState extends State<ChatRoom> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(
-          Icons.search,
+          Icons.chat,
           color: Colors.black,
         ),
         onPressed: () {
@@ -187,7 +196,7 @@ class ChatRoomsTile extends StatelessWidget {
         color: Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
         child: Row(
-          children: [
+        children: [
             Container(
               height: 50,
               width: 50,

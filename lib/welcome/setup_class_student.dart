@@ -167,13 +167,13 @@ class _SetUpStudentState extends State<SetUpStudent> {
               children: [
                 FlatButton(
                   child: Text(
-                    'ADD ANOTHER CLASS',
+                    'ADD CLASSES',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.white,
                     ),
                   ),
-                  color: Colors.grey,
+                  color: Colors.blueAccent,
                   padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(25.0),
@@ -181,7 +181,7 @@ class _SetUpStudentState extends State<SetUpStudent> {
                   onPressed: () async {
                     updateInfo(true);
                   },
-                )
+                ),
               ],
             ),
           ],

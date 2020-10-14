@@ -123,10 +123,11 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUserQ("David");
     initiateSearch();
   }
-  
+
   // gets the profile img
   _getUserProfileImg() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    Constants.myId = await HelperFunctions
+        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
     final DocumentSnapshot doc =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
 
@@ -139,7 +140,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // gets user name
   _getUserName() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    Constants.myId = await HelperFunctions
+        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
     final DocumentSnapshot doc =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
 
@@ -161,7 +163,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // gets question
   _getUserQuestion() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference(); // Gets user ID saved from Sign Up
+    Constants.myId = await HelperFunctions
+        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
     final DocumentSnapshot docQuestion =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
     setState(() {
@@ -171,18 +174,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
     print(values);
   }
+
   var questions;
 
   _getUserQ(String userName) async {
-    DatabaseMethods().getLatestQuestions('userName')
-    .then((QuerySnapshot doc) {
+    DatabaseMethods().getLatestQuestions('userName').then((QuerySnapshot doc) {
       if (doc.documents.isNotEmpty) {
         questions = doc.documents[0].data;
         print(questions);
       }
-    }); 
+    });
   }
-
 
   TextEditingController searchEditingController = new TextEditingController();
 
@@ -194,9 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods
-          .searchMyQuestions(Constants.myName)
-          .then((snapshot) {
+      await databaseMethods.searchMyQuestions("Tim").then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -210,43 +210,56 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
-           // shrinkWrap: true,
+            // shrinkWrap: true,
             itemCount: searchResultSnapshot.documents.length,
             itemBuilder: (context, index) {
-              return userTile(
-                searchResultSnapshot.documents[index].data["questionContent"],
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(
+                          searchResultSnapshot
+                              .documents[index].data["questionContent"],
+                          style: TextStyle(color: Colors.black, fontSize: 16))),
+                  Divider(
+                    height: 2.0,
+                  )
+                ],
               );
-          
+              // return userTile(
+              //   searchResultSnapshot.documents[index].data["questionContent"],
+              // );
             })
         : Container();
   }
 
-  Widget userTile( String content) {
+  Widget userTile(String content) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
+              // ListTile(
+              //   title: Text(content, style: TextStyle(color: Colors.black, fontSize: 16))
+              // ),
+              // Divider(
+              //   height: 2.0,
+              // ),
               Text(
                 content,
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
-              Divider(height: 3.0,)
-              
+              Divider(
+                height: 2.0,
+                color: Colors.black,
+              )
             ],
           ),
-          
         ],
       ),
     );
   }
-
-    
-
-  
-
 
   ListView Profile(double height) {
     return ListView(children: [
@@ -261,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       Container(
-        height: 120,
+          height: 120,
           child: Center(
             child: CircleAvatar(
               radius: 60,
@@ -346,10 +359,33 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                       ),
-                       Center(
-                      child: userList(),
+                      Center(
+                        child: userList(),
                       ),
-                      Center(child: Text('Not Made yet')),
+                      Center(
+                        child: ListView.builder(
+                            itemCount: 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                children: <Widget>[
+                                  ListTile(
+                                    title: Text(
+                                        "Democritus discovered the term atom"),
+                                    subtitle: Text(
+                                        "Question: Who discovered the Atom"),
+                                  ),
+                                  Divider(height: 2.0),
+                                  ListTile(
+                                    title: Text(
+                                        "There is 3 atoms, two hydrogen and one oxygen"),
+                                    subtitle: Text(
+                                        "Question: How many atoms does water have?"),
+                                  ),
+                                  Divider(height: 2.0),
+                                ],
+                              );
+                            }),
+                      )
                     ],
                   ))
             ],
