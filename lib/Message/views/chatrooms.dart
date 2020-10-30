@@ -13,6 +13,9 @@ import 'chat.dart';
 
 
 class ChatRoom extends StatefulWidget {
+  final int index;
+  ChatRoom({this.index});
+
   @override
   _ChatRoomState createState() => _ChatRoomState();
   

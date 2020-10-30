@@ -20,6 +20,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: ProfileAppbar(),
             drawer: CustomDrawers(),
@@ -84,7 +85,7 @@ class ProfileView extends StatelessWidget {
       title: Text(
         "Profile",
         style: TextStyle(
-          color: Colors.grey,
+          color: Colors.black,
         ),
       ),
     );
@@ -335,29 +336,49 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   ]),
               Container(
-                  height: 250,
+                  height: 280,
                   child: TabBarView(
                     children: [
                       Center(
                         // Creates a ListView.builder
                         // *important - this list view builder uses MAP Data
                         child: ListView.builder(
-                          itemCount: values.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            String key = values.keys.elementAt(index);
-                            return new Column(
-                              children: <Widget>[
-                                new ListTile(
-                                  title: new Text("$key"),
-                                  subtitle: new Text("Code: ${values[key]}"),
-                                ),
-                                new Divider(
-                                  height: 2.0,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                            shrinkWrap: false,
+                            itemCount: 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                children: <Widget>[
+                                  ListTile(
+                                    title: Text(
+                                        "U.S History"),
+                                    subtitle: Text(
+                                        "Code: GHE134"),
+                                  ),
+                                  Divider(height: 2.0),
+                                  ListTile(
+                                    title: Text(
+                                        "Chemistry I"),
+                                    subtitle: Text(
+                                        "Code: DER321"),
+                                  ),
+                                  Divider(height: 2.0),
+                                  ListTile(
+                                    title: Text(
+                                        "Psychology"),
+                                    subtitle: Text(
+                                        "Code: DLE983"),
+                                  ),
+                                  Divider(height: 2.0),
+                                  ListTile(
+                                    title: Text(
+                                        "Literature"),
+                                    subtitle: Text(
+                                        "Code: DEW342"),
+                                  ),
+                                  
+                                ],
+                              );
+                            }),
                       ),
                       Center(
                         child: userList(),
@@ -370,18 +391,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: <Widget>[
                                   ListTile(
                                     title: Text(
-                                        "Democritus discovered the term atom"),
+                                        "Greek word for indivisible"),
                                     subtitle: Text(
-                                        "Question: Who discovered the Atom"),
+                                        "Question: What is an Atom?"),
                                   ),
                                   Divider(height: 2.0),
                                   ListTile(
                                     title: Text(
-                                        "There is 3 atoms, two hydrogen and one oxygen"),
+                                        "Robert Oppenheimer"),
                                     subtitle: Text(
-                                        "Question: How many atoms does water have?"),
+                                        "Question: Who made the atomic bomb?"),
                                   ),
                                   Divider(height: 2.0),
+                                  ListTile(
+                                    title: Text(
+                                        "The 16th president of the United States."),
+                                    subtitle: Text(
+                                        "Question: Who is Lincoln?"),
+                                  ),
+                                  
                                 ],
                               );
                             }),

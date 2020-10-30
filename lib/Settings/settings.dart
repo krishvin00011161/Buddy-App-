@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:link/link.dart';
 
 class SettingsOnePage extends StatefulWidget {
@@ -140,7 +139,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
           backgroundColor: Colors.transparent,
           title: Text(
             'Settings',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.black),
           ),
         ),
         body: Stack(
@@ -210,7 +209,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                         _buildDivider(),
                         ListTile(
                           leading: Icon(
-                            FontAwesomeIcons.userLock,
+                            Icons.lock,
                             color: Colors.lightBlue,
                           ),
                           title: Text("Privacy Policy"),
@@ -284,3 +283,5 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
     );
   }
 }
+
+

@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../Message/helper/authenticate.dart';
 
 class CustomDrawers extends StatefulWidget {
   static final String path = "lib/src/pages/navigation/drawer2.dart";
@@ -106,6 +107,11 @@ class _CustomDrawersState extends State<CustomDrawers> {
                       ),
                       onPressed: () {
                         _signOut();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Authenticate()),
+                        );
                       },
                     ),
                   ),
@@ -129,7 +135,7 @@ class _CustomDrawersState extends State<CustomDrawers> {
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600),
                   ),
-                   Text(
+                  Text(
                     "$_role",
                     style: TextStyle(color: active, fontSize: 16.0),
                   ),

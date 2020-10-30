@@ -9,7 +9,7 @@ import '../../Authentication/widgets/TextEditingControllers.dart';
 // This needs work
 
 class Chat extends StatefulWidget {
-  final String chatRoomId;
+  String chatRoomId = "Aidan_Tim";
   static String lastChat =
       ""; // Used in MainHomeView.dart and carry information about last message in the chat
   static int
@@ -241,7 +241,7 @@ class MessageTile extends StatelessWidget {
             gradient: LinearGradient(
               colors: sendByMe
                   ? [const Color(0xff007EF4), const Color(0xff2A75BC)]
-                  : [const Color(0x1AFFFFFF), const Color(0x1AFFFFFF)],
+                  : [const Color(0xff8A8A8A), const Color(0xff8A8A8A)],
             )),
         child: Text(message,
             textAlign: TextAlign.start,

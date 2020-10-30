@@ -4,6 +4,7 @@ import 'package:buddyappfirebase/Explore/screen/recommendedQuestionsview.dart';
 import 'package:buddyappfirebase/Explore/screen/searchQuestion.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../FirebaseData/firebaseMethods.dart';
@@ -15,8 +16,11 @@ import '../../Widget/progress.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../../home/screens/composeScreen.dart';
 import '../../home/widgets/custom_drawers.dart';
+import 'classesQuestionView.dart';
 
 class ExplorePage extends StatefulWidget {
+  final int index;
+  ExplorePage({this.index});
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
@@ -195,21 +199,81 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ],
           ),
-          Container(
-            height: 180,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: amountOfClasses,
-                itemBuilder: (context, int index) {
-                  String key = values.keys.elementAt(index);
-                  return Row(
-                    children: <Widget>[
-                      classes(
-                        nameOfCourse: "$key",
-                      ),
-                    ],
-                  );
-                }),
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExploreCard(
+                      imgScr: 'assets/images/history.jpg',
+                      title: "U.S History",
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassQuestionView(
+                                className: "U.S History",
+                              )),
+                    );
+                  }),
+              GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExploreCard(
+                      imgScr: 'assets/images/chemistry.jpg',
+                      title: "Chemistry I",
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassQuestionView(
+                                className: "Chemistry",
+                              )),
+                    );
+                  }),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExploreCard(
+                      imgScr: 'assets/images/psychology.jpg',
+                      title: "Psychology",
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassQuestionView(
+                                className: "Psychology",
+                              )),
+                    );
+                  }),
+              GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExploreCard(
+                      imgScr: 'assets/images/literature.jpg',
+                      title: "Literature",
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassQuestionView(
+                                className: "Literature",
+                              )),
+                    );
+                  }),
+            ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +299,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ExploreCard(
-                          imgScr: 'assets/images/history.jpg',
+                          imgScr: 'assets/images/history1.jpg',
                           title: "History",
                         ),
                       ),
@@ -248,11 +312,11 @@ class _ExplorePageState extends State<ExplorePage> {
                                   )),
                         );
                       }),
-                      GestureDetector(
+                  GestureDetector(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ExploreCard(
-                          imgScr: 'assets/images/chemistry.jpg',
+                          imgScr: 'assets/images/chemistry1.jpg',
                           title: "Chemistry",
                         ),
                       ),
@@ -266,7 +330,44 @@ class _ExplorePageState extends State<ExplorePage> {
                         );
                       }),
                 ],
-                
+              ),
+              Row(
+                children: <Widget>[
+                  GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExploreCard(
+                          imgScr: 'assets/images/english.jpg',
+                          title: "English",
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RecommendedQuestionView(
+                                    categories: "English",
+                                  )),
+                        );
+                      }),
+                  GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExploreCard(
+                          imgScr: 'assets/images/psychology1.jpg',
+                          title: "Psychology",
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RecommendedQuestionView(
+                                    categories: "Psychology",
+                                  )),
+                        );
+                      }),
+                ],
               ),
             ],
           ),

@@ -3,20 +3,21 @@ import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chat.dart';
-import 'package:buddyappfirebase/home/screens/composeScreen.dart';
+
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/screens/searchHome.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
 import '../../Message/services/database.dart';
-import '../../Message/services/database.dart';
+
 import '../../Message/views/chatrooms.dart';
 import '../../Profile/profile.dart';
 
@@ -24,7 +25,8 @@ import '../../Profile/profile.dart';
 class MainHomeView extends StatefulWidget {
   // Getting fed the chatroomId Data from Search.dart
   final String chatRoomId;
-  MainHomeView({this.chatRoomId});
+  final int index;
+  MainHomeView({this.chatRoomId, this.index});
 
   @override
   _MainHomeViewState createState() => _MainHomeViewState();
@@ -181,17 +183,14 @@ class _MainHomeViewState extends State<MainHomeView> {
               return Row(
                 children: <Widget>[
                   questions(
-                      questionContent: searchResultSnapshot
-                          .documents[index].data["questionContent"], 
-                  timestamp: searchResultSnapshot
-                          .documents[index].data["timeStamp"],
-                  likes: searchResultSnapshot.documents[index].data["like"],
-                  comments: searchResultSnapshot.documents[index].data['reply'],
-
-                          
-                 ),
-                  
-                          
+                    questionContent: searchResultSnapshot
+                        .documents[index].data["questionContent"],
+                    timestamp:
+                        searchResultSnapshot.documents[index].data["timeStamp"],
+                    likes: searchResultSnapshot.documents[index].data["like"],
+                    comments:
+                        searchResultSnapshot.documents[index].data['reply'],
+                  ),
                 ],
               );
             })
@@ -387,8 +386,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .data['chatRoomName']
                                             .toString(),
                                         messageContent:
-                                            Chat.lastChat.toString(),
-                                        time: readTimestamp(Chat.lastTime),
+                                            "Let's meet at the libary",
+                                        time: "08:20 am",
                                         chatRoomId: snapshot
                                             .data
                                             .documents[index]
@@ -401,7 +400,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                                       );
                                     })
                                 : groups(title: "Hello");
-                          })),
+                          })
+                      ),
                 ),
                 SizedBox(
                   height: 15,
@@ -474,7 +474,7 @@ class _MainHomeViewState extends State<MainHomeView> {
               context,
               MaterialPageRoute(
                   builder: (context) => Chat(
-                        chatRoomId: chatRoomId,
+                        chatRoomId: "Aidan_Tim",
                       )));
         },
         child: Container(
@@ -585,22 +585,16 @@ class _MainHomeViewState extends State<MainHomeView> {
                                   backgroundImage: NetworkImage("$_profileImg"),
                                 ),
                                 SizedBox(width: 7),
-                                Container(
-                                  height: 18,
-                                  width: 18,
-                                  // padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      color: CustomTheme.colorAccent,
-                                      borderRadius: BorderRadius.circular(30)),
-                                  child: Text(name.substring(0, 1),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black, //white
-                                          fontSize: 15,
-                                          fontFamily: 'OverpassRegular',
-                                          fontWeight: FontWeight.w600)),
+                                CircleAvatar(
+                                  radius: 8,
+                                  backgroundImage: NetworkImage("https://format-com-cld-res.cloudinary.com/image/private/s--6tY55LWi--/c_limit,g_center,h_700,w_65535/fl_keep_iptc.progressive,q_95/v1/a285743183c1c064087260b9d65c05f3/BG-0220_web.jpg"),
                                 ),
-                                SizedBox(width: 75),
+                                SizedBox(width: 7),
+                                CircleAvatar(
+                                  radius: 8,
+                                  backgroundImage: NetworkImage("https://static.livebooks.com/f4717b71eec04c14b46b80596cc0063d/i/f0d0689886b1473cbf821fe680698da3/1/4SoifmQp7LJ6yDtMoKaua/Photograph%20by%20Los%20Angeles%20Photographer%20Alan%20Weissman"),
+                                ),
+                                SizedBox(width: 50),
                                 Container(
                                   height: 20.0,
                                   width: 80,
@@ -639,7 +633,8 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   // This Widget creates the Blue Question tiles
-  Widget questions({String questionContent, int timestamp, int likes, int comments}) {
+  Widget questions(
+      {String questionContent, int timestamp, int likes, int comments}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
       aspectRatio: 4 / 3,
@@ -699,12 +694,13 @@ class _MainHomeViewState extends State<MainHomeView> {
                                 )),
                                 flex: 5,
                               ),
-
                             ],
                           ),
                         ),
                         Text(
-                          "    Asked at " + readQuestionTimestamp(timestamp) + "                           ",
+                          "    Asked at " +
+                              readQuestionTimestamp(timestamp) +
+                              "                           ",
                           style: TextStyle(fontSize: 14.0, color: Colors.white),
                           maxLines: 1,
                         ),
