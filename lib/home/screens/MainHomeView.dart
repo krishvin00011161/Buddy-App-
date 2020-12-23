@@ -3,7 +3,6 @@ import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/helper/theme.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chat.dart';
-
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
@@ -17,7 +16,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
 import '../../Message/services/database.dart';
-
 import '../../Message/views/chatrooms.dart';
 import '../../Profile/profile.dart';
 
@@ -42,13 +40,19 @@ class _MainHomeViewState extends State<MainHomeView> {
   int amountOfQuestions = 0;
   Stream<QuerySnapshot> chats; // Data of all chat
   String message;
+  Map<String, dynamic> latestMessage;
+ 
+
+  
 
   @override
   void initState() {
     super.initState();
+    
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
+    _getLatestChats();
     getUserInfogetChats(); // getting the user info of chat
     // I have a bug, I am trying to get the last chat of from a ChatRoom
     // This code down here gets the Chat data from a certain chat room.
@@ -61,6 +65,14 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
     chatMessages();
     initiateSearch();
+  }
+
+  _getLatestChats() async {
+    DatabaseMethods().getLatestMessage(widget.chatRoomId).then((snapshots) {
+      setState(() {
+        latestMessage = snapshots;
+      });
+    });
   }
 
   getUserInfogetChats() async {
@@ -133,6 +145,8 @@ class _MainHomeViewState extends State<MainHomeView> {
     time = DateFormat.yMMMd().format(date);
     return time;
   }
+
+  
 
   Widget chatMessages() {
     // Gets the chat? I am not quite sure
@@ -386,8 +400,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .data['chatRoomName']
                                             .toString(),
                                         messageContent:
-                                            "Let's meet at the libary",
-                                        time: "08:20 am",
+                                            "",
+                                        time: "",
                                         chatRoomId: snapshot
                                             .data
                                             .documents[index]
@@ -400,8 +414,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                                       );
                                     })
                                 : groups(title: "Hello");
-                          })
-                      ),
+                          })),
                 ),
                 SizedBox(
                   height: 15,
@@ -474,7 +487,7 @@ class _MainHomeViewState extends State<MainHomeView> {
               context,
               MaterialPageRoute(
                   builder: (context) => Chat(
-                        chatRoomId: "Aidan_Tim",
+                        chatRoomId: chatRoomId,
                       )));
         },
         child: Container(
@@ -587,12 +600,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                                 SizedBox(width: 7),
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage("https://format-com-cld-res.cloudinary.com/image/private/s--6tY55LWi--/c_limit,g_center,h_700,w_65535/fl_keep_iptc.progressive,q_95/v1/a285743183c1c064087260b9d65c05f3/BG-0220_web.jpg"),
+                                  backgroundImage: NetworkImage(
+                                      "https://format-com-cld-res.cloudinary.com/image/private/s--6tY55LWi--/c_limit,g_center,h_700,w_65535/fl_keep_iptc.progressive,q_95/v1/a285743183c1c064087260b9d65c05f3/BG-0220_web.jpg"),
                                 ),
                                 SizedBox(width: 7),
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage("https://static.livebooks.com/f4717b71eec04c14b46b80596cc0063d/i/f0d0689886b1473cbf821fe680698da3/1/4SoifmQp7LJ6yDtMoKaua/Photograph%20by%20Los%20Angeles%20Photographer%20Alan%20Weissman"),
+                                  backgroundImage: NetworkImage(
+                                      "https://static.livebooks.com/f4717b71eec04c14b46b80596cc0063d/i/f0d0689886b1473cbf821fe680698da3/1/4SoifmQp7LJ6yDtMoKaua/Photograph%20by%20Los%20Angeles%20Photographer%20Alan%20Weissman"),
                                 ),
                                 SizedBox(width: 50),
                                 Container(

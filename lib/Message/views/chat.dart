@@ -57,7 +57,13 @@ class _ChatState extends State<Chat> {
         'time': DateTime.now().millisecondsSinceEpoch,
       };
 
+      Map<String, dynamic> chatLatestMessageMap = {
+        "message": messageEditingController.text,
+        'time': DateTime.now().millisecondsSinceEpoch,
+      };
+
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
+      DatabaseMethods().updateLatestMessage(widget.chatRoomId, chatLatestMessageMap);
 
       setState(() {
         messageEditingController.text = "";

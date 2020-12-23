@@ -64,7 +64,13 @@ class _SearchState extends State<Search> {
       "chatRoomName": "",
     };
 
+    Map<String, dynamic> message = {
+      "message" : "",
+      "time" : 0,
+    };
+
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
+    databaseMethods.addLatestMessage(chatRoomId, message);
 
     Navigator.push(
         context,
