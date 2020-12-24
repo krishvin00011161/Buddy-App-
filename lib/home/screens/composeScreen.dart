@@ -1,14 +1,13 @@
 import 'dart:collection';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/Global%20Widget/progress.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
-import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ComposeScreen extends StatefulWidget {
   ComposeScreen({Key key}) : super(key: key);

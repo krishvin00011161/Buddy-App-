@@ -1,4 +1,3 @@
-import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/home/functionality/FirebaseFunctionality.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

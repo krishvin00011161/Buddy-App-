@@ -1,10 +1,10 @@
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+import 'package:buddyappfirebase/Global%20Widget/progress.dart';
 import 'package:buddyappfirebase/home/functionality/FirebaseRepository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import '../../Message/helper/helperfunctions.dart';
-import '../../Widget/progress.dart';
 
 
 class GroupsPage extends StatefulWidget {

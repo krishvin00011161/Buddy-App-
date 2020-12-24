@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'home/screens/MainHomeView.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'welcome/welcome_view.dart';
-
 void main() {
   // Register all the models and services before the app starts
-
   runApp(MyApp());
 }
 
@@ -19,6 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Boolean value that check if users is logged in
   bool userIsLoggedIn;
 
   @override
@@ -27,6 +25,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  // function that checks if user is logged in.
   getLoggedInState() async {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
       setState(() {
@@ -37,6 +36,7 @@ class _MyAppState extends State<MyApp> {
 
   bool showSignIn = true;
 
+  // Helps toggle between Sign Up/Sign In
   void toggleView() {
     setState(() {
       showSignIn = !showSignIn;
@@ -50,12 +50,10 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.grey,
-        //scaffoldBackgroundColor: Colors.white,
         accentColor: Color(0xFFFEF9EB),
         fontFamily: "OverpassRegular",
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: WelcomeView(),
       home: userIsLoggedIn != null
           ? userIsLoggedIn ? MainHomeView() : Authenticate()
           : Container(

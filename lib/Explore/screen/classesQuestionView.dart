@@ -1,9 +1,7 @@
-
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../Message/services/database.dart';
 import '../../Message/views/chatrooms.dart';
 import '../../home/screens/MainHomeView.dart';

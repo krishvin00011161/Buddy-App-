@@ -1,6 +1,5 @@
 
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

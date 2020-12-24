@@ -1,21 +1,18 @@
+import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+import 'package:buddyappfirebase/Global%20Widget/progress.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
 
 class SettingsOnePage extends StatefulWidget {
-
-
   @override
   _SettingsOnePageState createState() => _SettingsOnePageState();
 }
@@ -66,6 +63,8 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
           })
         : circularProgress();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +191,11 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () {
                             //open change password
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Reset()),
+                            );
                           },
                         ),
                         _buildDivider(),
@@ -283,5 +287,3 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
     );
   }
 }
-
-

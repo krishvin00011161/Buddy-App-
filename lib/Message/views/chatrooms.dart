@@ -11,14 +11,12 @@ import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';
 import 'chat.dart';
 
-
 class ChatRoom extends StatefulWidget {
   final int index;
   ChatRoom({this.index});
 
   @override
   _ChatRoomState createState() => _ChatRoomState();
-  
 }
 
 class _ChatRoomState extends State<ChatRoom> {
@@ -41,13 +39,10 @@ class _ChatRoomState extends State<ChatRoom> {
     return StreamBuilder(
       stream: chatRooms,
       builder: (context, snapshot) {
-        
         return snapshot.hasData
             ? ListView.builder(
-                
-                itemCount: snapshot.data.documents.length, 
-                
-               shrinkWrap: true,
+                itemCount: snapshot.data.documents.length,
+                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
                     userName: snapshot
@@ -58,13 +53,14 @@ class _ChatRoomState extends State<ChatRoom> {
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
-                    chatRoomId: snapshot.data.documents[index].data[
-                        "chatRoomId"], 
-                        chatRoomName: snapshot.data != null ?  snapshot.data.documents[index].data['chatRoomName'] : "",
+                    chatRoomId:
+                        snapshot.data.documents[index].data["chatRoomId"],
+                    chatRoomName: snapshot.data != null
+                        ? snapshot.data.documents[index].data['chatRoomName']
+                        : "",
                   );
-                }) 
+                })
             : Container();
-            
       },
     );
   }
@@ -88,7 +84,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   AppBar chatRoomAppbar() {
-     // App bar
+    // App bar
     return AppBar(
       iconTheme: new IconThemeData(color: Colors.grey),
       backgroundColor: Colors.grey[100],
@@ -199,7 +195,7 @@ class ChatRoomsTile extends StatelessWidget {
         color: Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
         child: Row(
-        children: [
+          children: [
             Container(
               height: 50,
               width: 50,

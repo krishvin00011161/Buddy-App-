@@ -1,7 +1,6 @@
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseMethods {

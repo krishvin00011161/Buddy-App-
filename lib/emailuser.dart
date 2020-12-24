@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 class EmailUser {
   // Class for Email user when creating new user throw firebase
 

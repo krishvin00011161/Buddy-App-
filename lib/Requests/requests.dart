@@ -71,7 +71,7 @@ class _RequestsViewState extends State<RequestsView> {
   }
 
   AppBar requestsAppbar() {
-    bool isSearching = false;
+    
 
     return AppBar(
       backgroundColor: Colors.transparent,

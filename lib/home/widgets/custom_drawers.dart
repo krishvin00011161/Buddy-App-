@@ -1,11 +1,11 @@
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+import 'package:buddyappfirebase/Global%20Widget/progress.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
-import 'package:buddyappfirebase/Widget/progress.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:buddyappfirebase/home/widgets/ovalRightBorderClipper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

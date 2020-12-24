@@ -3,10 +3,8 @@ import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../Authentication/widgets/TextEditingControllers.dart';
-
-// This needs work
+import 'package:buddyappfirebase/Message/views/changeChatName.dart';
+import '../helper/constants.dart';
 
 class Chat extends StatefulWidget {
   String chatRoomId = "Aidan_Tim";
@@ -65,6 +63,10 @@ class _ChatState extends State<Chat> {
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
       DatabaseMethods().updateLatestMessage(widget.chatRoomId, chatLatestMessageMap);
 
+      updateLatestMessage(messageEditingController.text);
+      updateLatestTime(DateTime.now().millisecondsSinceEpoch);
+      updateLatestSendBy(Constants.myName);
+
       setState(() {
         messageEditingController.text = "";
       });
@@ -90,12 +92,35 @@ class _ChatState extends State<Chat> {
         .updateData({'chatRoomName': text});
   }
 
+  updateLatestMessage(String text) {
+    Firestore.instance
+       .collection('chatRoom')
+       .document(widget.chatRoomId)
+       .updateData({'message': text});
+  } 
+
+  updateLatestTime(int text) {
+    Firestore.instance
+       .collection('chatRoom')
+       .document(widget.chatRoomId)
+       .updateData({'time': text});
+  } 
+
+  updateLatestSendBy(String text) {
+    Firestore.instance
+       .collection('chatRoom')
+       .document(widget.chatRoomId)
+       .updateData({'sendBy': text});
+  } 
+
   deleteChat() {
     // Update the Name of the chat
     Firestore.instance
         .collection('chatRoom')
         .document(widget.chatRoomId)
         .delete();
+
+    
   }
 
   String chatName;
@@ -105,20 +130,23 @@ class _ChatState extends State<Chat> {
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
-      title: TextFormField(
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-            hintText: "Enter Chat Name",
-            //labelText: chatName,
-            border: InputBorder.none),
-        controller: TextEditingControllers.chatNameEditingController,
-        onChanged: (text) {
-          updateChatName(text);
-          setState(() {
-            chatName = text;
-          });
-        },
+      title: Text(
+        "David"
       ),
+      // title: TextFormField(
+      //   textAlign: TextAlign.center,
+      //   decoration: InputDecoration(
+      //       hintText: "Enter Chat Name",
+      //       //labelText: chatName,
+      //       border: InputBorder.none),
+      //   controller: TextEditingControllers.chatNameEditingController,
+      //   onChanged: (text) {
+      //     updateChatName(text);
+      //     setState(() {
+      //       chatName = text;
+      //     });
+      //   },
+      // ),
       actions: <Widget>[
         PopupMenuButton<String>(
           onSelected: choiceAction,
@@ -143,13 +171,15 @@ class _ChatState extends State<Chat> {
 
   void choiceAction(String choice) {
     if (choice == Constants.Settings) {
-      print('Settings');
+
+       Navigator.push(
+          context, MaterialPageRoute(builder: (context) => EditChatName(chatRoomId: widget.chatRoomId,)));
     } else if (choice == Constants.Subscribe) {
-      print("Delete");
+      
       deleteChat();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => ChatRoom()));
-    }
+    } 
   }
 
   @override

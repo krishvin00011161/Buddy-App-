@@ -1,6 +1,5 @@
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/Message/widget/widget.dart';
 import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +61,9 @@ class _SearchState extends State<Search> {
       "users": users,
       "chatRoomId": chatRoomId,
       "chatRoomName": "",
+      "message" : "",
+      "time" : 0,
+      "sendBy" : "",
     };
 
     Map<String, dynamic> message = {
