@@ -12,6 +12,7 @@ import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import '../Message/helper/constants.dart';
 import '../Message/services/database.dart';
 
 class ProfileView extends StatelessWidget {
@@ -122,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _getClasses();
     _getUserQuestion();
     _getUserQ("David");
-    initiateSearch();
+    //RsearchQuestions();
   }
 
   // gets the profile img
@@ -192,12 +193,24 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isLoading = false;
   bool haveUserSearched = false;
 
-  initiateSearch() async {
-    if (searchEditingController.text.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-      await databaseMethods.searchMyQuestions("Tim").then((snapshot) {
+  // searchQuestions() async {
+  //   if (searchEditingController.text.isEmpty) {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     await databaseMethods.searchClasses(Constants.myName).then((snapshot) {
+  //       searchResultSnapshot = snapshot;
+  //       print("$searchResultSnapshot");
+  //       setState(() {
+  //         isLoading = false;
+  //         haveUserSearched = true;
+  //       });
+  //     });
+  //   }
+  // }
+
+  searchClasses() async {
+      await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -205,33 +218,9 @@ class _ProfilePageState extends State<ProfilePage> {
           haveUserSearched = true;
         });
       });
-    }
   }
 
-  Widget userList() {
-    return haveUserSearched
-        ? ListView.builder(
-            // shrinkWrap: true,
-            itemCount: searchResultSnapshot.documents.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: <Widget>[
-                  ListTile(
-                      title: Text(
-                          searchResultSnapshot
-                              .documents[index].data["questionContent"],
-                          style: TextStyle(color: Colors.black, fontSize: 16))),
-                  Divider(
-                    height: 2.0,
-                  )
-                ],
-              );
-              // return userTile(
-              //   searchResultSnapshot.documents[index].data["questionContent"],
-              // );
-            })
-        : Container();
-  }
+  
 
   Widget userTile(String content) {
     return Container(
@@ -381,7 +370,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             }),
                       ),
                       Center(
-                        child: userList(),
+                        child: questionList(),
                       ),
                       Center(
                         child: ListView.builder(
@@ -419,6 +408,56 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ))
     ]);
+  }
+
+  Widget classList() {
+    return haveUserSearched
+        ? ListView.builder(
+            // shrinkWrap: true,
+            itemCount: searchResultSnapshot.documents.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(
+                          searchResultSnapshot
+                              .documents[index].data["questionContent"],
+                          style: TextStyle(color: Colors.black, fontSize: 16))),
+                  Divider(
+                    height: 2.0,
+                  )
+                ],
+              );
+              // return userTile(
+              //   searchResultSnapshot.documents[index].data["questionContent"],
+              // );
+            })
+        : Container();
+  }
+  
+  Widget questionList() {
+    return haveUserSearched
+        ? ListView.builder(
+            // shrinkWrap: true,
+            itemCount: searchResultSnapshot.documents.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(
+                          searchResultSnapshot
+                              .documents[index].data["questionContent"],
+                          style: TextStyle(color: Colors.black, fontSize: 16))),
+                  Divider(
+                    height: 2.0,
+                  )
+                ],
+              );
+              // return userTile(
+              //   searchResultSnapshot.documents[index].data["questionContent"],
+              // );
+            })
+        : Container();
   }
 
   @override

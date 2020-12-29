@@ -1,16 +1,13 @@
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 
-// This needs work
-
+// Helper class for Sign In/Up and Reset password
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   static String idNew;
   static String id;
   static String errormessage = "";
-
 
   // Gets the user form Firebase
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -19,7 +16,6 @@ class AuthService {
 
   // Sign in functionality
   Future signInWithEmailAndPassword(String email, String password) async {
-    // Sign In should not look at this.
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -32,17 +28,6 @@ class AuthService {
     }
   }
 
-  AlertDialog i() {
-    return AlertDialog(
-            title: Text("Email already in use"),
-            content: Text("Please try a different email"),
-   );
-  }
- 
-
-          
-
-
   // Sign Up functionality
   Future signUpWithEmailAndPassword(
       String email, String password, User user) async {
@@ -53,13 +38,12 @@ class AuthService {
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
-      
-      
+
       return null;
     }
   }
 
-  // Reset password functionality 
+  // Reset password functionality
   Future resetPass(String email) async {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
@@ -69,7 +53,7 @@ class AuthService {
     }
   }
 
-
+  // Sign out functionality
   Future signOut() async {
     try {
       return await _auth.signOut();

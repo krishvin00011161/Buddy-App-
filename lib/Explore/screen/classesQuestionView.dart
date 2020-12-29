@@ -1,4 +1,6 @@
-import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +20,6 @@ class ClassQuestionView extends StatefulWidget {
 
 class _ClassQuestionViewState extends State<ClassQuestionView> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
-  TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
   String _profileImg = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -41,9 +42,10 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
-
+   
+   // This searches for class questions
   initiateSearch() async {
-    if (searchEditingController.text.isEmpty) {
+    if (TextEditingControllers.searchEditingController.text.isEmpty) {
       setState(() {
         isLoading = true;
       });
@@ -60,6 +62,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     }
   }
 
+  // reads the time stamp of questions
   String readQuestionTimestamp(int timestamp) {
     var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -68,7 +71,8 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     return time;
   }
 
-  Widget userList() {
+  // this widget gets the list of questions
+  Widget getQuestionList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
@@ -87,8 +91,10 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(searchResultSnapshot.documents[index].data["questionContent"]),
-                            Text(searchResultSnapshot.documents[index].data["userName"]),
+                            Text(searchResultSnapshot
+                                .documents[index].data["questionContent"]),
+                            Text(searchResultSnapshot
+                                .documents[index].data["userName"]),
                           ],
                         ),
                         Spacer(),
@@ -96,8 +102,12 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Text(readQuestionTimestamp(searchResultSnapshot.documents[index].data["timeStamp"])),
-                            Text("Comment", style: TextStyle(color: Colors.blue),)
+                            Text(readQuestionTimestamp(searchResultSnapshot
+                                .documents[index].data["timeStamp"])),
+                            Text(
+                              "Comment",
+                              style: TextStyle(color: Colors.blue),
+                            )
                           ],
                         ),
                       ]),
@@ -109,8 +119,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
         : Container();
   }
 
-  
-
+  // responsible for the UI of AppBar
   AppBar appBar() {
     return AppBar(
       iconTheme: new IconThemeData(color: Colors.grey),
@@ -122,9 +131,11 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
         ),
         onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
-      
       title: GestureDetector(
-        child: Text(widget.className, style: TextStyle(color: Colors.black),),
+        child: Text(
+          widget.className,
+          style: TextStyle(color: Colors.black),
+        ),
         onTap: () {
           initiateSearch();
         },
@@ -132,15 +143,14 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     );
   }
 
+  // Responsible for the UI 
   Scaffold body() {
     return Scaffold(
       key: _scaffoldKey,
       appBar: appBar(),
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar(
-        // Code reuse make some class Reminder
         currentIndex: _currentIndex,
-        //activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -188,7 +198,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       body: Container(
         child: Column(
           children: <Widget>[
-            userList(),
+            getQuestionList(),
           ],
         ),
       ),

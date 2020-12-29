@@ -10,7 +10,6 @@ class Reset extends StatefulWidget {
 }
 
 class _ResetState extends State<Reset> {
-  //Fields
   TextEditingController emailEditingController = new TextEditingController();
   AuthService authService = new AuthService();
   final formKey = GlobalKey<FormState>();
@@ -33,6 +32,7 @@ class _ResetState extends State<Reset> {
     }
   }
 
+  // responsible for the UI of the Page
   Scaffold _body() {
     return Scaffold(
       body: Form(

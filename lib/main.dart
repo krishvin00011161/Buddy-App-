@@ -1,8 +1,10 @@
 import 'package:buddyappfirebase/Message/helper/authenticate.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/Profile/uploadImage/imageCapture.dart';
 import 'package:flutter/material.dart';
-import 'home/screens/MainHomeView.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'home/screens/MainHomeView.dart';
 
 void main() {
   // Register all the models and services before the app starts

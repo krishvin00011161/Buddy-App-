@@ -142,7 +142,7 @@ class GroupWidget extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage("$photoUrl"), //_profileImg
+                                  backgroundImage: NetworkImage("$photoUrl"), // change to image in latest
                                 ),
                                 SizedBox(width: 7),
                                 CircleAvatar(
@@ -153,13 +153,12 @@ class GroupWidget extends StatelessWidget {
                                 SizedBox(width: 7),
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage(
-                                      "https://format-com-cld-res.cloudinary.com/image/private/s--6tY55LWi--/c_limit,g_center,h_700,w_65535/fl_keep_iptc.progressive,q_95/v1/a285743183c1c064087260b9d65c05f3/BG-0220_web.jpg"),
+                                  backgroundColor: Colors.transparent,
                                 ),
                                 SizedBox(width: 50),
                                 Container(
-                                  height: 20.0,
-                                  width: 80,
+                                  height: 23.0,
+                                  width: 85,
                                   color: Colors.transparent,
                                   child: new Container(
                                       decoration: new BoxDecoration(

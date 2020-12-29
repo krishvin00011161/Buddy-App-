@@ -13,15 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
+import '../../Message/helper/constants.dart';
 import '../../Message/services/database.dart';
 import '../../Message/views/chatrooms.dart';
 import '../../Profile/profile.dart';
 
 // This class is responsible for the home page
+
 class MainHomeView extends StatefulWidget {
+
   // Getting fed the chatroomId Data from Search.dart
   final String chatRoomId;
   final int index;
+  String profileImg = "";
+
   MainHomeView({this.chatRoomId, this.index});
 
   @override
@@ -39,6 +44,8 @@ class _MainHomeViewState extends State<MainHomeView> {
   Stream<QuerySnapshot> chats; // Data of all chat
   String message;
   Stream<QuerySnapshot> latest;
+  
+  
  
 
   
@@ -50,12 +57,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
-   // _getLatestChats();
-    getUserInfogetChats(); // getting the user info of chat
-    // I have a bug, I am trying to get the last chat of from a ChatRoom
-    // This code down here gets the Chat data from a certain chat room.
-    // This code needs to be ran multiple times if we want to show the last message from multiple chatrooms
-    // I am not sure how to get mutliple chatroomid and Run this piece of code.
+    getUserInfogetChats(); 
     DatabaseMethods().getChats(widget.chatRoomId).then((val) {
       setState(() {
         chats = val;
@@ -65,13 +67,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     initiateSearch();
   }
 
-  // _getLatestChats() async {
-  //   DatabaseMethods().getLatestMessage(widget.chatRoomId).then((snapshots) {
-  //     setState(() {
-  //       latestMessage = snapshots;
-  //     });
-  //   });
-  // }
 
   getUserInfogetChats() async {
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
@@ -87,6 +82,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     FirebaseMethods().getUserProfileImg();
     setState(() {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
+      MainHomeView().profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
 

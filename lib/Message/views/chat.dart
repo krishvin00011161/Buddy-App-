@@ -4,6 +4,9 @@ import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/Message/views/changeChatName.dart';
+import '../../FirebaseData/firebaseMethods.dart';
+import '../../home/screens/MainHomeView.dart';
+import '../../home/widgets/ui_helpers.dart';
 import '../helper/constants.dart';
 import '../services/database.dart';
 
@@ -24,6 +27,9 @@ class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
   String title;
+  
+
+
 
   Widget chatMessages() {
     // This creates the message bubbles in chat
@@ -60,6 +66,7 @@ class _ChatState extends State<Chat> {
       Map<String, dynamic> chatLatestMessageMap = {
         "message": messageEditingController.text,
         'time': DateTime.now().millisecondsSinceEpoch,
+        'image' : "",
       };
 
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
@@ -68,6 +75,7 @@ class _ChatState extends State<Chat> {
       updateLatestMessage(messageEditingController.text);
       updateLatestTime(DateTime.now().millisecondsSinceEpoch);
       updateLatestSendBy(Constants.myName);
+      updateLatestProfileImg(MainHomeView().profileImg.toString());
 
       setState(() {
         messageEditingController.text = "";
@@ -116,6 +124,13 @@ class _ChatState extends State<Chat> {
        .updateData({'sendBy': text});
   } 
 
+  updateLatestProfileImg(String image) {
+    Firestore.instance
+       .collection('chatRoom')
+       .document(widget.chatRoomId)
+       .updateData({'image': image});
+  }
+
   deleteChat() {
     // Update the Name of the chat
     Firestore.instance
@@ -127,7 +142,7 @@ class _ChatState extends State<Chat> {
   _getChatTitle() async {
     DatabaseMethods().getChatsName(widget.chatRoomId).then((value){
       setState(() {
-        title = value.toString;        
+        title = value.toString();       
       });
     });
   }
@@ -186,6 +201,7 @@ class _ChatState extends State<Chat> {
         child: Stack(
           children: [
             chatMessages(),
+            SizedBox(height: 10),
             Container(
               padding: EdgeInsets.only(left: 10),
               alignment: Alignment.bottomCenter,
@@ -231,6 +247,7 @@ class _ChatState extends State<Chat> {
                 ),
               ),
             ),
+            SizedBox(height: 10),
           ],
         ),
       ),

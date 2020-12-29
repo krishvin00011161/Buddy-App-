@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../home/screens/MainHomeView.dart';
 
-// This class is responsible for Sign IN function
+// This class is responsible for Sign In function
 class SignIn extends StatefulWidget {
   final Function toggleView;
 
@@ -20,14 +20,13 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  // Fields
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
   AuthService authService = new AuthService();
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // Refer to auth.dart for documentation
+  // this function makes sign In work
   signIn() async {
     if (formKey.currentState.validate()) {
       setState(() {
@@ -52,10 +51,11 @@ class _SignInState extends State<SignIn> {
           HelperFunctions.saveUserIDSharedPreference(
               userInfoSnapshot.documents[0].data['id']);
 
+          // pushes to MainHomeView page
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainHomeView()));
-          
-      
+
+          // It shows error if the email/password is wrong
         } else {
           setState(() {
             isLoading = false;
@@ -80,6 +80,7 @@ class _SignInState extends State<SignIn> {
     }
   }
 
+  // responsible for the UI
   Scaffold body() {
     return Scaffold(
       body: isLoading

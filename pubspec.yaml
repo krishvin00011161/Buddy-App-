@@ -31,6 +31,15 @@ dependencies:
     # provider architecture
   provider_architecture: ^1.0.3
     # Button Designs
+  font_awesome_flutter: ^8.2.0
+
+  firebase_storage: ^3.0.4
+
+  image_cropper: ^1.0.2
+
+  image_picker: ^0.5.3+1
+
+  firebase_core: ^0.4.0+8
 
   modal_progress_hud: ^0.1.3
 

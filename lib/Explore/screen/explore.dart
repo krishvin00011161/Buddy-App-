@@ -2,8 +2,8 @@ import 'package:buddyappfirebase/Explore/Widget/search_explore_card.dart';
 import 'package:buddyappfirebase/Explore/screen/classesQuestionView.dart';
 import 'package:buddyappfirebase/Explore/screen/recommendedQuestionsview.dart';
 import 'package:buddyappfirebase/Explore/screen/searchQuestion.dart';
+import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +12,10 @@ import '../../Message/helper/constants.dart';
 import '../../Message/helper/helperfunctions.dart';
 import '../../FirebaseData/firebaseReferences.dart';
 import '../../Message/services/database.dart';
-import '../../home/screens/MainHomeView.dart';
 import '../../home/screens/composeScreen.dart';
 import '../../home/widgets/custom_drawers.dart';
 import 'classesQuestionView.dart';
+import 'package:buddyappfirebase/Global%20Widget/tabBar.dart';
 
 class ExplorePage extends StatefulWidget {
   final int index;
@@ -25,24 +25,24 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _profileImg = "";
   DatabaseMethods databaseMethods = new DatabaseMethods();
-  TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
   bool isLoading = false;
   bool haveUserSearched = false;
   Map values = {};
   int amountOfClasses = 0;
 
+  // searches for question with keyword
   initiateSearch() async {
-    if (searchEditingController.text.isNotEmpty) {
+    if (TextEditingControllers.searchEditingControllers.text.isNotEmpty) {
       setState(() {
         isLoading = true;
       });
       await databaseMethods
-          .searchMyQuestions(searchEditingController.text)
+          .searchMyQuestions(TextEditingControllers.searchEditingControllers
+              .text) // find a better name here for textediting
           .then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
@@ -54,69 +54,19 @@ class _ExplorePageState extends State<ExplorePage> {
     }
   }
 
-  Widget userList() {
+  // Populates question content
+  Widget questionContentList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
             itemCount: searchResultSnapshot.documents.length,
             itemBuilder: (context, index) {
-              return userTile(
+              return questionTile(
                   searchResultSnapshot.documents[index].data["questionContent"],
                   searchResultSnapshot
                       .documents[index].data["questionContent"]);
             })
         : Container();
-  }
-
-  CupertinoTabBar tabBar() {
-    return CupertinoTabBar(
-      // Code reuse make some class Reminder
-      currentIndex: _currentIndex,
-      //activeColor: Theme.of(context).primaryColor,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: _currentIndex == 0
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
-          ),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search,
-              color: _currentIndex == 1
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat,
-              color: _currentIndex == 2
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainHomeView()),
-          );
-        } else if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ExplorePage()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatRoom()),
-          );
-        }
-      },
-    );
   }
 
   @override
@@ -148,10 +98,32 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
+  // creates a widget based on class
+  Widget classes({String nameOfCourse}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        child: ExploreCard(
+          imgScr: 'assets/images/coding.jpg',
+          title: nameOfCourse,
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ClassQuestionView(
+                      className: nameOfCourse,
+                    )),
+          );
+        },
+      ),
+    );
+  }
+
+  // responsible for UI
   SingleChildScrollView exploreBody() {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
             height: 10,
@@ -184,6 +156,7 @@ class _ExplorePageState extends State<ExplorePage> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.all(11.5),
@@ -199,6 +172,7 @@ class _ExplorePageState extends State<ExplorePage> {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
                   child: Padding(
@@ -237,6 +211,7 @@ class _ExplorePageState extends State<ExplorePage> {
             ],
           ),
           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
                   child: Padding(
@@ -293,6 +268,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
                       child: Padding(
@@ -331,6 +307,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
                       child: Padding(
@@ -375,6 +352,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  // responsible for AppBar UI
   AppBar exploreAppBar() {
     // App bar
     return AppBar(
@@ -406,33 +384,15 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  // responsible for the whole Explore view
   Scaffold exploreView() {
     return Scaffold(
       key: _scaffoldKey,
       appBar: exploreAppBar(),
       drawer: CustomDrawers(),
       body: exploreBody(),
-      bottomNavigationBar: tabBar(),
-    );
-  }
-
-  Widget classes({String nameOfCourse}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        child: ExploreCard(
-          imgScr: 'assets/images/coding.jpg',
-          title: nameOfCourse,
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ClassQuestionView(
-                      className: nameOfCourse,
-                    )),
-          );
-        },
+      bottomNavigationBar: BottomBar(
+        currentIndex: 2,
       ),
     );
   }
@@ -443,7 +403,7 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 }
 
-Widget userTile(String userName, String userEmail) {
+Widget questionTile(String userName, String userEmail) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
     child: Row(

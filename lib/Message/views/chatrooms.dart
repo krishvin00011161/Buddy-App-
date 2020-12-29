@@ -49,7 +49,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         .data
                         .documents[index]
                         .data[
-                            'chatRoomId'] //userName: snapshot.data.documents[index].data['chatRoomId']
+                            'chatRoomId'] 
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),

@@ -1,4 +1,4 @@
-import 'package:buddyappfirebase/Authentication/widgets/TextEditingControllers.dart';
+import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
@@ -7,6 +7,7 @@ import 'package:buddyappfirebase/home/widgets/text_link.dart';
 import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../Message/helper/helperfunctions.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../welcome/welcome_view.dart';
 import '../services/auth.dart';
@@ -25,13 +26,12 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
-
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
-
   final DateTime timestamp = DateTime.now();
   final questionList = ["Start Of Question"];
 
+  // This function allows for Sign Up to work
   signUp() async {
     if (formKey.currentState.validate()) {
       setState(() {
@@ -61,6 +61,7 @@ class _SignUpState extends State<SignUp> {
           });
 
           SignUp.documentID = documentReference.documentID;
+          
 
           // Saves username, documentID or UserId, and user email
 
@@ -76,12 +77,15 @@ class _SignUpState extends State<SignUp> {
           HelperFunctions.saveUserIDSharedPreference(
               documentReference.documentID);
 
+          // Pushes to Welcome view
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => WelcomeView(),
               ));
+
         } else if (result == null) {
+          // If Sign up did not work, go back to sign up screen
           AlertDialog inUse = AlertDialog(
             title: Text("Wrong Credentials"),
             content: Text(
@@ -106,12 +110,12 @@ class _SignUpState extends State<SignUp> {
               return inUse;
             },
           );
-          
         }
       });
     }
   }
 
+  // Responsible for the UI
   Scaffold body() {
     return Scaffold(
       body: isLoading

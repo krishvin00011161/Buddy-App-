@@ -39,6 +39,13 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  searchClasses(String name) {
+    return Firestore.instance
+        .collection('users')
+        .where('userName', isEqualTo: name)
+        .getDocuments();
+  }
+
   searchClassQuestions(String className) {
     return Firestore.instance
         .collection('questions')
