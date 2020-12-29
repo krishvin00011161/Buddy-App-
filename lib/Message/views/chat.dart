@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/Message/views/changeChatName.dart';
 import '../helper/constants.dart';
+import '../services/database.dart';
 
 class Chat extends StatefulWidget {
   String chatRoomId = "Aidan_Tim";
@@ -22,6 +23,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
+  String title;
 
   Widget chatMessages() {
     // This creates the message bubbles in chat
@@ -81,6 +83,7 @@ class _ChatState extends State<Chat> {
       });
     });
     super.initState();
+    _getChatTitle();
     print(Chat.lastTime);
   }
 
@@ -119,8 +122,14 @@ class _ChatState extends State<Chat> {
         .collection('chatRoom')
         .document(widget.chatRoomId)
         .delete();
+  }
 
-    
+  _getChatTitle() async {
+    DatabaseMethods().getChatsName(widget.chatRoomId).then((value){
+      setState(() {
+        title = value.toString;        
+      });
+    });
   }
 
   String chatName;
@@ -131,22 +140,9 @@ class _ChatState extends State<Chat> {
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
       title: Text(
-        "David"
+        title
       ),
-      // title: TextFormField(
-      //   textAlign: TextAlign.center,
-      //   decoration: InputDecoration(
-      //       hintText: "Enter Chat Name",
-      //       //labelText: chatName,
-      //       border: InputBorder.none),
-      //   controller: TextEditingControllers.chatNameEditingController,
-      //   onChanged: (text) {
-      //     updateChatName(text);
-      //     setState(() {
-      //       chatName = text;
-      //     });
-      //   },
-      // ),
+     
       actions: <Widget>[
         PopupMenuButton<String>(
           onSelected: choiceAction,

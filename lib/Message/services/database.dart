@@ -72,6 +72,14 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  getChatsName(String chatRoomId) async {
+    return Firestore.instance
+        .collection("chatRoom")
+        .document(chatRoomId)
+        .collection("chatRoomName")
+        .snapshots();
+  }
+
   getQuestions(String searchField) async {
     return Firestore.instance
         .collection('questions')
