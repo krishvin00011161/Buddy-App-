@@ -1,3 +1,5 @@
+
+// Titles 
 class Strings {
   static var stepOneTitle = "Connect With Friends";
   static var stepOneContent =

@@ -11,8 +11,9 @@ import 'package:buddyappfirebase/home/widgets/groups.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import '../../Explore/screen/explore.dart';
+import 'package:buddyappfirebase/Global%20Widget/TimeStamp.dart';
+import '../../Message/helper/constants.dart';
 import '../../Message/helper/constants.dart';
 import '../../Message/services/database.dart';
 import '../../Message/views/chatrooms.dart';
@@ -103,42 +104,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
   }
 
-  String readTimestamp(int timestamp) {
-    // This converts timestamp in a human readable form
-    var now = DateTime.now();
-    var format = DateFormat('HH:mm a');
-    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var diff = now.difference(date);
-    var time = '';
-
-    if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 0) {
-      time = format.format(date);
-    } else if (diff.inDays > 0 && diff.inDays < 7) {
-      if (diff.inDays == 1) {
-        time = diff.inDays.toString() + ' DAY AGO';
-      } else {
-        time = diff.inDays.toString() + ' DAYS AGO';
-      }
-    } else {
-      if (diff.inDays == 7) {
-        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-      } else {
-        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-      }
-    }
-    return time;
-  }
-
-  String readQuestionTimestamp(int timestamp) {
-    var format = DateFormat('HH:mm a');
-    var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    var time = '';
-    time = DateFormat.yMMMd().format(date);
-    return time;
-  }
+  
 
   
 
@@ -172,7 +138,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods.searchMyQuestions("Tim").then((snapshot) {
+      await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -397,7 +363,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .toString(),
                                         messageContent:
                                             snapshot.data.documents[index].data["message"].toString(),
-                                        time: readQuestionTimestamp(snapshot.data.documents[index].data["time"]),
+                                        time: TimeStamp().readQuestionTimeStamp(snapshot.data.documents[index].data["time"]),
                                         chatRoomId: snapshot
                                             .data
                                             .documents[index]
@@ -553,7 +519,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                         ),
                         Text(
                           "    Asked at " +
-                              readQuestionTimestamp(timestamp) +
+                              TimeStamp().readQuestionTimeStamp(timestamp) +
                               "                           ",
                           style: TextStyle(fontSize: 14.0, color: Colors.white),
                           maxLines: 1,

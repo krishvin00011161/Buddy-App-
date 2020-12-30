@@ -4,9 +4,7 @@ import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/Message/views/changeChatName.dart';
-import '../../FirebaseData/firebaseMethods.dart';
 import '../../home/screens/MainHomeView.dart';
-import '../../home/widgets/ui_helpers.dart';
 import '../helper/constants.dart';
 import '../services/database.dart';
 
@@ -26,10 +24,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
-  String title;
-  
-
-
+  String title = "";
 
   Widget chatMessages() {
     // This creates the message bubbles in chat
@@ -66,11 +61,12 @@ class _ChatState extends State<Chat> {
       Map<String, dynamic> chatLatestMessageMap = {
         "message": messageEditingController.text,
         'time': DateTime.now().millisecondsSinceEpoch,
-        'image' : "",
+        'image': "",
       };
 
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
-      DatabaseMethods().updateLatestMessage(widget.chatRoomId, chatLatestMessageMap);
+      DatabaseMethods()
+          .updateLatestMessage(widget.chatRoomId, chatLatestMessageMap);
 
       updateLatestMessage(messageEditingController.text);
       updateLatestTime(DateTime.now().millisecondsSinceEpoch);
@@ -105,45 +101,68 @@ class _ChatState extends State<Chat> {
 
   updateLatestMessage(String text) {
     Firestore.instance
-       .collection('chatRoom')
-       .document(widget.chatRoomId)
-       .updateData({'message': text});
-  } 
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'message': text});
+  }
 
   updateLatestTime(int text) {
     Firestore.instance
-       .collection('chatRoom')
-       .document(widget.chatRoomId)
-       .updateData({'time': text});
-  } 
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'time': text});
+  }
 
   updateLatestSendBy(String text) {
     Firestore.instance
-       .collection('chatRoom')
-       .document(widget.chatRoomId)
-       .updateData({'sendBy': text});
-  } 
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'sendBy': text});
+  }
 
   updateLatestProfileImg(String image) {
     Firestore.instance
-       .collection('chatRoom')
-       .document(widget.chatRoomId)
-       .updateData({'image': image});
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'image': image});
   }
 
-  deleteChat() {
-    // Update the Name of the chat
+  deleteRoom() {
     Firestore.instance
         .collection('chatRoom')
         .document(widget.chatRoomId)
         .delete();
   }
 
+  // deleteLatest() {
+  //   Firestore.instance
+  //       .collection('chatRoom')
+  //       .document(widget.chatRoomId)
+  //       .collection('latest')
+  //       .document("tdxdsRjTejFnThTxVDGk")
+  //       .delete();
+  // }
+
+  // deleteChats() {
+  //   Firestore.instance
+  //       .collection('chatRoom')
+  //       .document(widget.chatRoomId)
+  //       .collection('chats')
+  //       .document()
+  //       .delete();
+  // }
+
   _getChatTitle() async {
-    DatabaseMethods().getChatsName(widget.chatRoomId).then((value){
-      setState(() {
-        title = value.toString();       
-      });
+    DatabaseMethods().getChatsName(widget.chatRoomId).then((value) {
+      if (value != null) {
+        setState(() {
+          title = value.document[0]["chatRoomName"];
+        });
+      } else {
+        setState(() {
+          title = "";
+        });
+      }
     });
   }
 
@@ -155,9 +174,8 @@ class _ChatState extends State<Chat> {
       iconTheme: IconThemeData(color: Colors.grey),
       elevation: 0.0,
       title: Text(
-        title
+        title,
       ),
-     
       actions: <Widget>[
         PopupMenuButton<String>(
           onSelected: choiceAction,
@@ -182,15 +200,17 @@ class _ChatState extends State<Chat> {
 
   void choiceAction(String choice) {
     if (choice == Constants.Settings) {
-
-       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => EditChatName(chatRoomId: widget.chatRoomId,)));
-    } else if (choice == Constants.Subscribe) {
-      
-      deleteChat();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditChatName(
+                    chatRoomId: widget.chatRoomId,
+                  )));
+    } else if (choice == Constants.Delete) {
+      deleteRoom();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => ChatRoom()));
-    } 
+    }
   }
 
   @override

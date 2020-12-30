@@ -68,7 +68,7 @@ class GroupWidget extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    title,
+                    title == "" ? "": title, // fix if logic wrong
                     style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                             color: Colors.white,

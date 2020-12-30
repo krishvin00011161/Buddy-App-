@@ -32,6 +32,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
     _getUserName();
   }
 
+  // responsible for dark mode
   Brightness _getBrightness() {
     return _dark ? Brightness.dark : Brightness.light;
   }
@@ -64,10 +65,9 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
         : circularProgress();
   }
 
-  
 
-  @override
-  Widget build(BuildContext context) {
+  // responsible for home UI
+  Theme homeBody() {
     return Theme(
       isMaterialAppTheme: true,
       data: ThemeData(
@@ -274,6 +274,11 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return homeBody();
   }
 
   Container _buildDivider() {

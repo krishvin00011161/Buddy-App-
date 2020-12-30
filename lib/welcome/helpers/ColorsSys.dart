@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Colors 
 class ColorSys {
   static Color primary = Color.fromRGBO(52, 43, 37, 1);
   static Color gray = Color.fromRGBO(137, 137, 137, 1);

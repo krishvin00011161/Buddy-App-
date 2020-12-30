@@ -1,11 +1,13 @@
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Message/helper/constants.dart';
 import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/helper/theme.dart';
+import 'package:buddyappfirebase/Global%20Widget/TimeStamp.dart';
 import 'package:buddyappfirebase/Message/views/search.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../Explore/screen/explore.dart';
+import '../../home/screens/MainHomeView.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';
@@ -20,12 +22,13 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
-  DatabaseMethods databaseMethods = new DatabaseMethods(); // added
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
   int _currentIndex = 0;
   int chatCount = 0;
   String _profileImg = "";
+  QuerySnapshot searchResultSnapshot;
 
   // This gets the profile Img url
   _getUserProfileImg() async {
@@ -45,19 +48,21 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
-                    userName: snapshot
-                        .data
-                        .documents[index]
-                        .data[
-                            'chatRoomId'] 
+                    userName: snapshot.data.documents[index].data['chatRoomId']
                         .toString()
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
                     chatRoomId:
                         snapshot.data.documents[index].data["chatRoomId"],
                     chatRoomName: snapshot.data != null
-                        ? snapshot.data.documents[index].data['chatRoomName']
-                        : "",
+                        ? snapshot.data.documents[index].data['chatRoomId']
+                            .toString()
+                            .replaceAll("_", "")
+                            .replaceAll(Constants.myName, "")
+                        : snapshot.data.documents[index].data['chatRoomName'],
+                    message: snapshot.data.documents[index].data["message"],
+                    time: snapshot.data.documents[index].data["time"],
+                   
                   );
                 })
             : Container();
@@ -70,6 +75,7 @@ class _ChatRoomState extends State<ChatRoom> {
     super.initState();
     getUserInfogetChats();
     _getUserProfileImg();
+    
   }
 
   getUserInfogetChats() async {
@@ -82,6 +88,20 @@ class _ChatRoomState extends State<ChatRoom> {
       });
     });
   }
+
+   searchUser(userName) async {
+      await databaseMethods
+          .searchByName(userName)
+          .then((snapshot) {
+       searchResultSnapshot = snapshot;
+       print("$searchResultSnapshot"); 
+      });
+    }
+  
+
+  
+  
+  
 
   AppBar chatRoomAppbar() {
     // App bar
@@ -173,12 +193,28 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 }
 
+// Responsible for creating Chat Tiles
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
   final String chatRoomName;
+  final String message;
+  final int time;
+  final String profileImg;
+  DatabaseMethods databaseMethods = new DatabaseMethods(); 
+  
 
-  ChatRoomsTile({this.userName, @required this.chatRoomId, this.chatRoomName});
+  ChatRoomsTile(
+      {this.userName,
+      @required this.chatRoomId,
+      this.chatRoomName,
+      this.message,
+      this.time,
+      this.profileImg});
+
+    
+     
+   
 
   @override
   Widget build(BuildContext context) {
@@ -196,31 +232,55 @@ class ChatRoomsTile extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
         child: Row(
           children: [
-            Container(
-              height: 50,
-              width: 50,
-              padding: EdgeInsets.all(11),
-              decoration: BoxDecoration(
-                  color: CustomTheme.colorAccent,
-                  borderRadius: BorderRadius.circular(30)),
-              child: Text(userName.substring(0, 1),
-                  textAlign: TextAlign.center,
+            Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 25.0,
+                  
+                ),
+                SizedBox(width: 10.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      userName,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            //SizedBox(width: 25.0),
+            Column(
+              children: <Widget>[
+                Text(
+                  TimeStamp().readQuestionTimeStampHours(time),
                   style: TextStyle(
-                      color: Colors.black, //white
-                      fontSize: 20,
-                      fontFamily: 'OverpassRegular',
-                      fontWeight: FontWeight.w600)),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Text(chatRoomName,
-                textAlign: TextAlign.start,
-                style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w400))
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 25.0),
+              ],
+            ),
           ],
         ),
       ),

@@ -83,7 +83,6 @@ class DatabaseMethods {
     return Firestore.instance
         .collection("chatRoom")
         .document(chatRoomId)
-        .collection("chatRoomName")
         .snapshots();
   }
 
@@ -154,5 +153,12 @@ class DatabaseMethods {
         .where('userName', isEqualTo: userName)
         .orderBy('timeStamp', descending: true)
         .getDocuments();
+  }
+
+  getProfileImg(Future<dynamic> userName) {
+    return Firestore.instance
+      .collection('users')
+      .where('userName', isEqualTo: userName)
+      .getDocuments();
   }
 }
