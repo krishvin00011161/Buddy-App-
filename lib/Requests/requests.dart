@@ -1,21 +1,43 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Request page
+  Description: Request Page Ui, currently not used
+
+
+ */
+
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
-import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RequestsView extends StatefulWidget {
-  RequestsView({Key key}) : super(key: key);
-
   @override
   _RequestsViewState createState() => _RequestsViewState();
 }
 
 class _RequestsViewState extends State<RequestsView> {
   int _currentIndex = 0;
-  @override
-  Widget build(BuildContext context) {
+
+  AppBar requestsAppbar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Requests",
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
+  Scaffold body() {
     return Scaffold(
       appBar: requestsAppbar(),
       drawer: CustomDrawers(),
@@ -70,19 +92,8 @@ class _RequestsViewState extends State<RequestsView> {
     );
   }
 
-  AppBar requestsAppbar() {
-    
-
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(color: Colors.grey),
-      elevation: 0.0,
-      title: Text(
-        "Requests",
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-      ),
-    );
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

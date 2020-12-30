@@ -1,16 +1,29 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Settings Page
+  Description: Responsible for the UI and Function of Settings
+
+
+ */
+
+
+
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
-import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
-import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
+
+import '../home/screens/MainHomeView.dart';
 
 class SettingsOnePage extends StatefulWidget {
   @override
@@ -276,11 +289,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return homeBody();
-  }
-
+  // Function that builds dividers 
   Container _buildDivider() {
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -291,4 +300,9 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
       color: Colors.grey.shade400,
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return homeBody();
+  } 
 }

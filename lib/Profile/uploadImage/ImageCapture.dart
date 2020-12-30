@@ -1,3 +1,13 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Upload Image page
+  Description: It is a page that uploads profile image to database
+
+
+ */
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,40 +23,42 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   File _image;
 
+  // Function that upload a picture
+  Future uploadPic(BuildContext context) async {
+    String fileName = basename(_image.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    setState(() {
+      print("Profile Picture uploaded");
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     Future getImage() async {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
       setState(() {
         _image = image;
-          print('Image Path $_image');
+        print('Image Path $_image');
       });
     }
 
-    Future uploadPic(BuildContext context) async{
-      String fileName = basename(_image.path);
-       StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
-       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-       StorageTaskSnapshot taskSnapshot= await uploadTask.onComplete;
-       setState(() {
-          print("Profile Picture uploaded");
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-       });
-    }
-
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(FontAwesomeIcons.arrowLeft),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          title: Text('Edit Profile'),
-        ),
-        body: Builder(
-        builder: (context) =>  Container(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        title: Text('Edit Profile'),
+      ),
+      body: Builder(
+        builder: (context) => Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -65,13 +77,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: new SizedBox(
                           width: 180.0,
                           height: 180.0,
-                          child: (_image!=null)?Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.network(
-                            "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                            fit: BoxFit.fill,
-                          ),
+                          child: (_image != null)
+                              ? Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.network(
+                                  "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                  fit: BoxFit.fill,
+                                ),
                         ),
                       ),
                     ),
@@ -248,9 +262,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   RaisedButton(
                     color: Color(0xff476cfb),
                     onPressed: () {
-                     uploadPic(context);
+                      uploadPic(context);
                     },
-                                     
                     elevation: 4.0,
                     splashColor: Colors.blueGrey,
                     child: Text(
@@ -258,13 +271,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(color: Colors.white, fontSize: 16.0),
                     ),
                   ),
-              
                 ],
               )
             ],
           ),
         ),
-        ),
-        );
+      ),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
+import 'package:buddyappfirebase/home/widgets/UIhelpers.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 

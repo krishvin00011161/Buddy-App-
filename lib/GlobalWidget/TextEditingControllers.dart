@@ -10,4 +10,6 @@ class TextEditingControllers {
   static final TextEditingController chatNameEditingController = new TextEditingController();
   static final TextEditingController searchEditingController = new TextEditingController();
   static final TextEditingController searchEditingControllers = new TextEditingController();
+  static final TextEditingController className = new TextEditingController();
+  static final TextEditingController classCode = new TextEditingController();
 }

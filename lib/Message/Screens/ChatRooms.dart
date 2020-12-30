@@ -1,15 +1,15 @@
+
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Global%20Widget/TimeStamp.dart';
-import 'package:buddyappfirebase/Message/views/search.dart';
+import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../Explore/screen/explore.dart';
 import '../../home/screens/MainHomeView.dart';
-import '../../home/screens/MainHomeView.dart';
-import '../../home/widgets/custom_drawers.dart';
 import '../services/database.dart';
 import 'chat.dart';
 

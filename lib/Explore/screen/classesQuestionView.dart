@@ -1,13 +1,13 @@
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
+import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../Message/services/database.dart';
-import '../../Message/views/chatrooms.dart';
 import '../../home/screens/MainHomeView.dart';
-import '../../home/widgets/custom_drawers.dart';
 import 'explore.dart';
 
 class ClassQuestionView extends StatefulWidget {

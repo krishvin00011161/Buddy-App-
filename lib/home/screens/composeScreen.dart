@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

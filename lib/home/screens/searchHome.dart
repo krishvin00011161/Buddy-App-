@@ -1,9 +1,10 @@
-import 'package:buddyappfirebase/Message/helper/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/Message/screens/chat.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:buddyappfirebase/Message/views/chat.dart';
+
 
 class SearchHome extends StatefulWidget {
   @override

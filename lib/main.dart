@@ -1,30 +1,36 @@
-import 'package:buddyappfirebase/Message/helper/authenticate.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Profile/uploadImage/imageCapture.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Start point/Auto Log-in helper
+  Description: It allows to save the login and help log in faster by skipping the sign-in process
+
+
+ */
+
+import 'package:buddyappfirebase/GlobalWidget/authenticate.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'home/screens/MainHomeView.dart';
 
 void main() {
-  // Register all the models and services before the app starts
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  // Boolean value that check if users is logged in
   bool userIsLoggedIn;
+  bool showSignIn = true;
 
   @override
   void initState() {
-    getLoggedInState();
     super.initState();
+    getLoggedInState();
   }
 
   // function that checks if user is logged in.
@@ -36,17 +42,15 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  bool showSignIn = true;
-
-  // Helps toggle between Sign Up/Sign In
+  // Helps toggle between Sign Up/Sign In Page
   void toggleView() {
     setState(() {
       showSignIn = !showSignIn;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  // Builds the UI of the Main page
+  MaterialApp body() {
     return MaterialApp(
       title: 'FlutterChat',
       debugShowCheckedModeBanner: false,
@@ -64,5 +68,10 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

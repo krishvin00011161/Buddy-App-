@@ -2,20 +2,20 @@ import 'package:buddyappfirebase/Explore/Widget/search_explore_card.dart';
 import 'package:buddyappfirebase/Explore/screen/classesQuestionView.dart';
 import 'package:buddyappfirebase/Explore/screen/recommendedQuestionsview.dart';
 import 'package:buddyappfirebase/Explore/screen/searchQuestion.dart';
-import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
+import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../FirebaseData/firebaseMethods.dart';
-import '../../Message/helper/constants.dart';
-import '../../Message/helper/helperfunctions.dart';
 import '../../FirebaseData/firebaseReferences.dart';
 import '../../Message/services/database.dart';
 import '../../home/screens/composeScreen.dart';
-import '../../home/widgets/custom_drawers.dart';
 import 'classesQuestionView.dart';
-import 'package:buddyappfirebase/Global%20Widget/tabBar.dart';
+import 'package:buddyappfirebase/GlobalWidget/tabBar.dart';
 
 class ExplorePage extends StatefulWidget {
   final int index;

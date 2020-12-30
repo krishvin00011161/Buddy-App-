@@ -1,5 +1,12 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
 
-// Titles 
+  Function: Text pickers
+  Description: This is used in Welcome View to display texts
+
+
+ */
 class Strings {
   static var stepOneTitle = "Connect With Friends";
   static var stepOneContent =

@@ -1,9 +1,9 @@
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Profile/profile.dart';
 import 'package:buddyappfirebase/Settings/settings.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
@@ -11,8 +11,7 @@ import 'package:buddyappfirebase/home/widgets/ovalRightBorderClipper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../Message/helper/authenticate.dart';
+import '../../GlobalWidget/authenticate.dart';
 
 class CustomDrawers extends StatefulWidget {
   static final String path = "lib/src/pages/navigation/drawer2.dart";

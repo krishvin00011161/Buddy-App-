@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: 
+  Description: 
+
+
+ */
+
+
 class User {
   final String uid;
   final String id;

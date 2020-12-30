@@ -1,14 +1,24 @@
-import 'package:buddyappfirebase/welcome/setup_class_student.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Welcome View UI
+  Description: This class display images, screens, and text in welcome view
+
+
+ */
+
+import 'package:buddyappfirebase/welcome/SetUpClassStudent.dart';
+import 'package:buddyappfirebase/welcome/SetUpClassTeachers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:buddyappfirebase/welcome/helpers/ColorsSys.dart';
 import 'package:buddyappfirebase/welcome/helpers/Strings.dart';
-import 'setup_class.dart';
 
-// This class Shows images that are in the welcome view
+
+
 
 class WelcomeView extends StatefulWidget {
-  const WelcomeView({Key key}) : super(key: key);
 
   @override
   _WelcomeViewState createState() => _WelcomeViewState();
@@ -18,27 +28,21 @@ class _WelcomeViewState extends State<WelcomeView> {
   PageController _pageController;
   int currentIndex = 0;
 
+
+  // runs when the page appears
   @override
   void initState() {
-    _pageController = PageController(initialPage: 0);
     super.initState();
+    _pageController = PageController(initialPage: 0);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
+    _pageController.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: welcomeViewAppBar(),
-      body: welcomeViewBody(),
-    );
-  }
-
+  // Responsible UI of App Bar
   AppBar welcomeViewAppBar() {
     return AppBar(
       elevation: 0,
@@ -46,7 +50,8 @@ class _WelcomeViewState extends State<WelcomeView> {
       actions: <Widget>[],
     );
   }
-
+ 
+  // Responsible UI of Welcome View Body
   Stack welcomeViewBody() {
     return Stack(
       alignment: Alignment.bottomCenter,
@@ -84,6 +89,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     );
   }
 
+  // Widget that makes Pages
   Widget makePage({image, title, content, reverse = false}) {
     return Container(
       padding: EdgeInsets.only(left: 50, right: 50, bottom: 60),
@@ -139,6 +145,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     );
   }
 
+  // Widget that make the Set Up Page
   Widget makeSetUpPage({image, title, content}) {
     bool isTeacherPressed = false;
     bool isStudentPressed = false;
@@ -261,6 +268,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     );
   }
 
+  // This Widget animates between screens
   Widget _indicator(bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
@@ -272,6 +280,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     );
   }
 
+  // This Function indicate with view it is in
   List<Widget> _buildIndicator() {
     List<Widget> indicators = [];
     for (int i = 0; i < 3; i++) {
@@ -283,5 +292,14 @@ class _WelcomeViewState extends State<WelcomeView> {
     }
 
     return indicators;
+  }
+
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: welcomeViewAppBar(),
+      body: welcomeViewBody(),
+    );
   }
 }

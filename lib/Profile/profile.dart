@@ -1,29 +1,54 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Profile Page
+  Description: Responsible for the UI and functions of Profile Page
+
+
+ */
+
 import 'package:buddyappfirebase/Explore/screen/explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Profile/editProfile.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
-import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../Message/helper/constants.dart';
 import '../Message/services/database.dart';
 
 class ProfileView extends StatelessWidget {
   int _currentIndex = 0;
   bool isSelected;
+
+  AppBar profileAppbar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.grey),
+      elevation: 0.0,
+      title: Text(
+        "Profile",
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  //Responsible for the UI
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-            appBar: ProfileAppbar(),
+            appBar: profileAppbar(),
             drawer: CustomDrawers(),
             body: ProfilePage(),
             bottomNavigationBar: CupertinoTabBar(
@@ -75,22 +100,6 @@ class ProfileView extends StatelessWidget {
               },
             )));
   }
-
-  AppBar ProfileAppbar() {
-    
-
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      iconTheme: IconThemeData(color: Colors.grey),
-      elevation: 0.0,
-      title: Text(
-        "Profile",
-        style: TextStyle(
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
 }
 
 class ProfilePage extends StatefulWidget {
@@ -114,6 +123,11 @@ class _ProfilePageState extends State<ProfilePage> {
   int amountOfQuestions = 0;
   QuerySnapshot searchResultSnapshot;
   DatabaseMethods databaseMethods = new DatabaseMethods();
+  var questions;
+  TextEditingController searchEditingController = new TextEditingController();
+  bool isLoading = false;
+  bool haveUserSearched = false;
+
 
   @override
   void initState() {
@@ -123,7 +137,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _getClasses();
     _getUserQuestion();
     _getUserQ("David");
-    //RsearchQuestions();
   }
 
   // gets the profile img
@@ -173,12 +186,11 @@ class _ProfilePageState extends State<ProfilePage> {
       questionValues = docQuestion.data["questions"];
       amountOfQuestions = questionValues.length;
     });
-
-    print(values);
   }
 
-  var questions;
+  
 
+  // gets user questions
   _getUserQ(String userName) async {
     DatabaseMethods().getLatestQuestions('userName').then((QuerySnapshot doc) {
       if (doc.documents.isNotEmpty) {
@@ -188,70 +200,21 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  TextEditingController searchEditingController = new TextEditingController();
-
-  bool isLoading = false;
-  bool haveUserSearched = false;
-
-  // searchQuestions() async {
-  //   if (searchEditingController.text.isEmpty) {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     await databaseMethods.searchClasses(Constants.myName).then((snapshot) {
-  //       searchResultSnapshot = snapshot;
-  //       print("$searchResultSnapshot");
-  //       setState(() {
-  //         isLoading = false;
-  //         haveUserSearched = true;
-  //       });
-  //     });
-  //   }
-  // }
-
+  // search Classes by Name
   searchClasses() async {
-      await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
-        searchResultSnapshot = snapshot;
-        print("$searchResultSnapshot");
-        setState(() {
-          isLoading = false;
-          haveUserSearched = true;
-        });
+    await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
+      searchResultSnapshot = snapshot;
+      print("$searchResultSnapshot");
+      setState(() {
+        isLoading = false;
+        haveUserSearched = true;
       });
+    });
   }
 
-  
 
-  Widget userTile(String content) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // ListTile(
-              //   title: Text(content, style: TextStyle(color: Colors.black, fontSize: 16))
-              // ),
-              // Divider(
-              //   height: 2.0,
-              // ),
-              Text(
-                content,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-              Divider(
-                height: 2.0,
-                color: Colors.black,
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
-  ListView Profile(double height) {
+  ListView profile(double height) {
     return ListView(children: [
       Padding(
         padding: EdgeInsets.all(16.0),
@@ -338,33 +301,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               return Column(
                                 children: <Widget>[
                                   ListTile(
-                                    title: Text(
-                                        "U.S History"),
-                                    subtitle: Text(
-                                        "Code: GHE134"),
+                                    title: Text("U.S History"),
+                                    subtitle: Text("Code: GHE134"),
                                   ),
                                   Divider(height: 2.0),
                                   ListTile(
-                                    title: Text(
-                                        "Chemistry I"),
-                                    subtitle: Text(
-                                        "Code: DER321"),
+                                    title: Text("Chemistry I"),
+                                    subtitle: Text("Code: DER321"),
                                   ),
                                   Divider(height: 2.0),
                                   ListTile(
-                                    title: Text(
-                                        "Psychology"),
-                                    subtitle: Text(
-                                        "Code: DLE983"),
+                                    title: Text("Psychology"),
+                                    subtitle: Text("Code: DLE983"),
                                   ),
                                   Divider(height: 2.0),
                                   ListTile(
-                                    title: Text(
-                                        "Literature"),
-                                    subtitle: Text(
-                                        "Code: DEW342"),
+                                    title: Text("Literature"),
+                                    subtitle: Text("Code: DEW342"),
                                   ),
-                                  
                                 ],
                               );
                             }),
@@ -379,15 +333,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               return Column(
                                 children: <Widget>[
                                   ListTile(
-                                    title: Text(
-                                        "Greek word for indivisible"),
-                                    subtitle: Text(
-                                        "Question: What is an Atom?"),
+                                    title: Text("Greek word for indivisible"),
+                                    subtitle:
+                                        Text("Question: What is an Atom?"),
                                   ),
                                   Divider(height: 2.0),
                                   ListTile(
-                                    title: Text(
-                                        "Robert Oppenheimer"),
+                                    title: Text("Robert Oppenheimer"),
                                     subtitle: Text(
                                         "Question: Who made the atomic bomb?"),
                                   ),
@@ -395,10 +347,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ListTile(
                                     title: Text(
                                         "The 16th president of the United States."),
-                                    subtitle: Text(
-                                        "Question: Who is Lincoln?"),
+                                    subtitle: Text("Question: Who is Lincoln?"),
                                   ),
-                                  
                                 ],
                               );
                             }),
@@ -410,6 +360,7 @@ class _ProfilePageState extends State<ProfilePage> {
     ]);
   }
 
+  // Widget creating a list of classes
   Widget classList() {
     return haveUserSearched
         ? ListView.builder(
@@ -428,13 +379,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               );
-              // return userTile(
-              //   searchResultSnapshot.documents[index].data["questionContent"],
-              // );
             })
         : Container();
   }
-  
+
+  // Widget creating list of questions
   Widget questionList() {
     return haveUserSearched
         ? ListView.builder(
@@ -453,9 +402,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               );
-              // return userTile(
-              //   searchResultSnapshot.documents[index].data["questionContent"],
-              // );
             })
         : Container();
   }
@@ -463,6 +409,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(body: Profile(height));
+    return Scaffold(body: profile(height));
   }
 }

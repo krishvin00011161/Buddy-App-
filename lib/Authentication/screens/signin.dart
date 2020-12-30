@@ -1,9 +1,9 @@
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Home/Widgets/TextLink.dart';
+import 'package:buddyappfirebase/Home/Widgets/UIHelpers.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
-import 'package:buddyappfirebase/home/widgets/text_link.dart';
-import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';

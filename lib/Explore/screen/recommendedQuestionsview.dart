@@ -1,13 +1,14 @@
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../Message/services/database.dart';
-import '../../Message/views/chatrooms.dart';
 import '../../home/screens/MainHomeView.dart';
-import '../../home/widgets/custom_drawers.dart';
+
 import 'explore.dart';
 
 class RecommendedQuestionView extends StatefulWidget {
@@ -55,7 +56,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
     }
   }
 
-   // This gets the profile Img url
+  // This gets the profile Img url
   _getUserProfileImg() async {
     FirebaseMethods().getUserProfileImg();
     setState(() {
@@ -63,8 +64,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
     });
   }
 
-
-   String readQuestionTimestamp(int timestamp) {
+  String readQuestionTimestamp(int timestamp) {
     var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     var time = '';
@@ -91,8 +91,10 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(searchResultSnapshot.documents[index].data["questionContent"]),
-                            Text(searchResultSnapshot.documents[index].data["userName"]),
+                            Text(searchResultSnapshot
+                                .documents[index].data["questionContent"]),
+                            Text(searchResultSnapshot
+                                .documents[index].data["userName"]),
                           ],
                         ),
                         Spacer(),
@@ -100,8 +102,12 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Text(readQuestionTimestamp(searchResultSnapshot.documents[index].data["timeStamp"])),
-                            Text("Comment", style: TextStyle(color: Colors.blue),)
+                            Text(readQuestionTimestamp(searchResultSnapshot
+                                .documents[index].data["timeStamp"])),
+                            Text(
+                              "Comment",
+                              style: TextStyle(color: Colors.blue),
+                            )
                           ],
                         ),
                       ]),
@@ -124,9 +130,11 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
         ),
         onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
-      
       title: GestureDetector(
-        child: Text(widget.categories, style: TextStyle(color: Colors.black),),
+        child: Text(
+          widget.categories,
+          style: TextStyle(color: Colors.black),
+        ),
         onTap: () {
           initiateSearch();
         },

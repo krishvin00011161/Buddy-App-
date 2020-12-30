@@ -1,19 +1,27 @@
-import 'package:buddyappfirebase/Global%20Widget/progress.dart';
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Edit UserName
+  Description: It is a page that helps update username
+
+
+ */
+
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EditProfile extends StatefulWidget {
-  
-
   final String profileId;
+  static String profileName = "";
 
   EditProfile({this.profileId});
 
-  static String profileName = "";
   @override
   _EditProfileState createState() => _EditProfileState();
 }
@@ -26,7 +34,6 @@ class _EditProfileState extends State<EditProfile> {
   String _profileImg = "";
   String _name = "";
 
-
   @override
   void initState() {
     super.initState();
@@ -35,33 +42,43 @@ class _EditProfileState extends State<EditProfile> {
     _getUserName();
   }
 
+  // gets the user
   getUser() async {
     setState(() {
       isLoading = true;
     });
   }
 
+  // get user profile img
   _getUserProfileImg() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["photoUrl"] != null) ?  setState(() {
-       _profileImg = doc.data["photoUrl"];
-     }) : circularProgress();
-     isLoading = false;
+    (doc.data["photoUrl"] != null)
+        ? setState(() {
+            _profileImg = doc.data["photoUrl"];
+          })
+        : circularProgress();
+    isLoading = false;
   }
 
-   _getUserName() async {
+  // get user's username
+  _getUserName() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
+    final DocumentSnapshot doc =
+        await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["userName"] != null) ?  setState(() {
-       _name = doc.data["userName"];
-       EditProfile.profileName = doc.data["userName"];
-     }) : circularProgress();
-     isLoading = false;
+    (doc.data["userName"] != null)
+        ? setState(() {
+            _name = doc.data["userName"];
+            EditProfile.profileName = doc.data["userName"];
+          })
+        : circularProgress();
+    isLoading = false;
   }
 
+  // Build UI of tetfield
   Column buildDisplayNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,19 +99,15 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  // function that updates username to database
   updateData() async {
-     _getUserName();
-    Firestore.instance
-          .collection('users')
-          .document(Constants.myId) // changed
-          .updateData({'userName': displayNameController.text});
+    _getUserName();
+    Firestore.instance.collection('users').document(Constants.myId) // changed
+        .updateData({'userName': displayNameController.text});
     _getUserName();
   }
 
-  
-
-  @override
-  Widget build(BuildContext context) {
+  Scaffold body() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -115,11 +128,9 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ],
       ),
-      body: 
-      isLoading
+      body: isLoading
           ? circularProgress()
-          : 
-          ListView(
+          : ListView(
               children: <Widget>[
                 Container(
                   child: Column(
@@ -161,5 +172,10 @@ class _EditProfileState extends State<EditProfile> {
               ],
             ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

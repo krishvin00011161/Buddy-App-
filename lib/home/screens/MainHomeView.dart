@@ -1,22 +1,21 @@
-import 'package:buddyappfirebase/Message/helper/constants.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/Message/views/chatrooms.dart';
 import 'package:buddyappfirebase/home/animation/FadeAnimation.dart';
 import 'package:buddyappfirebase/home/screens/searchHome.dart';
-import 'package:buddyappfirebase/home/widgets/custom_drawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:buddyappfirebase/home/widgets/groups.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Explore/screen/explore.dart';
-import 'package:buddyappfirebase/Global%20Widget/TimeStamp.dart';
-import '../../Message/helper/constants.dart';
-import '../../Message/helper/constants.dart';
+import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
+import '../../GlobalWidget/constants.dart';
+import '../../GlobalWidget/constants.dart';
 import '../../Message/services/database.dart';
-import '../../Message/views/chatrooms.dart';
 import '../../Profile/profile.dart';
 
 // This class is responsible for the home page

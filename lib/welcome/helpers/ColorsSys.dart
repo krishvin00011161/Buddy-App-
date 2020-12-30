@@ -1,6 +1,14 @@
-import 'package:flutter/material.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
 
-// Colors 
+  Function: Color picker
+  Description: It allows to pick color by variables
+
+
+ */
+
+import 'package:flutter/material.dart';
 class ColorSys {
   static Color primary = Color.fromRGBO(52, 43, 37, 1);
   static Color gray = Color.fromRGBO(137, 137, 137, 1);

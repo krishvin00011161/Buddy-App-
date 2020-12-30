@@ -4,6 +4,18 @@ A new Flutter application.
 
 # Changelog
 
+[1.2.0] - 12/30/20 - David Kim
+[]
+
+Added
+   - Group Chat latest message functionality
+   - Message Chat Name Change(Bugged)
+   
+Modfied
+   - Refactoring codes, not too major
+Note
+   - Many Bugs, Still needs some fixes
+
 Record any 'major changes' after each update. Please use this format:
 [1.1.0] - 10/9/20 - David Kim
 [a9f1644c3297e45cd23e4c3ea1c695f55afe,7fc521512ca32e62124f36cd4ac9b5c641e24c4f, b98ab8041011690c2fa60e7e197214c49a6042c1]

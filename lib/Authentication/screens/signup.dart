@@ -1,15 +1,14 @@
-import 'package:buddyappfirebase/Global%20Widget/TextEditingControllers.dart';
-import 'package:buddyappfirebase/Message/helper/helperfunctions.dart';
+import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
+import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Home/Widgets/TextLink.dart';
+import 'package:buddyappfirebase/Home/Widgets/UIHelpers.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/Authentication/services/auth.dart';
-import 'package:buddyappfirebase/home/widgets/text_link.dart';
-import 'package:buddyappfirebase/home/widgets/ui_helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../Message/helper/helperfunctions.dart';
 import '../../home/animation/FadeAnimation.dart';
-import '../../welcome/welcome_view.dart';
+import '../../welcome/WelcomeView.dart';
 import '../services/auth.dart';
 
 // This class is responsible for Sign Up

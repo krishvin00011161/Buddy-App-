@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: 
+  Description: 
+
+
+ */
+
+
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,14 +1,22 @@
-import 'dart:collection';
-class EmailUser {
-  // Class for Email user when creating new user throw firebase
+/* 
+  Authors: David Kim
+  Date: 12/30/20
 
+  Function: Set up document structure in Firebase
+  Description: It Set up the user portion of barebone document structure in Firebase
+
+
+ */
+
+import 'dart:collection';
+
+class EmailUser {
   final DateTime timestamp = DateTime.now();
   final String id;
   final String fullName;
   final String email;
   final String userRole;
   final String photoUrl;
-
   final HashMap<String, String> classes = HashMap();
 
   EmailUser({
