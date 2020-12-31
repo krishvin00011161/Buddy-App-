@@ -8,11 +8,11 @@
 
  */
 
+import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

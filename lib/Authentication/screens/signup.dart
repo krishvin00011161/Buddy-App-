@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: SignUp
+  Description: Helps with SignUp
+
+
+ */
+
+
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/TextLink.dart';

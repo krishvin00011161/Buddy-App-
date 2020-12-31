@@ -2,12 +2,11 @@
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
 
-  Function: 
-  Description: 
+  Function: Chat
+  Description: Builds the Chat functionality of textfield, sends, and diaplay emssages
 
 
  */
-
 
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Message/screens/changeChatName.dart';
@@ -19,11 +18,7 @@ import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 
 class Chat extends StatefulWidget {
-  String chatRoomId = "Aidan_Tim";
-  static String lastChat =
-      ""; // Used in MainHomeView.dart and carry information about last message in the chat
-  static int
-      lastTime; // Used in MainHomeView.dart and carry information about last message in the chat
+  String chatRoomId;
 
   Chat({this.chatRoomId});
 
@@ -35,9 +30,21 @@ class _ChatState extends State<Chat> {
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
   String title = "";
+  String chatName;
 
+  @override
+  void initState() {
+    super.initState();
+    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
+      setState(() {
+        chats = val;
+      });
+    });
+    _getChatTitle();
+  }
+
+  // This creates the message bubbles in chat
   Widget chatMessages() {
-    // This creates the message bubbles in chat
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot) {
@@ -49,10 +56,6 @@ class _ChatState extends State<Chat> {
                     message: snapshot.data.documents[index].data["message"],
                     sendByMe: Constants.myName ==
                         snapshot.data.documents[index].data["sendBy"],
-                    lastChat: Chat.lastChat =
-                        snapshot.data.documents[index].data["message"],
-                    lastTime: Chat.lastTime =
-                        snapshot.data.documents[index].data["time"],
                   );
                 })
             : Container();
@@ -60,6 +63,7 @@ class _ChatState extends State<Chat> {
     );
   }
 
+  // sends message to firebase
   addMessage() {
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
@@ -89,18 +93,7 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  @override
-  void initState() {
-    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
-      setState(() {
-        chats = val;
-      });
-    });
-    super.initState();
-    _getChatTitle();
-    print(Chat.lastTime);
-  }
-
+  // updates chat name in the database
   updateChatName(String text) {
     // Update the Name of the chat
     Firestore.instance
@@ -109,6 +102,7 @@ class _ChatState extends State<Chat> {
         .updateData({'chatRoomName': text});
   }
 
+  // update latest message's content to the database
   updateLatestMessage(String text) {
     Firestore.instance
         .collection('chatRoom')
@@ -116,6 +110,7 @@ class _ChatState extends State<Chat> {
         .updateData({'message': text});
   }
 
+  // update latest message's time to the database
   updateLatestTime(int text) {
     Firestore.instance
         .collection('chatRoom')
@@ -123,6 +118,7 @@ class _ChatState extends State<Chat> {
         .updateData({'time': text});
   }
 
+  // update latest message's time to database
   updateLatestSendBy(String text) {
     Firestore.instance
         .collection('chatRoom')
@@ -130,6 +126,7 @@ class _ChatState extends State<Chat> {
         .updateData({'sendBy': text});
   }
 
+  // update latest profileimg to the database
   updateLatestProfileImg(String image) {
     Firestore.instance
         .collection('chatRoom')
@@ -137,6 +134,7 @@ class _ChatState extends State<Chat> {
         .updateData({'image': image});
   }
 
+  // deletes the chat room
   deleteRoom() {
     Firestore.instance
         .collection('chatRoom')
@@ -144,24 +142,7 @@ class _ChatState extends State<Chat> {
         .delete();
   }
 
-  // deleteLatest() {
-  //   Firestore.instance
-  //       .collection('chatRoom')
-  //       .document(widget.chatRoomId)
-  //       .collection('latest')
-  //       .document("tdxdsRjTejFnThTxVDGk")
-  //       .delete();
-  // }
-
-  // deleteChats() {
-  //   Firestore.instance
-  //       .collection('chatRoom')
-  //       .document(widget.chatRoomId)
-  //       .collection('chats')
-  //       .document()
-  //       .delete();
-  // }
-
+  // gets the chat title from database
   _getChatTitle() async {
     DatabaseMethods().getChatsName(widget.chatRoomId).then((value) {
       if (value != null) {
@@ -176,7 +157,21 @@ class _ChatState extends State<Chat> {
     });
   }
 
-  String chatName;
+  // Logic for the drop down for delete chat, and edit chat name
+  void choiceAction(String choice) {
+    if (choice == Constants.Settings) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditChatName(
+                    chatRoomId: widget.chatRoomId,
+                  )));
+    } else if (choice == Constants.Delete) {
+      deleteRoom();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ChatRoom()));
+    }
+  }
 
   AppBar chatAppbar() {
     return AppBar(
@@ -208,23 +203,7 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  void choiceAction(String choice) {
-    if (choice == Constants.Settings) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => EditChatName(
-                    chatRoomId: widget.chatRoomId,
-                  )));
-    } else if (choice == Constants.Delete) {
-      deleteRoom();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ChatRoom()));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Scaffold body() {
     return Scaffold(
       appBar: chatAppbar(),
       body: Container(
@@ -282,6 +261,11 @@ class _ChatState extends State<Chat> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }
 

@@ -1,3 +1,13 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Oval
+  Description: Helps with Border
+
+
+ */
+
 import 'package:flutter/material.dart';
 
 class OvalRightBorderClipper extends CustomClipper<Path> {

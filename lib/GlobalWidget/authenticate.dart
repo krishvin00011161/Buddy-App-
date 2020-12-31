@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Authenticate
+  Description: Toggle between SignIN/SignUP
+
+
+ */
+
+
 import 'package:buddyappfirebase/Authentication/screens/signin.dart';
 import 'package:buddyappfirebase/Authentication/screens/signup.dart';
 import 'package:flutter/material.dart';

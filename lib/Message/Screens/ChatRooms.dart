@@ -1,4 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
 
+  Function: ChatRoom
+  Description: This creates the cells of Chatrooms
+
+
+ */
+
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
@@ -8,7 +18,6 @@ import 'package:buddyappfirebase/Message/screens/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../Explore/screen/explore.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 import 'chat.dart';
@@ -38,6 +47,34 @@ class _ChatRoomState extends State<ChatRoom> {
     });
   }
 
+  // gets the info of user chats
+  getUserInfogetChats() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(() {
+        chatRooms = snapshots;
+        print(
+            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
+      });
+    });
+  }
+
+  // seraches user by username
+  searchUser(userName) async {
+    await databaseMethods.searchByName(userName).then((snapshot) {
+      searchResultSnapshot = snapshot;
+      print("$searchResultSnapshot");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfogetChats();
+    _getUserProfileImg();
+  }
+
+  // Creates list of chatrooms buttons
   Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRooms,
@@ -62,46 +99,12 @@ class _ChatRoomState extends State<ChatRoom> {
                         : snapshot.data.documents[index].data['chatRoomName'],
                     message: snapshot.data.documents[index].data["message"],
                     time: snapshot.data.documents[index].data["time"],
-                   
                   );
                 })
             : Container();
       },
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-    getUserInfogetChats();
-    _getUserProfileImg();
-    
-  }
-
-  getUserInfogetChats() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(() {
-        chatRooms = snapshots;
-        print(
-            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
-      });
-    });
-  }
-
-   searchUser(userName) async {
-      await databaseMethods
-          .searchByName(userName)
-          .then((snapshot) {
-       searchResultSnapshot = snapshot;
-       print("$searchResultSnapshot"); 
-      });
-    }
-  
-
-  
-  
-  
 
   AppBar chatRoomAppbar() {
     // App bar
@@ -122,8 +125,7 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Scaffold body() {
     return Scaffold(
       key: _scaffoldKey,
       appBar: chatRoomAppbar(),
@@ -191,6 +193,11 @@ class _ChatRoomState extends State<ChatRoom> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
+  }
 }
 
 // Responsible for creating Chat Tiles
@@ -201,8 +208,7 @@ class ChatRoomsTile extends StatelessWidget {
   final String message;
   final int time;
   final String profileImg;
-  DatabaseMethods databaseMethods = new DatabaseMethods(); 
-  
+  DatabaseMethods databaseMethods = new DatabaseMethods();
 
   ChatRoomsTile(
       {this.userName,
@@ -211,10 +217,6 @@ class ChatRoomsTile extends StatelessWidget {
       this.message,
       this.time,
       this.profileImg});
-
-    
-     
-   
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +238,6 @@ class ChatRoomsTile extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 25.0,
-                  
                 ),
                 SizedBox(width: 10.0),
                 Column(

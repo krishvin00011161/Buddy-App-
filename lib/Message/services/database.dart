@@ -1,13 +1,25 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Database methods
+  Description: useful database methods for use
+
+
+ */
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
+
+  // Adds user Info
   Future<void> addUserInfo(userData) async {
-    // Not Needed
     Firestore.instance.collection("users").add(userData).catchError((e) {
       print(e.toString());
     });
   }
-
+  
+  // gets user info by searching email
   getUserInfo(String email) async {
     return Firestore.instance
         .collection("users")
@@ -18,6 +30,7 @@ class DatabaseMethods {
     });
   }
 
+  // gets user info by searching userName
   searchByName(String searchField) {
     return Firestore.instance
         .collection("users")
@@ -25,6 +38,7 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // Search questions by searching userName
   searchMyQuestions(String name) {
     return Firestore.instance
         .collection('questions')
@@ -32,6 +46,7 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // Search question by question content
   searchQuestions(String question) {
     return Firestore.instance
         .collection('questions')
@@ -39,13 +54,15 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // Search classes by username
   searchClasses(String name) {
     return Firestore.instance
         .collection('users')
         .where('userName', isEqualTo: name)
         .getDocuments();
   }
-
+ 
+  // search questions by className
   searchClassQuestions(String className) {
     return Firestore.instance
         .collection('questions')
@@ -53,6 +70,7 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // Search questions by topics
   searchTopicQuestions(String categories) {
     return Firestore.instance
         .collection('questions')
@@ -60,6 +78,7 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // add ChatRoom
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     Firestore.instance
         .collection("chatRoom")
@@ -70,6 +89,7 @@ class DatabaseMethods {
     });
   }
 
+  // get chats by searching ChatRoomId
   getChats(String chatRoomId) async {
     return Firestore.instance
         .collection("chatRoom")
@@ -79,6 +99,7 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  // gets chat Name by chatroomId
   getChatsName(String chatRoomId) async {
     return Firestore.instance
         .collection("chatRoom")
@@ -86,6 +107,7 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  // get questions by searching question content
   getQuestions(String searchField) async {
     return Firestore.instance
         .collection('questions')
@@ -105,6 +127,7 @@ class DatabaseMethods {
     });
   }
 
+  // get latest sent message by searching chatRoomId
   getLatestMessage(String chatRoomId) {
     return Firestore.instance
         .collection('chatRoom')
@@ -126,6 +149,7 @@ class DatabaseMethods {
     });
   }
 
+  // update Latest Message by ChatRoomId
   Future<void> updateLatestMessage(String chatRoomId, chatMessageData) {
       Firestore.instance
         .collection("chatRoom")
@@ -139,7 +163,7 @@ class DatabaseMethods {
   }
 
  
-
+  // get Users chat by using username
   getUserChats(String itIsMyName) async {
     return await Firestore.instance
         .collection("chatRoom")
@@ -147,6 +171,7 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  // get Latest qeustion by userName
   getLatestQuestions(String userName) {
     return Firestore.instance
         .collection('questions')
@@ -155,6 +180,7 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // get user profile img by userNmae
   getProfileImg(Future<dynamic> userName) {
     return Firestore.instance
       .collection('users')

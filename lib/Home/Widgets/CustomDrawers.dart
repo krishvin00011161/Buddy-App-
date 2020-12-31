@@ -1,5 +1,16 @@
-import 'package:buddyappfirebase/Explore/screen/explore.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: CustomDrawers
+  Description: Helps with importing Drawers
+
+
+ */
+
+
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
+import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';

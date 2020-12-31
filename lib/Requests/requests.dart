@@ -8,7 +8,7 @@
 
  */
 
-import 'package:buddyappfirebase/Explore/screen/explore.dart';
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';

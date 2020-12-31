@@ -1,7 +1,17 @@
-import 'package:buddyappfirebase/Explore/Widget/search_explore_card.dart';
-import 'package:buddyappfirebase/Explore/screen/classesQuestionView.dart';
-import 'package:buddyappfirebase/Explore/screen/recommendedQuestionsview.dart';
-import 'package:buddyappfirebase/Explore/screen/searchQuestion.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Explore
+  Description: UI and Functionality of Explore
+
+
+ */
+
+
+import 'package:buddyappfirebase/Explore/Screens/recommendedQuestionsview.dart';
+import 'package:buddyappfirebase/Explore/Widget/SearchExploreCard.dart';
+import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
@@ -11,9 +21,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../FirebaseData/firebaseMethods.dart';
-import '../../FirebaseData/firebaseReferences.dart';
 import '../../Message/services/database.dart';
 import '../../home/screens/composeScreen.dart';
+import 'SearchQuestion.dart';
 import 'classesQuestionView.dart';
 import 'package:buddyappfirebase/GlobalWidget/tabBar.dart';
 

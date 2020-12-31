@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Theme
+  Description: Colors themes
+
+
+ */
+
+
 import 'package:flutter/material.dart';
 
 // No need to change

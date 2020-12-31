@@ -1,4 +1,15 @@
-// no need to change
+
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Constants
+  Description: has the constants
+
+
+ */
+
+
 class Constants{
   static String myName = "";
   static String myId = "";
@@ -10,6 +21,5 @@ class Constants{
   static const List<String> choices = <String>[
     Delete,
     Settings,
-    
   ];
 }

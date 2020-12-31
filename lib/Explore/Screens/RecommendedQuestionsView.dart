@@ -1,5 +1,15 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Recommendation
+  Description: Recommendation of Questions
+
+
+ */
+
+
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
-import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,29 +20,49 @@ import '../../Message/services/database.dart';
 import '../../home/screens/MainHomeView.dart';
 import 'explore.dart';
 
-class ClassQuestionView extends StatefulWidget {
-  final String className;
-  ClassQuestionView({this.className});
+class RecommendedQuestionView extends StatefulWidget {
+  final String categories;
+  RecommendedQuestionView({this.categories});
 
   @override
-  _ClassQuestionViewState createState() => _ClassQuestionViewState();
+  _RecommendedQuestionViewState createState() =>
+      _RecommendedQuestionViewState();
 }
 
-class _ClassQuestionViewState extends State<ClassQuestionView> {
+class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
+  TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
-  String _profileImg = "";
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   bool isLoading = false;
   bool haveUserSearched = false;
   int _currentIndex = 0;
   bool isSelected;
+  String _profileImg = "";
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     initiateSearch();
     _getUserProfileImg();
+  }
+
+  initiateSearch() async {
+    if (searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods
+        ..searchTopicQuestions(widget.categories).then((snapshot) {
+          searchResultSnapshot = snapshot;
+          print("$searchResultSnapshot");
+          setState(() {
+            isLoading = false;
+            haveUserSearched = true;
+          });
+        });
+    }
   }
 
   // This gets the profile Img url
@@ -42,27 +72,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
-   
-   // This searches for class questions
-  initiateSearch() async {
-    if (TextEditingControllers.searchEditingController.text.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-      await databaseMethods
-          .searchClassQuestions(widget.className)
-          .then((snapshot) {
-        searchResultSnapshot = snapshot;
-        print("$searchResultSnapshot");
-        setState(() {
-          isLoading = false;
-          haveUserSearched = true;
-        });
-      });
-    }
-  }
 
-  // reads the time stamp of questions
   String readQuestionTimestamp(int timestamp) {
     var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -71,8 +81,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     return time;
   }
 
-  // this widget gets the list of questions
-  Widget getQuestionList() {
+  Widget userList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
@@ -119,7 +128,6 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
         : Container();
   }
 
-  // responsible for the UI of AppBar
   AppBar appBar() {
     return AppBar(
       iconTheme: new IconThemeData(color: Colors.grey),
@@ -133,7 +141,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       ),
       title: GestureDetector(
         child: Text(
-          widget.className,
+          widget.categories,
           style: TextStyle(color: Colors.black),
         ),
         onTap: () {
@@ -143,14 +151,15 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     );
   }
 
-  // Responsible for the UI 
   Scaffold body() {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: appBar(),
+      key: _scaffoldKey,
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar(
+        // Code reuse make some class Reminder
         currentIndex: _currentIndex,
+        //activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -198,7 +207,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       body: Container(
         child: Column(
           children: <Widget>[
-            getQuestionList(),
+            userList(),
           ],
         ),
       ),

@@ -1,3 +1,13 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Firebase Functionality
+  Description: gets the current User;
+
+
+ */
+
 class User {
   String userName;
   String id;

@@ -1,6 +1,29 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Firebase Functionality
+  Description: gets the current User;
+
+
+ */
+
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: MainHomeView
+  Description: The Main view for UI and Functionality
+
+
+ */
+
+
+
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
@@ -11,9 +34,7 @@ import 'package:buddyappfirebase/home/widgets/groups.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../Explore/screen/explore.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
-import '../../GlobalWidget/constants.dart';
 import '../../GlobalWidget/constants.dart';
 import '../../Message/services/database.dart';
 import '../../Profile/profile.dart';

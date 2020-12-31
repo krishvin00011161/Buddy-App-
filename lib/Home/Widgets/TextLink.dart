@@ -1,3 +1,13 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: TextLink
+  Description: Helps with TextLink
+
+
+ */
+
 import 'package:flutter/material.dart';
 
 class TextLink extends StatelessWidget {

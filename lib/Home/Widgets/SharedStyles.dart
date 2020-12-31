@@ -1,6 +1,14 @@
-import 'package:flutter/material.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
 
-// Box Decorations
+  Function: SharedStyle
+  Description: Helps with style
+
+
+ */
+
+import 'package:flutter/material.dart';
 
 BoxDecoration fieldDecortaion = BoxDecoration(
     borderRadius: BorderRadius.circular(5), color: Colors.grey[200]);

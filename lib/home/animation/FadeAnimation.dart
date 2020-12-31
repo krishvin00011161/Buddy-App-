@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Animation
+  Description: IT is responsible for the fade animation
+
+
+ */
+
+
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 

@@ -2,8 +2,8 @@
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
 
-  Function: 
-  Description: 
+  Function: Users
+  Description: IT saves the id and UID
 
 
  */

@@ -11,8 +11,8 @@
 
 
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
-import 'package:buddyappfirebase/Explore/screen/explore.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
+import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';

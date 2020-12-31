@@ -1,8 +1,18 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Auth
+  Description: Helps with Backend services
+
+
+ */
+
+
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-// Helper class for Sign In/Up and Reset password
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   static String idNew;

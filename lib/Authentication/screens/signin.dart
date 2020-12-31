@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: SignIn
+  Description: Helps with the Sign in
+
+
+ */
+
+
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/TextLink.dart';
@@ -9,7 +20,7 @@ import 'package:flutter/material.dart';
 import '../../home/animation/FadeAnimation.dart';
 import '../../home/screens/MainHomeView.dart';
 
-// This class is responsible for Sign In function
+
 class SignIn extends StatefulWidget {
   final Function toggleView;
 

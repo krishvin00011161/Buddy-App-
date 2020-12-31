@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: TimeStamp
+  Description: Convert Timestamp into readable format
+
+
+ */
+
+
 import 'package:intl/intl.dart';
 
 

@@ -1,59 +1,49 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: ClassQuestionView
+  Description: Display questions of a certain class
+
+
+ */
+
+
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../Message/services/database.dart';
 import '../../home/screens/MainHomeView.dart';
-
 import 'explore.dart';
 
-class RecommendedQuestionView extends StatefulWidget {
-  final String categories;
-  RecommendedQuestionView({this.categories});
+class ClassQuestionView extends StatefulWidget {
+  final String className;
+  ClassQuestionView({this.className});
 
   @override
-  _RecommendedQuestionViewState createState() =>
-      _RecommendedQuestionViewState();
+  _ClassQuestionViewState createState() => _ClassQuestionViewState();
 }
 
-class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
+class _ClassQuestionViewState extends State<ClassQuestionView> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
-  TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
-
+  String _profileImg = "";
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading = false;
   bool haveUserSearched = false;
   int _currentIndex = 0;
   bool isSelected;
-  String _profileImg = "";
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     initiateSearch();
     _getUserProfileImg();
-  }
-
-  initiateSearch() async {
-    if (searchEditingController.text.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-      await databaseMethods
-        ..searchTopicQuestions(widget.categories).then((snapshot) {
-          searchResultSnapshot = snapshot;
-          print("$searchResultSnapshot");
-          setState(() {
-            isLoading = false;
-            haveUserSearched = true;
-          });
-        });
-    }
   }
 
   // This gets the profile Img url
@@ -63,7 +53,27 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
+   
+   // This searches for class questions
+  initiateSearch() async {
+    if (TextEditingControllers.searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods
+          .searchClassQuestions(widget.className)
+          .then((snapshot) {
+        searchResultSnapshot = snapshot;
+        print("$searchResultSnapshot");
+        setState(() {
+          isLoading = false;
+          haveUserSearched = true;
+        });
+      });
+    }
+  }
 
+  // reads the time stamp of questions
   String readQuestionTimestamp(int timestamp) {
     var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -72,7 +82,8 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
     return time;
   }
 
-  Widget userList() {
+  // this widget gets the list of questions
+  Widget getQuestionList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
@@ -119,6 +130,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
         : Container();
   }
 
+  // responsible for the UI of AppBar
   AppBar appBar() {
     return AppBar(
       iconTheme: new IconThemeData(color: Colors.grey),
@@ -132,7 +144,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
       ),
       title: GestureDetector(
         child: Text(
-          widget.categories,
+          widget.className,
           style: TextStyle(color: Colors.black),
         ),
         onTap: () {
@@ -142,15 +154,14 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
     );
   }
 
+  // Responsible for the UI 
   Scaffold body() {
     return Scaffold(
-      appBar: appBar(),
       key: _scaffoldKey,
+      appBar: appBar(),
       drawer: CustomDrawers(),
       bottomNavigationBar: CupertinoTabBar(
-        // Code reuse make some class Reminder
         currentIndex: _currentIndex,
-        //activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -198,7 +209,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
       body: Container(
         child: Column(
           children: <Widget>[
-            userList(),
+            getQuestionList(),
           ],
         ),
       ),

@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Group
+  Description: Helps with Group function in MainHomeView
+
+
+ */
+
+
 import 'package:buddyappfirebase/Message/screens/chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

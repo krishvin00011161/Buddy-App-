@@ -1,3 +1,13 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Search
+  Description: Helps with Search
+
+
+ */
+
 class HomeUser {
   String name;
 

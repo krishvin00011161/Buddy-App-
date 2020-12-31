@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Explore card
+  Description: UI of Explore cards
+
+
+ */
+
+
 import 'package:buddyappfirebase/Explore/theme/constant.dart';
 import 'package:flutter/material.dart';
 

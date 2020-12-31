@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Search
+  Description: Searches User
+
+
+ */
+
+
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Message/screens/chat.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';

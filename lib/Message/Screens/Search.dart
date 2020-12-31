@@ -2,8 +2,8 @@
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
 
-  Function: 
-  Description: 
+  Function: Search
+  Description: Searches users and creates a chatroom
 
 
  */
@@ -26,10 +26,11 @@ class _SearchState extends State<Search> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
-
   bool isLoading = false;
   bool haveUserSearched = false;
 
+
+  // searches User by Username to harvest info from database
   initiateSearch() async {
     if (searchEditingController.text.isNotEmpty) {
       setState(() {
@@ -48,6 +49,7 @@ class _SearchState extends State<Search> {
     }
   }
 
+  // A widget that show Username and Useremail
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
@@ -62,12 +64,13 @@ class _SearchState extends State<Search> {
         : Container();
   }
 
-  /// 1.create a chatroom, send user to the chatroom, other userdetails
+  // create a chatroom, send user to the chatroom, other userdetails
   sendMessage(String userName) {
     List<String> users = [Constants.myName, userName];
 
     String chatRoomId = getChatRoomId(Constants.myName, userName);
 
+    // This just creates a chatroom
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId": chatRoomId,
@@ -77,6 +80,7 @@ class _SearchState extends State<Search> {
       "sendBy" : "",
     };
 
+    // This creates a field of latest text messages
     Map<String, dynamic> message = {
       "message" : "",
       "time" : 0,
@@ -96,6 +100,7 @@ class _SearchState extends State<Search> {
     );
   }
 
+  // A widget that shows users infomration
   Widget userTile(String userName, String userEmail) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -134,6 +139,7 @@ class _SearchState extends State<Search> {
     );
   }
 
+  // gets the chatRoomID
   getChatRoomId(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       return "$b\_$a";
@@ -142,13 +148,7 @@ class _SearchState extends State<Search> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Scaffold body() {
     return Scaffold(
       body: isLoading
           ? Container(
@@ -234,5 +234,10 @@ class _SearchState extends State<Search> {
               ),
             ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

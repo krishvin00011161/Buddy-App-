@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Helperfunction
+  Description: Saves useful information
+
+
+ */
+
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 // No need to change

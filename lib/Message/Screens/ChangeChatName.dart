@@ -2,24 +2,22 @@
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
 
-  Function: 
-  Description: 
+  Function: Changes that Chat name
+  Description: It have a textfield and updates the data to database
 
 
  */
-
 
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EditChatName extends StatefulWidget {
-  
   String chatRoomId;
+  static String profileName = "";
 
   EditChatName({@required this.chatRoomId});
 
-  static String profileName = "";
   @override
   _EditChatNameState createState() => _EditChatNameState();
 }
@@ -30,25 +28,20 @@ class _EditChatNameState extends State<EditChatName> {
   bool isLoading = false;
   User user;
 
-
-
   @override
   void initState() {
     super.initState();
     getUser();
-   
   }
 
+  // gets the data of users
   getUser() async {
     setState(() {
       isLoading = true;
     });
   }
 
- 
-
-
-
+  // builds the input textfield
   Column buildDisplayNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,17 +56,16 @@ class _EditChatNameState extends State<EditChatName> {
     );
   }
 
+  // updates data to firebase
   updateData() async {
     Firestore.instance
-          .collection('chatRoom')
-          .document(widget.chatRoomId) 
-          .updateData({'chatRoomName': displayNameController.text});
+        .collection('chatRoom')
+        .document(widget.chatRoomId)
+        .updateData({'chatRoomName': displayNameController.text});
   }
 
-  
-
-  @override
-  Widget build(BuildContext context) {
+  // responsible for the UI
+  Scaffold body() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -94,39 +86,42 @@ class _EditChatNameState extends State<EditChatName> {
           ),
         ],
       ),
-      body: 
-      
-          ListView(
+      body: ListView(
+        children: <Widget>[
+          Container(
+            child: Column(
               children: <Widget>[
-                Container(
+                Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          children: <Widget>[
-                            buildDisplayNameField(),
-                          ],
-                        ),
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          updateData();
-                        },
-                        child: Text(
-                          "Update ChatName",
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      buildDisplayNameField(),
                     ],
+                  ),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    updateData();
+                  },
+                  child: Text(
+                    "Update ChatName",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }

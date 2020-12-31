@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Progress
+  Description: useful progress animations
+
+
+ */
+
+
 import 'package:flutter/material.dart';
 
 Container circularProgress() {

@@ -1,4 +1,15 @@
 
+
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: SearchQuetion
+  Description: It searches question
+
+
+ */
+
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,18 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: TabBar
+  Description: Useful Tabbar
+
+
+ */
+
+
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../Explore/screen/explore.dart';
 import '../home/screens/MainHomeView.dart';
 
 class BottomBar extends StatelessWidget {

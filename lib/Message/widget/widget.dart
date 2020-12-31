@@ -1,6 +1,17 @@
+
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Widget 
+  Description: It has appbar, textFieldInputDecoration, textStyles
+
+
+ */
+
 import 'package:flutter/material.dart';
 
-// This class don't need to be changed
+
 
 Widget appBarMain(BuildContext context) {
   return AppBar(

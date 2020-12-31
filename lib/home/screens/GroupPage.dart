@@ -1,4 +1,14 @@
-import 'package:buddyappfirebase/FirebaseData/firebaseReferences.dart';
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Group Page
+  Description: 
+
+
+ */
+
+import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/home/functionality/FirebaseRepository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

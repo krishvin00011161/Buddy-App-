@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: UIHelper
+  Description: Helps with UI spacing
+
+
+ */
+
+
 import 'package:flutter/material.dart';
 
 const Widget horizontalSpaceTiny = SizedBox(width: 5.0);

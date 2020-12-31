@@ -1,9 +1,19 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Reset
+  Description: Reset password
+
+
+ */
+
+
 import 'package:buddyappfirebase/home/widgets/UIhelpers.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 
 
-// This class is responsible for Resetting password
 class Reset extends StatefulWidget {
   @override
   _ResetState createState() => _ResetState();

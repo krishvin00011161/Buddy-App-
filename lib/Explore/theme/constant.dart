@@ -1,3 +1,14 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 12/30/20
+
+  Function: Constants
+  Description: Constants for colors
+
+
+ */
+
+
 import 'package:flutter/material.dart';
 
 const appBackground = Color(0xFFEFF5F4);
