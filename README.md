@@ -5,7 +5,7 @@ A new Flutter application.
 # Changelog
 
 [1.2.0] - 12/30/20 - David Kim
-[]
+[cb25804214d625bda439b949f9dd5be31debd27d]
 
 Added
    - Group Chat latest message functionality
