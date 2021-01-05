@@ -8,9 +8,10 @@
 
  */
 
-
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/Explore/Screens/CommentScreen.dart';
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +26,7 @@ class ClassQuestionView extends StatefulWidget {
   final String className;
   ClassQuestionView({this.className});
 
+  static bool like = false;
   @override
   _ClassQuestionViewState createState() => _ClassQuestionViewState();
 }
@@ -38,6 +40,9 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
   bool haveUserSearched = false;
   int _currentIndex = 0;
   bool isSelected;
+  bool like = false;
+  QuerySnapshot searchLikeResultSnapshot;
+  bool likeExists = false;
 
   @override
   void initState() {
@@ -53,8 +58,8 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
-   
-   // This searches for class questions
+
+  // This searches for class questions
   initiateSearch() async {
     if (TextEditingControllers.searchEditingController.text.isEmpty) {
       setState(() {
@@ -70,6 +75,53 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
           haveUserSearched = true;
         });
       });
+    }
+  }
+
+  searchIfLiked(String userId) async {
+    if (ClassQuestionView.like == false) {
+      // Checks if Like have been not pressed, Ex: If pressed why bother check, the liked data would be in database
+      await databaseMethods
+          .searchIfUserLiked(Constants.myId,
+              userId) // Search If the user using this device have liked
+          .then((snapshot) {
+        searchLikeResultSnapshot = snapshot;
+        if (searchLikeResultSnapshot != null) {
+          // If the user did like, set var like Exists to true else false
+          setState(() {
+            likeExists = true;
+          });
+        } else {
+          setState(() {
+            likeExists = false;
+          });
+        }
+      });
+    }
+  }
+
+  liked(String userId, String questionId) async {
+    searchIfLiked(userId); // Search If user has liked the post from other device
+
+    if (likeExists == false) { // If the user has not liked at all
+      Map<String, dynamic> like = {
+        "userName": Constants.myName,
+        "userId": Constants.myId,
+        "timeStamp": DateTime.now().millisecondsSinceEpoch,
+      };
+
+      databaseMethods.addLike(questionId, like); // add like
+
+      likeExists = true; // Make sure to know next time that like exists
+    }
+  }
+
+  deleteLiked(String userId, String questionId) async {
+    searchIfLiked(userId); // Check if the user like exists from another device
+    if (likeExists == true) { // If the user did like on a another device
+      databaseMethods.deleteLike(questionId); // delete the like
+
+      likeExists = false; // Make sure to know next time that like does not exists
     }
   }
 
@@ -92,37 +144,88 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Card(
-                    elevation: 5.0,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(searchResultSnapshot
-                                .documents[index].data["questionContent"]),
-                            Text(searchResultSnapshot
-                                .documents[index].data["userName"]),
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(readQuestionTimestamp(searchResultSnapshot
-                                .documents[index].data["timeStamp"])),
-                            Text(
-                              "Comment",
-                              style: TextStyle(color: Colors.blue),
+                  GestureDetector(
+                    child: Card(
+                      elevation: 5.0,
+                      shape: like == true
+                          ? RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Colors.redAccent[400], width: 2.0),
                             )
-                          ],
-                        ),
-                      ]),
+                          : RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Colors.transparent, width: 2.0),
+                            ),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(searchResultSnapshot
+                                  .documents[index].data["questionContent"]),
+                              Text(searchResultSnapshot
+                                  .documents[index].data["userName"]),
+                            ],
+                          ),
+                          Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(readQuestionTimestamp(searchResultSnapshot
+                                  .documents[index].data["timeStamp"])),
+                              GestureDetector(
+                                child: Text(
+                                  "Comment",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CommentScreen(
+                                              questionContent:
+                                                  searchResultSnapshot
+                                                      .documents[index]
+                                                      .data["questionContent"],
+                                              userName: searchResultSnapshot
+                                                  .documents[index]
+                                                  .data["userName"],
+                                              questionId: searchResultSnapshot
+                                                  .documents[index]
+                                                  .data["questionId"],
+                                            )),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        ]),
+                      ),
                     ),
+                    onDoubleTap: () {
+                      // Tip! - If function is called after Setstate, it does not run
+                      liked(
+                          searchResultSnapshot.documents[index].data["userId"],
+                          searchResultSnapshot
+                              .documents[index].data["questionId"]);
+                      setState(() {
+                        like = true;
+                        ClassQuestionView.like = true;
+                      });
+                    },
+                    onTap: () {
+                      deleteLiked(Constants.myId, searchResultSnapshot
+                          .documents[index].data["questionId"]);
+
+                      setState(() {
+                        ClassQuestionView.like = false;
+                        like = false;
+                      });
+                    },
                   ),
                 ],
               );
@@ -154,7 +257,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     );
   }
 
-  // Responsible for the UI 
+  // Responsible for the UI
   Scaffold body() {
     return Scaffold(
       key: _scaffoldKey,

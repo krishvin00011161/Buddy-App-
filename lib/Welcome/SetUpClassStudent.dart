@@ -49,11 +49,11 @@ class _SetUpStudentState extends State<SetUpStudent> {
         classes[className.text] = classCode.text;
         Firestore.instance
             .collection('users')
-            .document(SignUp.documentID) // changed AuthService.idNew
+            .document(SignUp.documentID) 
             .updateData({'classes': classes});
         Firestore.instance
             .collection('users')
-            .document(SignUp.documentID) // changed
+            .document(SignUp.documentID) 
             .updateData({'userRole': 'student'});
 
         // adds user's id to the class's user array
@@ -257,23 +257,23 @@ class _SetUpStudentState extends State<SetUpStudent> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton(
-                  child: Text(
-                    'ADD CLASSES',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                  color: Colors.blueAccent,
-                  padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                  ),
-                  onPressed: () async {
-                    updateInfo(true);
-                  },
-                ),
+                // FlatButton(
+                //   child: Text(
+                //     'ADD CLASSES',
+                //     style: TextStyle(
+                //       fontSize: 15,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   color: Colors.blueAccent,
+                //   padding: EdgeInsets.fromLTRB(75, 12, 75, 12),
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: new BorderRadius.circular(25.0),
+                //   ),
+                //   onPressed: () async {
+                //     updateInfo(true);
+                //   },
+                // ),
               ],
             ),
           ],

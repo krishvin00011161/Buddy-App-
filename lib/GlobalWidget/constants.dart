@@ -14,6 +14,7 @@ class Constants{
   static String myName = "";
   static String myId = "";
   static String myQuestionId = "";
+  static String myProfileImg = "";
   static const String Delete = 'Delete Chat';
   static const String Settings = 'Change Chat Name';
 

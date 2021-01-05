@@ -11,6 +11,7 @@
 import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
@@ -126,8 +127,8 @@ class _ProfilePageState extends State<ProfilePage> {
   var questions;
   TextEditingController searchEditingController = new TextEditingController();
   bool isLoading = false;
-  bool haveUserSearched = false;
-
+  bool userHaveQuestion = false;
+  bool userHaveClass = false;
 
   @override
   void initState() {
@@ -135,8 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUserName();
     _getUserProfileImg();
     _getClasses();
-    _getUserQuestion();
-    _getUserQ("David");
+    _searchQuestions();
   }
 
   // gets the profile img
@@ -167,52 +167,29 @@ class _ProfilePageState extends State<ProfilePage> {
         : circularProgress();
   }
 
-  // gets classes
   _getClasses() async {
-    FirebaseMethods().getUserClasses();
-    setState(() {
-      values = FirebaseMethods.classValues;
-      amountOfClasses = amountOfClasses;
-    });
-  }
-
-  // gets question
-  _getUserQuestion() async {
-    Constants.myId = await HelperFunctions
-        .getUserIDSharedPreference(); // Gets user ID saved from Sign Up
-    final DocumentSnapshot docQuestion =
+    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
+    final DocumentSnapshot doc =
         await FirebaseReferences.usersRef.document(Constants.myId).get();
     setState(() {
-      questionValues = docQuestion.data["questions"];
-      amountOfQuestions = questionValues.length;
+      values = doc.data["classes"];
+      amountOfClasses = values.length;
     });
+
+    print(values);
   }
 
-  
-
-  // gets user questions
-  _getUserQ(String userName) async {
-    DatabaseMethods().getLatestQuestions('userName').then((QuerySnapshot doc) {
-      if (doc.documents.isNotEmpty) {
-        questions = doc.documents[0].data;
-        print(questions);
-      }
-    });
-  }
-
-  // search Classes by Name
-  searchClasses() async {
+  // search questions by name
+  _searchQuestions() async {
     await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
       searchResultSnapshot = snapshot;
       print("$searchResultSnapshot");
       setState(() {
         isLoading = false;
-        haveUserSearched = true;
+        userHaveQuestion = true;
       });
     });
   }
-
-
 
   ListView profile(double height) {
     return ListView(children: [
@@ -294,34 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Center(
                         // Creates a ListView.builder
                         // *important - this list view builder uses MAP Data
-                        child: ListView.builder(
-                            shrinkWrap: false,
-                            itemCount: 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: <Widget>[
-                                  ListTile(
-                                    title: Text("U.S History"),
-                                    subtitle: Text("Code: GHE134"),
-                                  ),
-                                  Divider(height: 2.0),
-                                  ListTile(
-                                    title: Text("Chemistry I"),
-                                    subtitle: Text("Code: DER321"),
-                                  ),
-                                  Divider(height: 2.0),
-                                  ListTile(
-                                    title: Text("Psychology"),
-                                    subtitle: Text("Code: DLE983"),
-                                  ),
-                                  Divider(height: 2.0),
-                                  ListTile(
-                                    title: Text("Literature"),
-                                    subtitle: Text("Code: DEW342"),
-                                  ),
-                                ],
-                              );
-                            }),
+                        child: classList(),
                       ),
                       Center(
                         child: questionList(),
@@ -360,23 +310,21 @@ class _ProfilePageState extends State<ProfilePage> {
     ]);
   }
 
-  // Widget creating a list of classes
   Widget classList() {
-    return haveUserSearched
+    return values != null
         ? ListView.builder(
-            // shrinkWrap: true,
-            itemCount: searchResultSnapshot.documents.length,
+            itemCount: values.length,
             itemBuilder: (context, index) {
+              String key = values.keys.elementAt(index);
               return Column(
                 children: <Widget>[
-                  ListTile(
-                      title: Text(
-                          searchResultSnapshot
-                              .documents[index].data["questionContent"],
-                          style: TextStyle(color: Colors.black, fontSize: 16))),
-                  Divider(
+                  new ListTile(
+                    title: new Text("$key"),
+                    subtitle: new Text("Code: ${values[key]}"),
+                  ),
+                  new Divider(
                     height: 2.0,
-                  )
+                  ),
                 ],
               );
             })
@@ -385,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Widget creating list of questions
   Widget questionList() {
-    return haveUserSearched
+    return userHaveQuestion
         ? ListView.builder(
             // shrinkWrap: true,
             itemCount: searchResultSnapshot.documents.length,
@@ -393,10 +341,15 @@ class _ProfilePageState extends State<ProfilePage> {
               return Column(
                 children: <Widget>[
                   ListTile(
-                      title: Text(
-                          searchResultSnapshot
-                              .documents[index].data["questionContent"],
-                          style: TextStyle(color: Colors.black, fontSize: 16))),
+                    title: Text(
+                        searchResultSnapshot
+                            .documents[index].data["questionContent"],
+                        ),
+                    subtitle: Text(
+                        "Asked " + TimeStamp().readQuestionTimeStamp(searchResultSnapshot
+                            .documents[index].data["timeStamp"]),
+                        ),
+                  ),
                   Divider(
                     height: 2.0,
                   )

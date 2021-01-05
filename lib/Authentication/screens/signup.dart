@@ -8,7 +8,6 @@
 
  */
 
-
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/TextLink.dart';
@@ -64,14 +63,13 @@ class _SignUpState extends State<SignUp> {
             'userEmail': TextEditingControllers.emailEditingController.text,
             'classes': "",
             'photoUrl':
-                "https://img.pngio.com/user-logos-user-logo-png-1920_1280.png",
+                "https://www.kindpng.com/picc/m/22-223965_no-profile-picture-icon-circle-member-icon-png.png",
             'timeStamp': timestamp.toString(),
             'userRole': "",
             'questions': questionList,
           });
 
           SignUp.documentID = documentReference.documentID;
-          
 
           // Saves username, documentID or UserId, and user email
 
@@ -86,6 +84,8 @@ class _SignUpState extends State<SignUp> {
               TextEditingControllers.emailEditingController.text);
           HelperFunctions.saveUserIDSharedPreference(
               documentReference.documentID);
+          HelperFunctions.saveUserProfileImagePreference(
+              "https://www.kindpng.com/picc/m/22-223965_no-profile-picture-icon-circle-member-icon-png.png");
 
           // Pushes to Welcome view
           Navigator.pushReplacement(
@@ -93,7 +93,6 @@ class _SignUpState extends State<SignUp> {
               MaterialPageRoute(
                 builder: (context) => WelcomeView(),
               ));
-
         } else if (result == null) {
           // If Sign up did not work, go back to sign up screen
           AlertDialog inUse = AlertDialog(

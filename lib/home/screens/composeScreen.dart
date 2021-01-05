@@ -9,11 +9,13 @@
  */
 
 import 'dart:collection';
+import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
+import 'package:buddyappfirebase/Message/Services/Database.dart';
 import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,11 +30,15 @@ class ComposeScreen extends StatefulWidget {
 
 class _ComposeScreenState extends State<ComposeScreen> {
   TextEditingController composeEditingController = new TextEditingController();
-  TextEditingController categoriesEditingController = new TextEditingController();
+  TextEditingController categoriesEditingController =
+      new TextEditingController();
   TextEditingController classesEditingController = new TextEditingController();
   String _profileImg;
   String _name;
   final timestamp = DateTime.now().millisecondsSinceEpoch;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  final Map<String, dynamic> comment = Map();
+  final Map<String, dynamic> like = Map();
 
   @override
   void initState() {
@@ -40,10 +46,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
     _getUserProfileImg();
     _getUserName();
     FirebaseMethods().getUserQuestions();
-    
   }
-
- 
 
   // gets the profile
   _getUserProfileImg() async {
@@ -72,7 +75,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
   }
 
   final questionList = [];
-  final HashMap<String, String> questions = HashMap();
+  
 
   String id = Constants.myId;
 
@@ -80,7 +83,8 @@ class _ComposeScreenState extends State<ComposeScreen> {
   _createQuestion() async {
     DocumentReference documentReference =
         Firestore.instance.collection('questions').document();
-    documentReference.setData({
+
+    Map<String, dynamic> content = {
       'userId': Constants.myId,
       'questionContent': composeEditingController.text,
       'questionId': documentReference.documentID,
@@ -88,9 +92,9 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'timeStamp': timestamp,
       'categories': categoriesEditingController.text,
       'classes': classesEditingController.text,
-      'like' : 0,
-      'reply' : 0,
-    });
+    };
+
+    databaseMethods.addQuestion(content, documentReference.documentID);
   }
 
   @override
@@ -116,10 +120,10 @@ class _ComposeScreenState extends State<ComposeScreen> {
             ),
             onPressed: () {
               _createQuestion();
-              
+
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MainHomeView()),
+                MaterialPageRoute(builder: (context) => ExplorePage()),
               );
             },
           )
@@ -155,11 +159,11 @@ class _ComposeScreenState extends State<ComposeScreen> {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Text(
-                  "Categories",
-                  style: TextStyle(color: Colors.black),
-                )),
+                      "Categories",
+                      style: TextStyle(color: Colors.black),
+                    )),
                 SizedBox(
                   width: 3,
                 ),
@@ -179,11 +183,11 @@ class _ComposeScreenState extends State<ComposeScreen> {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Text(
-                  "Classes",
-                  style: TextStyle(color: Colors.black),
-                )),
+                      "Classes",
+                      style: TextStyle(color: Colors.black),
+                    )),
                 SizedBox(
                   width: 3,
                 ),

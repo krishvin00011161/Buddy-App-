@@ -23,6 +23,7 @@ class User {
     this.userRole,
     this.photoUrl,
   });
+  
   Map toUsers(User user) {
     var data = Map<String, dynamic>();
     data['userName'] = user.userName;

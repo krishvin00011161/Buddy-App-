@@ -8,7 +8,6 @@
 
  */
 
-
 import 'package:buddyappfirebase/Message/screens/chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +22,7 @@ class GroupWidget extends StatelessWidget {
     @required this.messageContent,
     @required this.chatRoomId,
     @required this.time,
-    @required this.secondPhotoUrl,
-    
+
   }) : super(key: key);
 
   final BuildContext context;
@@ -33,7 +31,6 @@ class GroupWidget extends StatelessWidget {
   final String messageContent;
   final String chatRoomId;
   final String time;
-  final String secondPhotoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +76,7 @@ class GroupWidget extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    title == "" ? "": title, // fix if logic wrong
+                    title == "" ? "" : title, // fix if logic wrong
                     style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                             color: Colors.white,
@@ -126,7 +123,7 @@ class GroupWidget extends StatelessWidget {
                         Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage("$photoUrl"),
+                              backgroundImage: NetworkImage(photoUrl),
                             ),
                             SizedBox(width: 10),
                             Expanded(
@@ -143,24 +140,24 @@ class GroupWidget extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(height: 10),
+                      
+                        SizedBox(height: 5),
                         Column(
                           children: [
                             SizedBox(
-                              height: 10,
+                              height: 5,
                             ),
                             Row(
                               children: [
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage("$photoUrl"), // change to image in latest
+                                  backgroundColor: Colors.transparent,
                                 ),
-                                SizedBox(width: 7),
                                 CircleAvatar(
                                   radius: 8,
-                                  backgroundImage: NetworkImage(
-                                      "https://format-com-cld-res.cloudinary.com/image/private/s--6tY55LWi--/c_limit,g_center,h_700,w_65535/fl_keep_iptc.progressive,q_95/v1/a285743183c1c064087260b9d65c05f3/BG-0220_web.jpg"),
+                                  backgroundColor: Colors.transparent,
                                 ),
+                                SizedBox(width: 7),
                                 SizedBox(width: 7),
                                 CircleAvatar(
                                   radius: 8,
@@ -168,7 +165,7 @@ class GroupWidget extends StatelessWidget {
                                 ),
                                 SizedBox(width: 50),
                                 Container(
-                                  height: 23.0,
+                                  height: 35.0, // 23
                                   width: 85,
                                   color: Colors.transparent,
                                   child: new Container(
@@ -185,7 +182,7 @@ class GroupWidget extends StatelessWidget {
                                                 const Radius.circular(10.0),
                                           )),
                                       child: new Center(
-                                        child: new Text(time),
+                                        child: Text(time),
                                       )),
                                 ),
                               ],

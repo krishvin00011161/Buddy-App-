@@ -2,8 +2,8 @@
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
 
-  Function: Firebase Functionality
-  Description: gets the current User;
+  Function: MainHomeView
+  Description: The Main view for UI and Functionality
 
 
  */
@@ -12,18 +12,6 @@ import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
-/* 
-  Authors: David Kim, Aaron NI, Vinay Krisnan
-  Date: 12/30/20
-
-  Function: MainHomeView
-  Description: The Main view for UI and Functionality
-
-
- */
-
-
-
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
@@ -42,7 +30,6 @@ import '../../Profile/profile.dart';
 // This class is responsible for the home page
 
 class MainHomeView extends StatefulWidget {
-
   // Getting fed the chatroomId Data from Search.dart
   final String chatRoomId;
   final int index;
@@ -65,11 +52,6 @@ class _MainHomeViewState extends State<MainHomeView> {
   Stream<QuerySnapshot> chats; // Data of all chat
   String message;
   Stream<QuerySnapshot> latest;
-  
-  
- 
-
-  
 
   @override
   void initState() {
@@ -78,7 +60,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
-    getUserInfogetChats(); 
+    getUserInfogetChats();
     DatabaseMethods().getChats(widget.chatRoomId).then((val) {
       setState(() {
         chats = val;
@@ -87,7 +69,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     chatMessages();
     initiateSearch();
   }
-
 
   getUserInfogetChats() async {
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
@@ -100,6 +81,8 @@ class _MainHomeViewState extends State<MainHomeView> {
 
   // This gets the profile Img url
   _getUserProfileImg() async {
+    Constants.myProfileImg =
+        await HelperFunctions.getUserImageSharedPreference();
     FirebaseMethods().getUserProfileImg();
     setState(() {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
@@ -124,10 +107,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
   }
 
-  
-
-  
-
   Widget chatMessages() {
     // Gets the chat? I am not quite sure
     return StreamBuilder(
@@ -144,9 +123,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     );
   }
 
-
-
-
   TextEditingController searchEditingController = new TextEditingController();
   DatabaseMethods databaseMethods = new DatabaseMethods();
   bool isLoading = false;
@@ -158,7 +134,9 @@ class _MainHomeViewState extends State<MainHomeView> {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods.searchMyQuestions(Constants.myName).then((snapshot) {
+      await databaseMethods
+          .searchMyQuestions(Constants.myName)
+          .then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -313,6 +291,7 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   int numberOfGroups = 0;
+  String image2;
 
   SingleChildScrollView homeBody() {
     // Anything body related
@@ -377,28 +356,27 @@ class _MainHomeViewState extends State<MainHomeView> {
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       return groups(
-                                        
                                         title: snapshot.data.documents[index]
                                             .data['chatRoomName']
                                             .toString(),
-                                        messageContent:
-                                            snapshot.data.documents[index].data["message"].toString(),
-                                        time: TimeStamp().readQuestionTimeStamp(snapshot.data.documents[index].data["time"]),
+                                        messageContent: snapshot.data
+                                            .documents[index].data["message"]
+                                            .toString(),
+                                        time: TimeStamp().readQuestionTimeStamp(
+                                            snapshot.data.documents[index]
+                                                .data["time"]),
                                         chatRoomId: snapshot
                                             .data
                                             .documents[index]
                                             .data["chatRoomId"],
-                                        
                                         name: snapshot.data.documents[index]
                                             .data['chatRoomId']
                                             .toString()
                                             .replaceAll("_", "")
                                             .replaceAll(Constants.myName, ""),
-                                        secondPhotoUrl: snapshot.data.documents[index]
-                                            .data['chatRoomId']
-                                            .toString()
-                                            .replaceAll("", "_")
-                                            .replaceAll("", Constants.myName),                                        
+                                        photoUrl: snapshot.data.documents[index]
+                                            .data['image'].toString(),
+                                              
                                       );
                                     })
                                 : groups(title: "Hello");
@@ -459,17 +437,23 @@ class _MainHomeViewState extends State<MainHomeView> {
   }
 
   // This Widget creates the Yellow rectangular tiles
-  Widget groups(
-      {String title,
-      String messageContent,
-      String chatRoomId,
-      String photoUrl,
-      String name,
-      String time,
-      String secondPhotoUrl,
-      }) {
+  Widget groups({
+    String title,
+    String messageContent,
+    String chatRoomId,
+    String photoUrl,
+    String name,
+    String time,
+  }) {
     // Makes Rectangles belongs in the groups section
-    return GroupWidget(context: context, photoUrl: _profileImg, title: title, messageContent: messageContent, chatRoomId: chatRoomId, time: time, secondPhotoUrl: secondPhotoUrl);
+    return GroupWidget(
+        context: context,
+        photoUrl: photoUrl,
+        title: title,
+        messageContent: messageContent,
+        chatRoomId: chatRoomId,
+        time: time,
+    );
   }
 
   // This Widget creates the Blue Question tiles
@@ -630,4 +614,3 @@ class _MainHomeViewState extends State<MainHomeView> {
     return home();
   }
 }
-

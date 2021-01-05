@@ -8,6 +8,7 @@
 
  */
 
+import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
@@ -19,16 +20,6 @@ class DatabaseMethods {
     });
   }
   
-  // gets user info by searching email
-  getUserInfo(String email) async {
-    return Firestore.instance
-        .collection("users")
-        .where("userEmail", isEqualTo: email)
-        .getDocuments()
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
 
   // gets user info by searching userName
   searchByName(String searchField) {
@@ -78,6 +69,16 @@ class DatabaseMethods {
         .getDocuments();
   }
 
+  // Search If user have Liked
+  searchIfUserLiked(String userId, String questionId) {
+    return Firestore.instance
+        .collection('questions')
+        .document(questionId)
+        .collection('likes')
+        .where('userId', isEqualTo: userId)
+        .getDocuments();
+  }
+
   // add ChatRoom
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     Firestore.instance
@@ -86,6 +87,64 @@ class DatabaseMethods {
         .setData(chatRoom)
         .catchError((e) {
       print(e);
+    });
+  }
+
+  Future<bool> addQuestion(content, questionId) {
+    Firestore.instance
+        .collection("questions")
+        .document(questionId)
+        .setData(content)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  Future<void> addLatestComment(String questionId, content) {
+     Firestore.instance
+        .collection("questions")
+        .document(questionId)
+        .collection("comments")
+        .add(content)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  Future<void> addLike(String questionId, content) { // changed from .add to .set If trouble search this
+     Firestore.instance
+        .collection("questions")
+        .document(questionId)
+        .collection("likes") 
+        .document(Constants.myId)
+        .setData(content)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  Future<void> deleteLike(String questionId) {
+     Firestore.instance
+        .collection("questions")
+        .document(questionId)
+        .collection("likes")
+        .document(Constants.myId)
+        .delete()
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+
+  
+ // gets user info by searching email
+  getUserInfo(String email) async {
+    return Firestore.instance
+        .collection("users")
+        .where("userEmail", isEqualTo: email)
+        .getDocuments()
+        .catchError((e) {
+      print(e.toString());
     });
   }
 
@@ -106,6 +165,8 @@ class DatabaseMethods {
         .document(chatRoomId)
         .snapshots();
   }
+
+  
 
   // get questions by searching question content
   getQuestions(String searchField) async {
@@ -181,7 +242,7 @@ class DatabaseMethods {
   }
 
   // get user profile img by userNmae
-  getProfileImg(Future<dynamic> userName) {
+  getProfileImg(String userName) {
     return Firestore.instance
       .collection('users')
       .where('userName', isEqualTo: userName)

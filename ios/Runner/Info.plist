@@ -2,14 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>&quot;We need Camera!&quot;</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>&quot;We need to hear!&quot;</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>&quot;Photo Libary is needed&quot;</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>StudyPals</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,6 +35,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>"We need Camera!"</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>"We need to hear!"</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>"Photo Libary is needed"</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

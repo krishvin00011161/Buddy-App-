@@ -14,6 +14,7 @@ import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../GlobalWidget/constants.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 
@@ -72,20 +73,12 @@ class _ChatState extends State<Chat> {
         'time': DateTime.now().millisecondsSinceEpoch,
       };
 
-      Map<String, dynamic> chatLatestMessageMap = {
-        "message": messageEditingController.text,
-        'time': DateTime.now().millisecondsSinceEpoch,
-        'image': "",
-      };
-
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
-      DatabaseMethods()
-          .updateLatestMessage(widget.chatRoomId, chatLatestMessageMap);
 
       updateLatestMessage(messageEditingController.text);
       updateLatestTime(DateTime.now().millisecondsSinceEpoch);
+      updateLatestProfileImg(Constants.myProfileImg);
       updateLatestSendBy(Constants.myName);
-      updateLatestProfileImg(MainHomeView().profileImg.toString());
 
       setState(() {
         messageEditingController.text = "";
@@ -200,64 +193,72 @@ class _ChatState extends State<Chat> {
             height: 1.0,
           ),
           preferredSize: Size.fromHeight(1.0)),
+    
     );
   }
 
   Scaffold body() {
     return Scaffold(
       appBar: chatAppbar(),
-      body: Container(
-        child: Stack(
-          children: [
-            chatMessages(),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              alignment: Alignment.bottomCenter,
-              width: MediaQuery.of(context).size.width - 10,
-              height: MediaQuery.of(context).size.height - 88,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 1.5, color: Colors.grey),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 3),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      controller: messageEditingController,
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                          hintText: "Message ...",
-                          hintStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                          border: InputBorder.none),
-                    )),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        addMessage();
-                      },
-                      child: Container(
-                          height: 40,
-                          width: 40,
-                          padding: EdgeInsets.only(left: 12),
-                          child: Icon(
-                            Icons.send,
-                            size: 25,
-                          )),
-                    ),
-                  ],
+      body: SafeArea(
+        child: Container(
+          child: Stack(
+            children: [
+              Container(
+                child: chatMessages(),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                alignment: Alignment.bottomCenter,
+                width: MediaQuery.of(context).size.width - 10,
+                height: MediaQuery.of(context).size.height - 88,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(width: 1.5, color: Colors.grey),
+                    color: Colors.white,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 3),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextField(
+                        controller: messageEditingController,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                            hintText: "Message ...",
+                            hintStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                            border: InputBorder.none),
+                      )),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          addMessage();
+                        },
+                        child: Container(
+                            height: 40,
+                            width: 40,
+                            padding: EdgeInsets.only(left: 12),
+                            child: Icon(
+                              Icons.send,
+                              size: 25,
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-          ],
+              SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );

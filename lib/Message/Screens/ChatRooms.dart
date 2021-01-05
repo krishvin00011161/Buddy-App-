@@ -18,6 +18,8 @@ import 'package:buddyappfirebase/Message/screens/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../GlobalWidget/Progress.dart';
+import '../../GlobalWidget/constants.dart';
 import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 import 'chat.dart';
@@ -36,16 +38,7 @@ class _ChatRoomState extends State<ChatRoom> {
   Stream chatRooms;
   int _currentIndex = 0;
   int chatCount = 0;
-  String _profileImg = "";
   QuerySnapshot searchResultSnapshot;
-
-  // This gets the profile Img url
-  _getUserProfileImg() async {
-    FirebaseMethods().getUserProfileImg();
-    setState(() {
-      _profileImg = FirebaseMethods.profileImgUrl.toString();
-    });
-  }
 
   // gets the info of user chats
   getUserInfogetChats() async {
@@ -71,7 +64,7 @@ class _ChatRoomState extends State<ChatRoom> {
   void initState() {
     super.initState();
     getUserInfogetChats();
-    _getUserProfileImg();
+    
   }
 
   // Creates list of chatrooms buttons
@@ -85,20 +78,13 @@ class _ChatRoomState extends State<ChatRoom> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ChatRoomsTile(
-                    userName: snapshot.data.documents[index].data['chatRoomId']
-                        .toString()
-                        .replaceAll("_", "")
-                        .replaceAll(Constants.myName, ""),
+                    userName: snapshot.data.documents[index].data['sendBy'],
                     chatRoomId:
                         snapshot.data.documents[index].data["chatRoomId"],
-                    chatRoomName: snapshot.data != null
-                        ? snapshot.data.documents[index].data['chatRoomId']
-                            .toString()
-                            .replaceAll("_", "")
-                            .replaceAll(Constants.myName, "")
-                        : snapshot.data.documents[index].data['chatRoomName'],
+                    chatRoomName: snapshot.data.documents[index].data['chatRoomName'],
                     message: snapshot.data.documents[index].data["message"],
                     time: snapshot.data.documents[index].data["time"],
+                    profileImg: snapshot.data.documents[index].data["image"],
                   );
                 })
             : Container();
@@ -114,7 +100,7 @@ class _ChatRoomState extends State<ChatRoom> {
       elevation: 0,
       leading: new IconButton(
         icon: CircleAvatar(
-          backgroundImage: NetworkImage("$_profileImg"),
+          backgroundImage: NetworkImage(Constants.myProfileImg),
         ),
         onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
@@ -201,14 +187,13 @@ class _ChatRoomState extends State<ChatRoom> {
 }
 
 // Responsible for creating Chat Tiles
-class ChatRoomsTile extends StatelessWidget {
+class ChatRoomsTile extends StatefulWidget {
   final String userName;
   final String chatRoomId;
   final String chatRoomName;
   final String message;
   final int time;
   final String profileImg;
-  DatabaseMethods databaseMethods = new DatabaseMethods();
 
   ChatRoomsTile(
       {this.userName,
@@ -219,6 +204,14 @@ class ChatRoomsTile extends StatelessWidget {
       this.profileImg});
 
   @override
+  _ChatRoomsTileState createState() => _ChatRoomsTileState();
+}
+
+class _ChatRoomsTileState extends State<ChatRoomsTile> {
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -226,7 +219,7 @@ class ChatRoomsTile extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => Chat(
-                      chatRoomId: chatRoomId,
+                      chatRoomId: widget.chatRoomId,
                     )));
       },
       child: Container(
@@ -238,13 +231,16 @@ class ChatRoomsTile extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 25.0,
+                  backgroundImage: 
+                  widget.profileImg != null ?
+                  NetworkImage(widget.profileImg) : circularProgress(), //Todo
                 ),
                 SizedBox(width: 10.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      userName,
+                      widget.userName,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15.0,
@@ -255,7 +251,7 @@ class ChatRoomsTile extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.45,
                       child: Text(
-                        message,
+                        widget.message,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15.0,
@@ -272,7 +268,7 @@ class ChatRoomsTile extends StatelessWidget {
             Column(
               children: <Widget>[
                 Text(
-                  TimeStamp().readQuestionTimeStampHours(time),
+                  TimeStamp().readQuestionTimeStampHours(widget.time),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 15.0,

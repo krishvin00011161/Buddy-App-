@@ -61,6 +61,8 @@ class _SignInState extends State<SignIn> {
               userInfoSnapshot.documents[0].data["userEmail"]);
           HelperFunctions.saveUserIDSharedPreference(
               userInfoSnapshot.documents[0].data['id']);
+          HelperFunctions.saveUserProfileImagePreference(
+            userInfoSnapshot.documents[0].data['photoUrl']);
 
           // pushes to MainHomeView page
           Navigator.pushReplacement(
