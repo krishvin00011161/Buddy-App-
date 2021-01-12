@@ -144,9 +144,7 @@ class _SetUpStudentState extends State<SetUpStudent> {
                     color: Colors.blueAccent,
                   )),
               validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please make a class code.';
-                }
+                return value;
               },
             ),
             verticalSpaceSmall,
@@ -158,9 +156,7 @@ class _SetUpStudentState extends State<SetUpStudent> {
                     color: Colors.blueAccent,
                   )),
               validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please make a class code.';
-                }
+                return value;
               },
               obscureText: false,
             ),

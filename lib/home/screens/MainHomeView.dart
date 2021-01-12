@@ -8,7 +8,6 @@
 
  */
 
-import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
@@ -23,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import '../../GlobalWidget/constants.dart';
 import '../../Message/services/database.dart';
 import '../../Profile/profile.dart';
@@ -42,7 +42,6 @@ class MainHomeView extends StatefulWidget {
 }
 
 class _MainHomeViewState extends State<MainHomeView> {
-  int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
   String _profileImg = "";
@@ -68,6 +67,7 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
     chatMessages();
     initiateSearch();
+    searchLikeData("InUtF6RV5lnQExsLvEpY");
   }
 
   getUserInfogetChats() async {
@@ -128,6 +128,18 @@ class _MainHomeViewState extends State<MainHomeView> {
   bool isLoading = false;
   bool haveUserSearched = false;
   QuerySnapshot searchResultSnapshot;
+  QuerySnapshot likeSnapshot;
+
+  searchLikeData(String questionId) async {
+    if (searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods.getAmountOfLikes(questionId).then((snapshot) {
+        likeSnapshot = snapshot;
+      });
+    }
+  }
 
   initiateSearch() async {
     if (searchEditingController.text.isEmpty) {
@@ -147,6 +159,55 @@ class _MainHomeViewState extends State<MainHomeView> {
     }
   }
 
+  Stream<QuerySnapshot> likes;
+  int likesCount = 0;
+  getAmountOfLikes(String questionId) async {
+    databaseMethods.getAmountOfLikes(questionId).then((val) {
+      setState(() {
+        likes = val;
+      });
+      StreamBuilder(
+        stream: likes,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    likesCount = snapshot.data.documents.length;
+                    //return Text("${index}");
+                    return snapshot.data.documents.length;
+                  })
+              : Container(
+                  color: Colors.blue,
+                );
+        },
+      );
+    });
+  }
+
+
+
+  // StreamBuilder(
+  //   stream: FirebaseDatabase.instance
+  //             .reference()
+  //             .child("users")
+  //             .orderByChild('firstName')
+  //             .limitToFirst(20)
+  //             .onValue,
+  //   builder: (context, snapshot) {
+  //           if (snapshot.hasData) {
+  //             return ListView.builder(
+  //               itemCount: snapshot.data.snapshot.value.lenght,//Here you can see that I will get the count of my data
+  //                 itemBuilder: (context, int) {
+  //                 //perform the task you want to do here
+  //                   return Text("Item count ${int}");
+  //                 });
+  //           } else {
+  //             return Container();
+  //           }
+  //     },
+  // ),
+
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
@@ -160,9 +221,10 @@ class _MainHomeViewState extends State<MainHomeView> {
                         .documents[index].data["questionContent"],
                     timestamp:
                         searchResultSnapshot.documents[index].data["timeStamp"],
-                    likes: searchResultSnapshot.documents[index].data["like"],
-                    comments:
-                        searchResultSnapshot.documents[index].data['reply'],
+                    likes: 0,
+                    comments: 4,
+                    questionId: getAmountOfLikes(searchResultSnapshot
+                        .documents[index].data["questionId"]),
                   ),
                 ],
               );
@@ -200,58 +262,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       appBar: homeAppBar(),
       drawer: CustomDrawers(),
       body: homeBody(),
-      bottomNavigationBar: tabBar(),
-    );
-  }
-
-  CupertinoTabBar tabBar() {
-    return CupertinoTabBar(
-      // Code reuse make some class Reminder
-
-      currentIndex: _currentIndex,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: _currentIndex == 0
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
-          ),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search,
-              color: _currentIndex == 1
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat,
-              color: _currentIndex == 2
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainHomeView()),
-          );
-        } else if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ExplorePage()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatRoom()),
-          );
-        }
-      },
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 
@@ -374,9 +385,9 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .toString()
                                             .replaceAll("_", "")
                                             .replaceAll(Constants.myName, ""),
-                                        photoUrl: snapshot.data.documents[index]
-                                            .data['image'].toString(),
-                                              
+                                        photoUrl: snapshot
+                                            .data.documents[index].data['image']
+                                            .toString(),
                                       );
                                     })
                                 : groups(title: "Hello");
@@ -447,18 +458,22 @@ class _MainHomeViewState extends State<MainHomeView> {
   }) {
     // Makes Rectangles belongs in the groups section
     return GroupWidget(
-        context: context,
-        photoUrl: photoUrl,
-        title: title,
-        messageContent: messageContent,
-        chatRoomId: chatRoomId,
-        time: time,
+      context: context,
+      photoUrl: photoUrl,
+      title: title,
+      messageContent: messageContent,
+      chatRoomId: chatRoomId,
+      time: time,
     );
   }
 
   // This Widget creates the Blue Question tiles
   Widget questions(
-      {String questionContent, int timestamp, int likes, int comments}) {
+      {String questionContent,
+      int timestamp,
+      int likes,
+      int comments,
+      Future<dynamic> questionId}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
       aspectRatio: 4 / 3,
@@ -558,7 +573,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     text: TextSpan(
                       style: TextStyle(color: Colors.grey),
                       children: [
-                        //TextSpan(text: 'Created with '),
                         WidgetSpan(
                           child: Padding(
                             padding:
@@ -581,7 +595,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     text: TextSpan(
                       style: TextStyle(color: Colors.grey),
                       children: [
-                        //TextSpan(text: 'Created with '),
                         WidgetSpan(
                           child: Padding(
                             padding:

@@ -25,7 +25,7 @@ import '../../Message/services/database.dart';
 import '../../home/screens/composeScreen.dart';
 import 'SearchQuestion.dart';
 import 'classesQuestionView.dart';
-import 'package:buddyappfirebase/GlobalWidget/tabBar.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 
 class ExplorePage extends StatefulWidget {
   final int index;
@@ -369,7 +369,7 @@ class _ExplorePageState extends State<ExplorePage> {
       iconTheme: new IconThemeData(color: Colors.grey),
       backgroundColor: Colors.grey[100],
       elevation: 0,
-      leading: new IconButton(
+      leading: IconButton(
         icon: CircleAvatar(
           backgroundImage: NetworkImage("$_profileImg"),
         ),
@@ -401,9 +401,7 @@ class _ExplorePageState extends State<ExplorePage> {
       appBar: exploreAppBar(),
       drawer: CustomDrawers(),
       body: exploreBody(),
-      bottomNavigationBar: BottomBar(
-        currentIndex: 2,
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

@@ -8,22 +8,18 @@
 
  */
 
-
-
 import 'package:buddyappfirebase/Authentication/screens/reset.dart';
-import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
-import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:link/link.dart';
 
-import '../home/screens/MainHomeView.dart';
 
 class SettingsOnePage extends StatefulWidget {
   @override
@@ -34,7 +30,6 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
   bool _dark;
   String _name = "";
   String _profileImg = "";
-  int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -78,6 +73,21 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
         : circularProgress();
   }
 
+  // Makes it available to open links in Safari or Chrome
+  Future<void> launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        //forceWebView: ,
+        headers: <String, String>{'header_key': 'header_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  int selectedIndex = 0;
 
   // responsible for home UI
   Theme homeBody() {
@@ -89,54 +99,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: CustomDrawers(),
-        bottomNavigationBar: CupertinoTabBar(
-          // Code reuse make some class Reminder
-          currentIndex: _currentIndex,
-          activeColor: Theme.of(context).primaryColor,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: _currentIndex == 0
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey,
-              ),
-              title: Text(""),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search,
-                  color: _currentIndex == 1
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey),
-              title: Text(""),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat,
-                  color: _currentIndex == 2
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey),
-              title: Text(""),
-            )
-          ],
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MainHomeView()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ExplorePage()),
-              );
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatRoom()),
-              );
-            }
-          },
-        ),
+        bottomNavigationBar: CustomBottomNavigationBar(),
         backgroundColor: _dark ? null : Colors.grey.shade200,
         appBar: AppBar(
           elevation: 0,
@@ -181,10 +144,6 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage("$_profileImg"),
                       ),
-                      trailing: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
                     ),
                   ),
                   const SizedBox(height: 10.0),
@@ -206,21 +165,8 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                             //open change password
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => Reset()),
+                              MaterialPageRoute(builder: (context) => Reset()),
                             );
-                          },
-                        ),
-                        _buildDivider(),
-                        ListTile(
-                          leading: Icon(
-                            Icons.location_on,
-                            color: Colors.lightBlue,
-                          ),
-                          title: Text("Change Location"),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: () {
-                            //open change location
                           },
                         ),
                         _buildDivider(),
@@ -232,11 +178,8 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                           title: Text("Privacy Policy"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () {
-                            Link(
-                              child: Text("Private Policy"),
-                              url:
-                                  'https://docs.google.com/document/d/1TAqTE7MBzuIagISHHzjGxSHoY1z884LXR3iGIojz1sA/edit',
-                            );
+                            launchInBrowser(
+                                "https://docs.google.com/document/d/1TAqTE7MBzuIagISHHzjGxSHoY1z884LXR3iGIojz1sA/edit");
                           },
                         ),
                       ],
@@ -254,30 +197,38 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                   SwitchListTile(
                     activeColor: Colors.lightBlue,
                     contentPadding: const EdgeInsets.all(0),
-                    value: true,
+                    value: _receivedNotification,
                     title: Text("Received notification"),
-                    onChanged: (val) {},
+                    onChanged: (value) => setState(() {
+                      _receivedNotification = value;
+                    }),
                   ),
                   SwitchListTile(
                     activeColor: Colors.lightBlue,
                     contentPadding: const EdgeInsets.all(0),
-                    value: false,
+                    value: _receivedNewsLetter,
                     title: Text("Received newsletter"),
-                    onChanged: null,
+                    onChanged: (value) => setState(() {
+                      _receivedNewsLetter = value;
+                    }),
                   ),
                   SwitchListTile(
                     activeColor: Colors.lightBlue,
                     contentPadding: const EdgeInsets.all(0),
-                    value: true,
+                    value: _receivedOfferNotification,
                     title: Text("Received Offer Notification"),
-                    onChanged: (val) {},
+                    onChanged: (value) => setState(() {
+                      _receivedOfferNotification = value;
+                    }),
                   ),
                   SwitchListTile(
                     activeColor: Colors.lightBlue,
                     contentPadding: const EdgeInsets.all(0),
-                    value: true,
+                    value: _receivedAppUpdates,
                     title: Text("Received App Updates"),
-                    onChanged: null,
+                    onChanged: (value) => setState(() {
+                      _receivedAppUpdates = value;
+                    }),
                   ),
                   const SizedBox(height: 60.0),
                 ],
@@ -289,7 +240,12 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
     );
   }
 
-  // Function that builds dividers 
+  bool _receivedNotification = false;
+  bool _receivedNewsLetter = false;
+  bool _receivedOfferNotification = false;
+  bool _receivedAppUpdates = false;
+
+  // Function that builds dividers
   Container _buildDivider() {
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -304,5 +260,5 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
   @override
   Widget build(BuildContext context) {
     return homeBody();
-  } 
+  }
 }

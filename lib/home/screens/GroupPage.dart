@@ -8,51 +8,38 @@
 
  */
 
-import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
-import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/home/functionality/FirebaseRepository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
-import '../../GlobalWidget/helperfunctions.dart';
-
 
 class GroupsPage extends StatefulWidget {
   @override
   _GroupsPageState createState() => _GroupsPageState();
 }
-final FirebaseRepository repository= FirebaseRepository();
+
+final FirebaseRepository repository = FirebaseRepository();
 
 class _GroupsPageState extends State<GroupsPage> {
   @override
   String currentUserId;
 
-  void initState(){
-    getUserName();
+  void initState() {
     super.initState();
-    repository.getCurrentUser().then((user){
+    repository.getCurrentUser().then((user) {
       setState(() {
-
         currentUserId = Constants.myId;
       });
-
     });
   }
-  getUserName() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc = await FirebaseReferences.usersRef.document(Constants.myId).get();
 
-    (doc.data["userName"] != null) ?  setState(() {
-      var _profileImg = doc.data["userName"];
-    }) : circularProgress();
+ 
 
-  }
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar:AppBar(
-        title: Text("Groups", textAlign: TextAlign.center,
-
+      appBar: AppBar(
+        title: Text(
+          "Groups",
+          textAlign: TextAlign.center,
         ),
         actions: <Widget>[
           IconButton(
@@ -60,8 +47,7 @@ class _GroupsPageState extends State<GroupsPage> {
               Icons.search,
               color: Colors.blue,
             ),
-            onPressed: (){
-
+            onPressed: () {
               Navigator.pushNamed(context, "/SearchScreen");
             },
           )
@@ -69,10 +55,10 @@ class _GroupsPageState extends State<GroupsPage> {
       ),
       floatingActionButton: newGroup(),
       body: ChatListContainer(currentUserId),
-
     );
   }
 }
+
 class ChatListContainer extends StatefulWidget {
   @override
   final String currentUserId;
@@ -85,17 +71,19 @@ class _ChatListContainerState extends State<ChatListContainer> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        padding: EdgeInsets.all(10) ,
+        padding: EdgeInsets.all(10),
         itemCount: 2,
-        itemBuilder: (context, index){
+        itemBuilder: (context, index) {
           return CustomTile(
             mini: false,
-            onTap: (){},
+            onTap: () {},
             title: Text(
               "Gangster Vinny V",
               style: TextStyle(
-                color: Colors.white, fontFamily: "Calibri", fontSize: 19,),
-
+                color: Colors.white,
+                fontFamily: "Calibri",
+                fontSize: 19,
+              ),
             ),
             subtitle: Text(
               "Hello",
@@ -105,11 +93,11 @@ class _ChatListContainerState extends State<ChatListContainer> {
               ),
             ),
             leading: Container(
-              constraints: BoxConstraints(maxHeight: 60, maxWidth: 60) ,
+              constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
               child: Stack(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundColor:Colors.blueGrey,
+                    backgroundColor: Colors.blueGrey,
                     maxRadius: 30,
                   ),
                   Align(
@@ -118,12 +106,11 @@ class _ChatListContainerState extends State<ChatListContainer> {
                       height: 30,
                       width: 30,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.lightBlueAccent,
-                        border:Border.all(
-                          color: Colors.blue,
-                        )
-                      ),
+                          shape: BoxShape.circle,
+                          color: Colors.lightBlueAccent,
+                          border: Border.all(
+                            color: Colors.blue,
+                          )),
                     ),
                   )
                 ],
@@ -135,6 +122,7 @@ class _ChatListContainerState extends State<ChatListContainer> {
     );
   }
 }
+
 class CustomTile extends StatelessWidget {
   @override
   final Widget title;
@@ -152,34 +140,32 @@ class CustomTile extends StatelessWidget {
     this.icon,
     @required this.subtitle,
     this.trailing,
-    this.margin=const EdgeInsets.all(0),
+    this.margin = const EdgeInsets.all(0),
     this.onTap,
     this.onLongPress,
-    this.mini=true,
-});
+    this.mini = true,
+  });
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      onLongPress: onLongPress ,
+      onLongPress: onLongPress,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: mini ? 10:0),
+        padding: EdgeInsets.symmetric(horizontal: mini ? 10 : 0),
         margin: margin,
         child: Row(
-
           children: <Widget>[
             leading,
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: mini?10:15),
-                padding:EdgeInsets.symmetric(vertical: mini ? 3:20),
+                margin: EdgeInsets.only(left: mini ? 10 : 15),
+                padding: EdgeInsets.symmetric(vertical: mini ? 3 : 20),
                 decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 1,
-                      color: Colors.purple,
-                    ),
-                  )
-                ),
+                    border: Border(
+                  bottom: BorderSide(
+                    width: 1,
+                    color: Colors.purple,
+                  ),
+                )),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -190,7 +176,7 @@ class CustomTile extends StatelessWidget {
                         SizedBox(height: 5),
                         Row(
                           children: <Widget>[
-                            icon??Container(),
+                            icon ?? Container(),
                             subtitle,
                           ],
                         )

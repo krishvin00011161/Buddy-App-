@@ -127,7 +127,6 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
 
   // reads the time stamp of questions
   String readQuestionTimestamp(int timestamp) {
-    var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     var time = '';
     time = DateFormat.yMMMd().format(date);

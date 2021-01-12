@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'homeUser.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  bool isSearching = false;
 
   AutoCompleteTextField searchTextField;
   GlobalKey<AutoCompleteTextFieldState<HomeUser>> key = new GlobalKey();
@@ -26,6 +25,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   static List<HomeUser> users = new List<HomeUser>();
+  bool isSearching = false;
 
   @override
   Widget build(BuildContext context) {

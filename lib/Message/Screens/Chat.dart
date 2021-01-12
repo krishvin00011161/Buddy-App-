@@ -15,12 +15,10 @@ import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../GlobalWidget/constants.dart';
-import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 
 class Chat extends StatefulWidget {
-  String chatRoomId;
-
+  final String chatRoomId;
   Chat({this.chatRoomId});
 
   @override
@@ -193,7 +191,6 @@ class _ChatState extends State<Chat> {
             height: 1.0,
           ),
           preferredSize: Size.fromHeight(1.0)),
-    
     );
   }
 

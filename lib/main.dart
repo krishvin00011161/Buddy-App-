@@ -12,7 +12,6 @@ import 'package:buddyappfirebase/GlobalWidget/authenticate.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'Profile/Uploadimage/ImageCapture.dart';
 import 'home/screens/MainHomeView.dart';
 
 void main() {

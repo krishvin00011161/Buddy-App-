@@ -1,4 +1,3 @@
-import 'package:buddyappfirebase/Explore/Screens/ClassesQuestionView.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Home/Screens/MainHomeView.dart';
 import 'package:buddyappfirebase/Message/Services/Database.dart';
@@ -61,6 +60,8 @@ class _CommentScreenState extends State<CommentScreen> {
         "commentContent": commentEditingController.text,
         "commentId": documentReference.documentID,
         "timeStamp": DateTime.now().millisecondsSinceEpoch,
+        "photoUrl" : Constants.myProfileImg,
+
       };
 
       DatabaseMethods().addLatestComment(widget.questionId, comment);
@@ -71,6 +72,7 @@ class _CommentScreenState extends State<CommentScreen> {
     }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(

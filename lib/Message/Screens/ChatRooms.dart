@@ -7,22 +7,18 @@
 
 
  */
-
-import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
-import 'package:buddyappfirebase/Message/screens/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../GlobalWidget/Progress.dart';
 import '../../GlobalWidget/constants.dart';
-import '../../home/screens/MainHomeView.dart';
 import '../services/database.dart';
 import 'chat.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 
 class ChatRoom extends StatefulWidget {
   final int index;
@@ -36,7 +32,6 @@ class _ChatRoomState extends State<ChatRoom> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
-  int _currentIndex = 0;
   int chatCount = 0;
   QuerySnapshot searchResultSnapshot;
 
@@ -116,54 +111,7 @@ class _ChatRoomState extends State<ChatRoom> {
       key: _scaffoldKey,
       appBar: chatRoomAppbar(),
       drawer: CustomDrawers(),
-      bottomNavigationBar: CupertinoTabBar(
-        // Code reuse make some class Reminder
-        currentIndex: _currentIndex,
-        //activeColor: Theme.of(context).primaryColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _currentIndex == 0
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey,
-            ),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search,
-                color: _currentIndex == 1
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat,
-                color: _currentIndex == 2
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          )
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MainHomeView()),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ExplorePage()),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ChatRoom()),
-            );
-          }
-        },
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
       body: Container(
         child: chatRoomsList(),
       ),
@@ -173,8 +121,8 @@ class _ChatRoomState extends State<ChatRoom> {
           color: Colors.black,
         ),
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Search()));
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => Search()));
         },
       ),
     );

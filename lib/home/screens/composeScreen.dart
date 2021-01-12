@@ -8,7 +8,6 @@
 
  */
 
-import 'dart:collection';
 import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
@@ -16,7 +15,6 @@ import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Message/Services/Database.dart';
-import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +90,8 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'timeStamp': timestamp,
       'categories': categoriesEditingController.text,
       'classes': classesEditingController.text,
+      'likes' : 0,
+      "comments" : 0,
     };
 
     databaseMethods.addQuestion(content, documentReference.documentID);

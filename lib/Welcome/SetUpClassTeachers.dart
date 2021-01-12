@@ -108,11 +108,9 @@ class _SetupState extends State<Setup> {
                   labelStyle: TextStyle(
                     color: Colors.blueAccent,
                   )),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please make a class name.';
-                }
-              },
+                  validator: (value) {
+                    return value;
+                  },
             ),
             verticalSpaceSmall,
             TextFormField(
@@ -123,9 +121,7 @@ class _SetupState extends State<Setup> {
                     color: Colors.blueAccent,
                   )),
               validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please make a class code.';
-                }
+                return value;
               },
               obscureText: false,
             ),
