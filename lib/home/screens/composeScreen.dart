@@ -90,8 +90,6 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'timeStamp': timestamp,
       'categories': categoriesEditingController.text,
       'classes': classesEditingController.text,
-      'likes' : 0,
-      "comments" : 0,
     };
 
     databaseMethods.addQuestion(content, documentReference.documentID);

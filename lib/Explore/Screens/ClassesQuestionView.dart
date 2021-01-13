@@ -10,6 +10,7 @@
 
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
 import 'package:buddyappfirebase/Explore/Screens/CommentScreen.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
@@ -196,6 +197,9 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
                                               questionId: searchResultSnapshot
                                                   .documents[index]
                                                   .data["questionId"],
+                                                  timeStamp: searchResultSnapshot
+                                                  .documents[index]
+                                                  .data["timeStamp"],
                                             )),
                                   );
                                 },
@@ -262,52 +266,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
       key: _scaffoldKey,
       appBar: appBar(),
       drawer: CustomDrawers(),
-      bottomNavigationBar: CupertinoTabBar(
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _currentIndex == 0
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey,
-            ),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search,
-                color: _currentIndex == 1
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat,
-                color: _currentIndex == 2
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          )
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MainHomeView()),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ExplorePage()),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ChatRoom()),
-            );
-          }
-        },
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
       body: Container(
         child: Column(
           children: <Widget>[

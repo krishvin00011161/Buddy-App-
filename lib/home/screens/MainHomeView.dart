@@ -5,7 +5,7 @@
   Function: MainHomeView
   Description: The Main view for UI and Functionality
 
-
+  Bug: I don't know how to get the right amount of number of likes and comments for each question 
  */
 
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
@@ -33,7 +33,6 @@ class MainHomeView extends StatefulWidget {
   // Getting fed the chatroomId Data from Search.dart
   final String chatRoomId;
   final int index;
-  String profileImg = "";
 
   MainHomeView({this.chatRoomId, this.index});
 
@@ -51,12 +50,13 @@ class _MainHomeViewState extends State<MainHomeView> {
   Stream<QuerySnapshot> chats; // Data of all chat
   String message;
   Stream<QuerySnapshot> latest;
+  QuerySnapshot likes;
+  Stream<QuerySnapshot> comments;
+  int likesCount = 0;
 
   @override
   void initState() {
     super.initState();
-    print(message.toString);
-    _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
     getUserInfogetChats();
@@ -68,6 +68,13 @@ class _MainHomeViewState extends State<MainHomeView> {
     chatMessages();
     initiateSearch();
     searchLikeData("InUtF6RV5lnQExsLvEpY");
+    getAmountOfLikes("InUtF6RV5lnQExsLvEpY");
+    DatabaseMethods().getComments("InUtF6RV5lnQExsLvEpY").then((val) {
+      setState(() {
+        comments = val;
+      });
+    });
+    _getUserProfileImg();
   }
 
   getUserInfogetChats() async {
@@ -86,7 +93,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     FirebaseMethods().getUserProfileImg();
     setState(() {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
-      MainHomeView().profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
 
@@ -159,54 +165,21 @@ class _MainHomeViewState extends State<MainHomeView> {
     }
   }
 
-  Stream<QuerySnapshot> likes;
-  int likesCount = 0;
   getAmountOfLikes(String questionId) async {
-    databaseMethods.getAmountOfLikes(questionId).then((val) {
+    databaseMethods.getAmountOfLikes(questionId).then((snapshot) {
       setState(() {
-        likes = val;
+        likes = snapshot;
       });
-      StreamBuilder(
-        stream: likes,
-        builder: (context, snapshot) {
-          return snapshot.hasData
-              ? ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    likesCount = snapshot.data.documents.length;
-                    //return Text("${index}");
-                    return snapshot.data.documents.length;
-                  })
-              : Container(
-                  color: Colors.blue,
-                );
-        },
-      );
     });
   }
 
-
-
-  // StreamBuilder(
-  //   stream: FirebaseDatabase.instance
-  //             .reference()
-  //             .child("users")
-  //             .orderByChild('firstName')
-  //             .limitToFirst(20)
-  //             .onValue,
-  //   builder: (context, snapshot) {
-  //           if (snapshot.hasData) {
-  //             return ListView.builder(
-  //               itemCount: snapshot.data.snapshot.value.lenght,//Here you can see that I will get the count of my data
-  //                 itemBuilder: (context, int) {
-  //                 //perform the task you want to do here
-  //                   return Text("Item count ${int}");
-  //                 });
-  //           } else {
-  //             return Container();
-  //           }
-  //     },
-  // ),
+  getAmountOfComments(String questionId) async {
+    databaseMethods.getComments(questionId).then((val) {
+      setState(() {
+        comments = val;
+      });
+    });
+  }
 
   Widget userList() {
     return haveUserSearched
@@ -222,14 +195,37 @@ class _MainHomeViewState extends State<MainHomeView> {
                     timestamp:
                         searchResultSnapshot.documents[index].data["timeStamp"],
                     likes: 0,
-                    comments: 4,
-                    questionId: getAmountOfLikes(searchResultSnapshot
-                        .documents[index].data["questionId"]),
+                    comments: 0,
                   ),
                 ],
               );
             })
         : Container();
+  }
+
+  Widget questionList() {
+    return StreamBuilder(
+      stream: comments,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: searchResultSnapshot.documents.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return questions(
+                    questionContent: searchResultSnapshot
+                        .documents[index].data["questionContent"],
+                    timestamp:
+                        searchResultSnapshot.documents[index].data["timeStamp"],
+                    comments: snapshot.data.documents.length,
+                    likes: likes.documents.length, 
+                  );
+                })
+            : Container(
+                color: Colors.blue,
+              );
+      },
+    );
   }
 
   Widget userTile(String content) {
@@ -433,7 +429,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                   1.4,
                   Container(
                     height: 225,
-                    child: userList(),
+                    child: questionList(),
                   ),
                 ),
                 SizedBox(

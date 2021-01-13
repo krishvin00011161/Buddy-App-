@@ -10,9 +10,10 @@ class CommentScreen extends StatefulWidget {
   final String questionContent;
   final String userName;
   final String questionId;
+  final int timeStamp;
  
 
-  CommentScreen({this.questionContent, this.userName, this.questionId});
+  CommentScreen({this.questionContent, this.userName, this.questionId, this.timeStamp});
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
@@ -31,7 +32,6 @@ class _CommentScreenState extends State<CommentScreen> {
   void initState() {
     super.initState();
     getProfileImg();
-    
   }
 
   getProfileImg() async {
@@ -51,6 +51,7 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
  
+ 
 
 
   comment() async {
@@ -61,7 +62,10 @@ class _CommentScreenState extends State<CommentScreen> {
         "commentId": documentReference.documentID,
         "timeStamp": DateTime.now().millisecondsSinceEpoch,
         "photoUrl" : Constants.myProfileImg,
-
+        "questionContent" : widget.questionContent,
+        "questionTimeStamp" : widget.timeStamp,
+        "questionUserName" : widget.userName,
+        "questionId" : widget.questionId
       };
 
       DatabaseMethods().addLatestComment(widget.questionId, comment);

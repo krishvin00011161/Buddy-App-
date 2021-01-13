@@ -8,20 +8,16 @@
 
  */
 
-
-
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
-
   // Adds user Info
   Future<void> addUserInfo(userData) async {
     Firestore.instance.collection("users").add(userData).catchError((e) {
       print(e.toString());
     });
   }
-  
 
   // gets user info by searching userName
   searchByName(String searchField) {
@@ -54,7 +50,7 @@ class DatabaseMethods {
         .where('userName', isEqualTo: name)
         .getDocuments();
   }
- 
+
   // search questions by className
   searchClassQuestions(String className) {
     return Firestore.instance
@@ -102,12 +98,12 @@ class DatabaseMethods {
     });
   }
 
-
-  Future<void> addLike(String questionId, content) { // changed from .add to .set If trouble search this
-     Firestore.instance
+  Future<void> addLike(String questionId, content) {
+    // changed from .add to .set If trouble search this
+    Firestore.instance
         .collection("questions")
         .document(questionId)
-        .collection("likes") 
+        .collection("likes")
         .document(Constants.myId)
         .setData(content)
         .catchError((e) {
@@ -116,7 +112,7 @@ class DatabaseMethods {
   }
 
   Future<void> deleteLike(String questionId) {
-     Firestore.instance
+    Firestore.instance
         .collection("questions")
         .document(questionId)
         .collection("likes")
@@ -127,9 +123,7 @@ class DatabaseMethods {
     });
   }
 
-
-  
- // gets user info by searching email
+  // gets user info by searching email
   getUserInfo(String email) async {
     return Firestore.instance
         .collection("users")
@@ -150,7 +144,7 @@ class DatabaseMethods {
         .snapshots();
   }
 
-    // get comments by searching questionId
+  // get comments by searching questionId
   getComments(String questionId) async {
     return Firestore.instance
         .collection("questions")
@@ -158,7 +152,6 @@ class DatabaseMethods {
         .collection("comments")
         .snapshots();
   }
-
 
   // gets chat Name by chatroomId
   getChatsName(String chatRoomId) async {
@@ -168,15 +161,13 @@ class DatabaseMethods {
         .snapshots();
   }
 
-    getAmountOfLikes(String questionId) {
+  getAmountOfLikes(String questionId) {
     return Firestore.instance
         .collection('questions')
         .document(questionId)
         .collection('likes')
         .getDocuments();
   }
-
-  
 
   // get questions by searching question content
   getQuestions(String searchField) async {
@@ -198,8 +189,8 @@ class DatabaseMethods {
     });
   }
 
- Future<void> addLatestComment(String questionId, content) {
-     Firestore.instance
+  Future<void> addLatestComment(String questionId, content) {
+    Firestore.instance
         .collection("questions")
         .document(questionId)
         .collection("comments")
@@ -220,7 +211,7 @@ class DatabaseMethods {
 
   // Adds message into the Latest Chat for ChatroomID
   Future<void> addLatestMessage(String chatRoomId, chatMessageData) {
-     Firestore.instance
+    Firestore.instance
         .collection("chatRoom")
         .document(chatRoomId)
         .collection("latest")
@@ -233,7 +224,7 @@ class DatabaseMethods {
 
   // update Latest Message by ChatRoomId
   Future<void> updateLatestMessage(String chatRoomId, chatMessageData) {
-      Firestore.instance
+    Firestore.instance
         .collection("chatRoom")
         .document(chatRoomId)
         .collection("latest")
@@ -244,7 +235,6 @@ class DatabaseMethods {
     });
   }
 
- 
   // get Users chat by using username
   getUserChats(String itIsMyName) async {
     return await Firestore.instance
@@ -265,11 +255,10 @@ class DatabaseMethods {
   // get user profile img by userNmae
   getProfileImg(String userName) {
     return Firestore.instance
-      .collection('users')
-      .where('userName', isEqualTo: userName)
-      .getDocuments();
+        .collection('users')
+        .where('userName', isEqualTo: userName)
+        .getDocuments();
   }
-  
 }
 // import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -513,7 +502,6 @@ class DatabaseMethods {
 //       .where('userId', isEqualTo: userId)
 //       .getDocuments();
 // }
-
 
 //   // update Latest Message by ChatRoomId
 //   Future<void> updateLatestMessage(String chatRoomId, chatMessageData) {
