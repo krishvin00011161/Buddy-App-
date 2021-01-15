@@ -4,6 +4,17 @@ A new Flutter application.
 
 # Changelog
 
+[1.3.0] - 1/11/21 - David Kim
+[349447f5bfc02920286ef9daa1c52227faeb791e]
+
+Added 
+   - Like/Comment functionality
+   - Settings
+
+Modified
+   - Refactoring
+   - Code warnings
+
 [1.2.0] - 12/30/20 - David Kim
 [cb25804214d625bda439b949f9dd5be31debd27d]
 

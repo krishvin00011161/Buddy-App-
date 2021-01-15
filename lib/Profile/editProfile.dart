@@ -14,9 +14,8 @@ import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+//import 'package:path/path.dart';
 import 'package:buddyappfirebase/Message/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -36,14 +35,12 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController bioController = TextEditingController();
   bool isLoading = false;
   User user;
-  String _profileImg = "";
   String _name = "";
 
   @override
   void initState() {
     super.initState();
     getUser();
-    _getUserProfileImg();
     _getUserName();
   }
 
@@ -54,19 +51,6 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  // get user profile img
-  _getUserProfileImg() async {
-    Constants.myId = await HelperFunctions.getUserIDSharedPreference();
-    final DocumentSnapshot doc =
-        await FirebaseReferences.usersRef.document(Constants.myId).get();
-
-    (doc.data["photoUrl"] != null)
-        ? setState(() {
-            _profileImg = doc.data["photoUrl"];
-          })
-        : circularProgress();
-    isLoading = false;
-  }
 
   // get user's username
   _getUserName() async {
@@ -123,18 +107,18 @@ class _EditProfileState extends State<EditProfile> {
       });
     }
 
-  Future uploadPic(BuildContext context) async {
-    String fileName = basename(_image.path);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    setState(() {
-      print("Profile Picture uploaded");
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-    });
-  }
+  // Future uploadPic(BuildContext context) async {
+  //   String fileName = basename(_image.path);
+  //   StorageReference firebaseStorageRef =
+  //       FirebaseStorage.instance.ref().child(fileName);
+  //   StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+  //   StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+  //   setState(() {
+  //     print("Profile Picture uploaded");
+  //     Scaffold.of(context)
+  //         .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+  //   });
+  // }
 
 
   @override
@@ -207,7 +191,7 @@ class _EditProfileState extends State<EditProfile> {
                       RaisedButton(
                         onPressed: () {
                           updateData();
-                          uploadPic(context);
+                          //uploadPic(context);
                         },
                         child: Text(
                           "Update Profile",

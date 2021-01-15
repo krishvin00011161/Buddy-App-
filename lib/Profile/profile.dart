@@ -8,26 +8,24 @@
 
  */
 
-import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
+
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
-import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/GlobalWidget/progress.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
-import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
+import 'package:buddyappfirebase/Profile/ShowComment.dart';
 import 'package:buddyappfirebase/Profile/editProfile.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
-import 'package:buddyappfirebase/home/screens/MainHomeView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../Message/services/database.dart';
 
 class ProfileView extends StatelessWidget {
-  int _currentIndex = 0;
-  bool isSelected;
+  // bool isSelected;
 
   AppBar profileAppbar() {
     return AppBar(
@@ -52,54 +50,7 @@ class ProfileView extends StatelessWidget {
             appBar: profileAppbar(),
             drawer: CustomDrawers(),
             body: ProfilePage(),
-            bottomNavigationBar: CupertinoTabBar(
-              // Code reuse make some class Reminder
-              currentIndex: _currentIndex,
-              //activeColor: Theme.of(context).primaryColor,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    color: _currentIndex == 0
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey,
-                  ),
-                  title: Text(""),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search,
-                      color: _currentIndex == 1
-                          ? Theme.of(context).primaryColor
-                          : Colors.grey),
-                  title: Text(""),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.chat,
-                      color: _currentIndex == 2
-                          ? Theme.of(context).primaryColor
-                          : Colors.grey),
-                  title: Text(""),
-                )
-              ],
-              onTap: (index) {
-                if (index == 0) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainHomeView()),
-                  );
-                } else if (index == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ExplorePage()),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatRoom()),
-                  );
-                }
-              },
-            )));
+            bottomNavigationBar: CustomBottomNavigationBar()));
   }
 }
 
@@ -129,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isLoading = false;
   bool userHaveQuestion = false;
   bool userHaveClass = false;
+  bool userHaveComments = false;
 
   @override
   void initState() {
@@ -190,6 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     });
   }
+
 
   ListView profile(double height) {
     return ListView(children: [
@@ -277,31 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: questionList(),
                       ),
                       Center(
-                        child: ListView.builder(
-                            itemCount: 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: <Widget>[
-                                  ListTile(
-                                    title: Text("Greek word for indivisible"),
-                                    subtitle:
-                                        Text("Question: What is an Atom?"),
-                                  ),
-                                  Divider(height: 2.0),
-                                  ListTile(
-                                    title: Text("Robert Oppenheimer"),
-                                    subtitle: Text(
-                                        "Question: Who made the atomic bomb?"),
-                                  ),
-                                  Divider(height: 2.0),
-                                  ListTile(
-                                    title: Text(
-                                        "The 16th president of the United States."),
-                                    subtitle: Text("Question: Who is Lincoln?"),
-                                  ),
-                                ],
-                              );
-                            }),
+                        child: commentsList(),
                       )
                     ],
                   ))
@@ -342,13 +271,56 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   ListTile(
                     title: Text(
+                      searchResultSnapshot
+                          .documents[index].data["questionContent"],
+                    ),
+                    subtitle: Text(
+                      "Asked " +
+                          TimeStamp().readQuestionTimeStamp(searchResultSnapshot
+                              .documents[index].data["timeStamp"]),
+                    ),
+                  ),
+                  Divider(
+                    height: 2.0,
+                  )
+                ],
+              );
+            })
+        : Container();
+  }
+
+  // Widget creating list of comments
+  Widget commentsList() {
+    return userHaveQuestion
+        ? ListView.builder(
+            // shrinkWrap: true,
+            itemCount: searchResultSnapshot.documents.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  GestureDetector(
+                    child: ListTile(
+                      title: Text(
                         searchResultSnapshot
                             .documents[index].data["questionContent"],
+                      ),
+                      subtitle: Text(
+                        "View replies",
+                        style: TextStyle(
+                          color: Colors.blue[300],
                         ),
-                    subtitle: Text(
-                        "Asked " + TimeStamp().readQuestionTimeStamp(searchResultSnapshot
-                            .documents[index].data["timeStamp"]),
-                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      // Todo left off here
+                      if (searchResultSnapshot != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ShowComment(questionId: searchResultSnapshot.documents[index].data["questionId"],)),
+                        );
+                      }
+                    },
                   ),
                   Divider(
                     height: 2.0,

@@ -57,32 +57,32 @@ class HelperFunctions{
 
   static Future<bool> getUserLoggedInSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getBool(sharedPreferenceUserLoggedInKey);
+    return preferences.getBool(sharedPreferenceUserLoggedInKey);
   }
 
   static Future<String> getUserNameSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getString(sharedPreferenceUserNameKey);
+    return preferences.getString(sharedPreferenceUserNameKey);
   }
 
   static Future<String> getUserEmailSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getString(sharedPreferenceUserEmailKey);
+    return preferences.getString(sharedPreferenceUserEmailKey);
   }
 
   static Future<String> getUserIDSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getString(sharedPreferenceUserIDKey);
+    return preferences.getString(sharedPreferenceUserIDKey);
   }
 
   static Future<String> getUserQuestionIDSharedPreference() async { // question
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getString(sharedPreferenceQuestionIDKey);
+    return preferences.getString(sharedPreferenceQuestionIDKey);
   }
 
   static Future<String> getUserImageSharedPreference() async { // Image
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.getString(sharedPreferenceUserImageKey);
+    return preferences.getString(sharedPreferenceUserImageKey);
   }
 
 }

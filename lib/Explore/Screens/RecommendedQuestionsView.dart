@@ -74,7 +74,6 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
   }
 
   String readQuestionTimestamp(int timestamp) {
-    var format = DateFormat('H:mm y');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     var time = '';
     time = DateFormat.yMMMd().format(date);

@@ -13,8 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EditChatName extends StatefulWidget {
-  String chatRoomId;
-  static String profileName = "";
+  final String chatRoomId;
 
   EditChatName({@required this.chatRoomId});
 

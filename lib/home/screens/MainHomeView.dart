@@ -5,10 +5,9 @@
   Function: MainHomeView
   Description: The Main view for UI and Functionality
 
-
+  Bug: I don't know how to get the right amount of number of likes and comments for each question 
  */
 
-import 'package:buddyappfirebase/Explore/Screens/Explore.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/GlobalWidget/helperfunctions.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
@@ -23,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import '../../GlobalWidget/constants.dart';
 import '../../Message/services/database.dart';
 import '../../Profile/profile.dart';
@@ -33,7 +33,6 @@ class MainHomeView extends StatefulWidget {
   // Getting fed the chatroomId Data from Search.dart
   final String chatRoomId;
   final int index;
-  String profileImg = "";
 
   MainHomeView({this.chatRoomId, this.index});
 
@@ -42,7 +41,6 @@ class MainHomeView extends StatefulWidget {
 }
 
 class _MainHomeViewState extends State<MainHomeView> {
-  int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Stream chatRooms;
   String _profileImg = "";
@@ -52,12 +50,13 @@ class _MainHomeViewState extends State<MainHomeView> {
   Stream<QuerySnapshot> chats; // Data of all chat
   String message;
   Stream<QuerySnapshot> latest;
+  QuerySnapshot likes;
+  Stream<QuerySnapshot> comments;
+  int likesCount = 0;
 
   @override
   void initState() {
     super.initState();
-    print(message.toString);
-    _getUserProfileImg();
     _getUserName();
     _getUserQuestion();
     getUserInfogetChats();
@@ -68,6 +67,14 @@ class _MainHomeViewState extends State<MainHomeView> {
     });
     chatMessages();
     initiateSearch();
+    searchLikeData("InUtF6RV5lnQExsLvEpY");
+    getAmountOfLikes("InUtF6RV5lnQExsLvEpY");
+    DatabaseMethods().getComments("InUtF6RV5lnQExsLvEpY").then((val) {
+      setState(() {
+        comments = val;
+      });
+    });
+    _getUserProfileImg();
   }
 
   getUserInfogetChats() async {
@@ -86,7 +93,6 @@ class _MainHomeViewState extends State<MainHomeView> {
     FirebaseMethods().getUserProfileImg();
     setState(() {
       _profileImg = FirebaseMethods.profileImgUrl.toString();
-      MainHomeView().profileImg = FirebaseMethods.profileImgUrl.toString();
     });
   }
 
@@ -128,6 +134,18 @@ class _MainHomeViewState extends State<MainHomeView> {
   bool isLoading = false;
   bool haveUserSearched = false;
   QuerySnapshot searchResultSnapshot;
+  QuerySnapshot likeSnapshot;
+
+  searchLikeData(String questionId) async {
+    if (searchEditingController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods.getAmountOfLikes(questionId).then((snapshot) {
+        likeSnapshot = snapshot;
+      });
+    }
+  }
 
   initiateSearch() async {
     if (searchEditingController.text.isEmpty) {
@@ -147,6 +165,22 @@ class _MainHomeViewState extends State<MainHomeView> {
     }
   }
 
+  getAmountOfLikes(String questionId) async {
+    databaseMethods.getAmountOfLikes(questionId).then((snapshot) {
+      setState(() {
+        likes = snapshot;
+      });
+    });
+  }
+
+  getAmountOfComments(String questionId) async {
+    databaseMethods.getComments(questionId).then((val) {
+      setState(() {
+        comments = val;
+      });
+    });
+  }
+
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
@@ -160,14 +194,38 @@ class _MainHomeViewState extends State<MainHomeView> {
                         .documents[index].data["questionContent"],
                     timestamp:
                         searchResultSnapshot.documents[index].data["timeStamp"],
-                    likes: searchResultSnapshot.documents[index].data["like"],
-                    comments:
-                        searchResultSnapshot.documents[index].data['reply'],
+                    likes: 0,
+                    comments: 0,
                   ),
                 ],
               );
             })
         : Container();
+  }
+
+  Widget questionList() {
+    return StreamBuilder(
+      stream: comments,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: searchResultSnapshot.documents.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return questions(
+                    questionContent: searchResultSnapshot
+                        .documents[index].data["questionContent"],
+                    timestamp:
+                        searchResultSnapshot.documents[index].data["timeStamp"],
+                    comments: snapshot.data.documents.length,
+                    likes: likes.documents.length, 
+                  );
+                })
+            : Container(
+                color: Colors.blue,
+              );
+      },
+    );
   }
 
   Widget userTile(String content) {
@@ -200,58 +258,7 @@ class _MainHomeViewState extends State<MainHomeView> {
       appBar: homeAppBar(),
       drawer: CustomDrawers(),
       body: homeBody(),
-      bottomNavigationBar: tabBar(),
-    );
-  }
-
-  CupertinoTabBar tabBar() {
-    return CupertinoTabBar(
-      // Code reuse make some class Reminder
-
-      currentIndex: _currentIndex,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: _currentIndex == 0
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
-          ),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search,
-              color: _currentIndex == 1
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat,
-              color: _currentIndex == 2
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey),
-          title: Text(""),
-        )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainHomeView()),
-          );
-        } else if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ExplorePage()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatRoom()),
-          );
-        }
-      },
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 
@@ -374,9 +381,9 @@ class _MainHomeViewState extends State<MainHomeView> {
                                             .toString()
                                             .replaceAll("_", "")
                                             .replaceAll(Constants.myName, ""),
-                                        photoUrl: snapshot.data.documents[index]
-                                            .data['image'].toString(),
-                                              
+                                        photoUrl: snapshot
+                                            .data.documents[index].data['image']
+                                            .toString(),
                                       );
                                     })
                                 : groups(title: "Hello");
@@ -422,7 +429,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                   1.4,
                   Container(
                     height: 225,
-                    child: userList(),
+                    child: questionList(),
                   ),
                 ),
                 SizedBox(
@@ -447,18 +454,22 @@ class _MainHomeViewState extends State<MainHomeView> {
   }) {
     // Makes Rectangles belongs in the groups section
     return GroupWidget(
-        context: context,
-        photoUrl: photoUrl,
-        title: title,
-        messageContent: messageContent,
-        chatRoomId: chatRoomId,
-        time: time,
+      context: context,
+      photoUrl: photoUrl,
+      title: title,
+      messageContent: messageContent,
+      chatRoomId: chatRoomId,
+      time: time,
     );
   }
 
   // This Widget creates the Blue Question tiles
   Widget questions(
-      {String questionContent, int timestamp, int likes, int comments}) {
+      {String questionContent,
+      int timestamp,
+      int likes,
+      int comments,
+      Future<dynamic> questionId}) {
     // Makes rectangles belongs in the questions section
     return AspectRatio(
       aspectRatio: 4 / 3,
@@ -558,7 +569,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     text: TextSpan(
                       style: TextStyle(color: Colors.grey),
                       children: [
-                        //TextSpan(text: 'Created with '),
                         WidgetSpan(
                           child: Padding(
                             padding:
@@ -581,7 +591,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                     text: TextSpan(
                       style: TextStyle(color: Colors.grey),
                       children: [
-                        //TextSpan(text: 'Created with '),
                         WidgetSpan(
                           child: Padding(
                             padding:

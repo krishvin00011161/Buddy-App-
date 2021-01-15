@@ -11,9 +11,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:path/path.dart';
+//import 'package:path/path.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -25,12 +24,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Function that upload a picture
   Future uploadPic(BuildContext context) async {
-    String fileName = basename(_image.path);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    //String fileName = basename(_image.path);
+    //StorageReference firebaseStorageRef =
+      //  FirebaseStorage.instance.ref().child(fileName);
+    //StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+   // StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     setState(() {
+      
       print("Profile Picture uploaded");
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
