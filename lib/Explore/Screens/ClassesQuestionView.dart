@@ -14,14 +14,11 @@ import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
-import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../Message/services/database.dart';
-import '../../home/screens/MainHomeView.dart';
-import 'explore.dart';
 
 class ClassQuestionView extends StatefulWidget {
   final String className;
@@ -33,22 +30,21 @@ class ClassQuestionView extends StatefulWidget {
 }
 
 class _ClassQuestionViewState extends State<ClassQuestionView> {
-  DatabaseMethods databaseMethods = new DatabaseMethods();
-  QuerySnapshot searchResultSnapshot;
-  String _profileImg = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool isLoading = false;
-  bool haveUserSearched = false;
-  int _currentIndex = 0;
-  bool isSelected;
-  bool like = false;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   QuerySnapshot searchLikeResultSnapshot;
+  QuerySnapshot searchResultSnapshot;
+  bool haveUserSearched = false;
   bool likeExists = false;
+  String _profileImg = "";
+  bool isLoading = false;
+  bool like = false;
+  bool isSelected;
 
   @override
   void initState() {
     super.initState();
-    initiateSearch();
+    _searchClasses();
     _getUserProfileImg();
   }
 
@@ -61,7 +57,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
   }
 
   // This searches for class questions
-  initiateSearch() async {
+  _searchClasses() async {
     if (TextEditingControllers.searchEditingController.text.isEmpty) {
       setState(() {
         isLoading = true;
@@ -79,6 +75,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     }
   }
 
+  // This functions checks if a user had liked a question before
   searchIfLiked(String userId) async {
     if (ClassQuestionView.like == false) {
       // Checks if Like have been not pressed, Ex: If pressed why bother check, the liked data would be in database
@@ -101,10 +98,13 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     }
   }
 
+  // This function likes a question, saves the response in the database
   liked(String userId, String questionId) async {
-    searchIfLiked(userId); // Search If user has liked the post from other device
+    searchIfLiked(
+        userId); // Search If user has liked the post from other device
 
-    if (likeExists == false) { // If the user has not liked at all
+    if (likeExists == false) {
+      // If the user has not liked at all
       Map<String, dynamic> like = {
         "userName": Constants.myName,
         "userId": Constants.myId,
@@ -117,12 +117,15 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
     }
   }
 
+  // This function first checks if liked, deletes the like
   deleteLiked(String userId, String questionId) async {
     searchIfLiked(userId); // Check if the user like exists from another device
-    if (likeExists == true) { // If the user did like on a another device
+    if (likeExists == true) {
+      // If the user did like on a another device
       databaseMethods.deleteLike(questionId); // delete the like
 
-      likeExists = false; // Make sure to know next time that like does not exists
+      likeExists =
+          false; // Make sure to know next time that like does not exists
     }
   }
 
@@ -197,7 +200,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
                                               questionId: searchResultSnapshot
                                                   .documents[index]
                                                   .data["questionId"],
-                                                  timeStamp: searchResultSnapshot
+                                              timeStamp: searchResultSnapshot
                                                   .documents[index]
                                                   .data["timeStamp"],
                                             )),
@@ -221,8 +224,10 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
                       });
                     },
                     onTap: () {
-                      deleteLiked(Constants.myId, searchResultSnapshot
-                          .documents[index].data["questionId"]);
+                      deleteLiked(
+                          Constants.myId,
+                          searchResultSnapshot
+                              .documents[index].data["questionId"]);
 
                       setState(() {
                         ClassQuestionView.like = false;
@@ -254,7 +259,7 @@ class _ClassQuestionViewState extends State<ClassQuestionView> {
           style: TextStyle(color: Colors.black),
         ),
         onTap: () {
-          initiateSearch();
+          _searchClasses();
         },
       ),
     );

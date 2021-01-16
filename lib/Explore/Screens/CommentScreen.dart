@@ -1,19 +1,29 @@
+/* 
+  Authors: David Kim, Aaron NI, Vinay Krisnan
+  Date: 1/15/21
+
+  Function: Comment Screen
+  Description: Display comments of a certain question
+
+
+ */
+
 import 'package:buddyappfirebase/GlobalWidget/constants.dart';
 import 'package:buddyappfirebase/Home/Screens/MainHomeView.dart';
 import 'package:buddyappfirebase/Message/Services/Database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../FirebaseData/FirebaseReference.dart';
 import '../../GlobalWidget/constants.dart';
-
 
 class CommentScreen extends StatefulWidget {
   final String questionContent;
   final String userName;
   final String questionId;
   final int timeStamp;
- 
 
-  CommentScreen({this.questionContent, this.userName, this.questionId, this.timeStamp});
+  CommentScreen(
+      {this.questionContent, this.userName, this.questionId, this.timeStamp});
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
@@ -21,12 +31,12 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   TextEditingController commentEditingController = new TextEditingController();
-  bool isLoading = false;
   DatabaseMethods databaseMethods = new DatabaseMethods();
   QuerySnapshot searchResultSnapshot;
   bool haveUserSearched;
-  DocumentReference documentReference =
-  Firestore.instance.collection('comments').document();
+  bool isLoading = false;
+ 
+  
 
   @override
   void initState() {
@@ -50,22 +60,18 @@ class _CommentScreenState extends State<CommentScreen> {
     }
   }
 
- 
- 
-
-
   comment() async {
     if (commentEditingController.text.isNotEmpty) {
       Map<String, dynamic> comment = {
         "userName": Constants.myName,
         "commentContent": commentEditingController.text,
-        "commentId": documentReference.documentID,
+        "commentId": FirebaseReferences.commentsRef.documentID,
         "timeStamp": DateTime.now().millisecondsSinceEpoch,
-        "photoUrl" : Constants.myProfileImg,
-        "questionContent" : widget.questionContent,
-        "questionTimeStamp" : widget.timeStamp,
-        "questionUserName" : widget.userName,
-        "questionId" : widget.questionId
+        "photoUrl": Constants.myProfileImg,
+        "questionContent": widget.questionContent,
+        "questionTimeStamp": widget.timeStamp,
+        "questionUserName": widget.userName,
+        "questionId": widget.questionId
       };
 
       DatabaseMethods().addLatestComment(widget.questionId, comment);
@@ -76,7 +82,6 @@ class _CommentScreenState extends State<CommentScreen> {
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(

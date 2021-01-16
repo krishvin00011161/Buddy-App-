@@ -90,6 +90,7 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'timeStamp': timestamp,
       'categories': categoriesEditingController.text,
       'classes': classesEditingController.text,
+      'photoUrl' : Constants.myProfileImg,
     };
 
     databaseMethods.addQuestion(content, documentReference.documentID);

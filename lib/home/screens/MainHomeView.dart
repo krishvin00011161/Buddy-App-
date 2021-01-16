@@ -357,7 +357,6 @@ class _MainHomeViewState extends State<MainHomeView> {
                           builder: (context, snapshot) {
                             return snapshot.hasData
                                 ? ListView.builder(
-                                    // This Builder builds the yellow rectangles. Gets the data from Chatrooms
                                     scrollDirection: Axis.horizontal,
                                     itemCount: snapshot.data.documents.length,
                                     shrinkWrap: true,

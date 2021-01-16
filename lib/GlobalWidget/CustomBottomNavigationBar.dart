@@ -4,7 +4,7 @@ import '../Explore/Screens/Explore.dart';
 import '../Home/Screens/MainHomeView.dart';
 import '../Home/Screens/composeScreen.dart';
 import '../Message/Screens/ChatRooms.dart';
-import '../Settings/Settings.dart';
+import '../Notification/NotificationPage.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   CustomBottomNavigationBar({Key key}) : super(key: key);
@@ -37,7 +37,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         } else if (index == 1) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ExplorePage()),
+            MaterialPageRoute(builder: (context) => NotificationPage()),
           );
         } else if (index == 2) {
           Navigator.push(
@@ -47,13 +47,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         } else if (index == 3) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ChatRoom()),
+            MaterialPageRoute(builder: (context) => ExplorePage()),
           );
         } else if (index == 4) {
           //Navigator.push(context, PageTransition(type: PageTransitionType.leftToRight, reverseDuration: Duration(milliseconds: 300), child: SettingsOnePage()));
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SettingsOnePage()),
+            MaterialPageRoute(builder: (context) => ChatRoom()),
           );
         }
         setState(() {
@@ -66,20 +66,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: 'Home',
         ),
         FFNavigationBarItem(
-          iconData: Icons.explore,
-          label: 'Explore',
+          iconData: Icons.notifications,
+          label: 'Notification',
         ),
         FFNavigationBarItem(
           iconData: Icons.add,
           label: 'Add',
         ),
         FFNavigationBarItem(
-          iconData: Icons.message,
-          label: 'Messages',
+          iconData: Icons.explore,
+          label: 'Explore',
         ),
         FFNavigationBarItem(
-          iconData: Icons.settings,
-          label: 'Setting',
+          iconData: Icons.message,
+          label: 'Messages',
         ),
       ],
     );

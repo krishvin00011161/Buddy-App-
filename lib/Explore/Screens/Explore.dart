@@ -8,7 +8,6 @@
 
  */
 
-
 import 'package:buddyappfirebase/Explore/Screens/recommendedQuestionsview.dart';
 import 'package:buddyappfirebase/Explore/Widget/SearchExploreCard.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
@@ -154,14 +153,11 @@ class _ExplorePageState extends State<ExplorePage> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                     hintText: "Search question",
-                    suffixIcon: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchQuestion()));
-                        },
-                        child: Icon(Icons.search))),
+                    suffixIcon: Icon(Icons.search)),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SearchQuestion()));
+                },
               ),
             ),
           ),
@@ -221,7 +217,7 @@ class _ExplorePageState extends State<ExplorePage> {
             ],
           ),
           Row(
-             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
                   child: Padding(

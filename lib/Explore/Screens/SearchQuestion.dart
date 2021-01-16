@@ -1,5 +1,3 @@
-
-
 /* 
   Authors: David Kim, Aaron NI, Vinay Krisnan
   Date: 12/30/20
@@ -10,6 +8,7 @@
 
  */
 
+import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +24,16 @@ class _SearchState extends State<SearchQuestion> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
-
+  QuerySnapshot userResultSnapshot;
   bool isLoading = false;
   bool haveUserSearched = false;
 
-  initiateSearch() async {
+  _searchQuestion(String value) async {
     if (searchEditingController.text.isNotEmpty) {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods
-          .searchQuestions(searchEditingController.text)
-          .then((snapshot) {
+      await databaseMethods.searchQuestions(value).then((snapshot) {
         searchResultSnapshot = snapshot;
         print("$searchResultSnapshot");
         setState(() {
@@ -47,72 +44,141 @@ class _SearchState extends State<SearchQuestion> {
     }
   }
 
+  __searchUser(String value) async {
+    if (searchEditingController.text.isNotEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await databaseMethods.searchByName(value).then((snapshot) {
+        userResultSnapshot = snapshot;
+        print("$searchResultSnapshot");
+        setState(() {
+          isLoading = false;
+          haveUserSearched = true;
+        });
+      });
+    }
+  }
+
+  // Widget that makes the chain UI
+  Widget userChain(
+      String userName, String photoUrl, String message, int timeStamp) {
+    return Container(
+      color: Colors.transparent,
+      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {},
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 25.0,
+                  backgroundImage: NetworkImage(photoUrl),
+                ),
+                SizedBox(width: 10.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      userName,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // this widget prints out the user list
   Widget userList() {
     return haveUserSearched
         ? ListView.builder(
             shrinkWrap: true,
             itemCount: searchResultSnapshot.documents.length,
             itemBuilder: (context, index) {
-              return userTile(
+              return userChain(
                 searchResultSnapshot.documents[index].data["userName"],
-                searchResultSnapshot.documents[index].data["timeStamp"],
+                searchResultSnapshot.documents[index].data["photoUrl"],
                 searchResultSnapshot.documents[index].data["questionContent"],
+                searchResultSnapshot.documents[index].data["timeStamp"],
               );
             })
         : Container();
   }
 
- 
-
-  Widget userTile(String userName, String timeStamp, String content) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                content,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-              Text(
-                userName,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-              Text(
-                timeStamp,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              )
-            ],
+  // searchAppBar UI
+  AppBar searchAppBar() {
+    return AppBar(
+      iconTheme: new IconThemeData(color: Colors.grey),
+      backgroundColor: Colors.grey[100],
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      title: Container(
+        width: 310,
+        child: TextField(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(8.0),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(color: Colors.grey, width: 3)),
+            hintStyle: TextStyle(
+                color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
+            prefixIcon: Icon(Icons.search),
+            hintText: "Search question",
           ),
-          Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(24)),
-              child: Text(
-                "Comment",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          )
-        ],
+          controller: searchEditingController,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+          onChanged: (val) {
+            _searchQuestion(val);
+          },
+        ),
       ),
+      actions: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: GestureDetector(
+            child: Icon(Icons.cancel, size: 25),
+            onTap: () {
+              Navigator.pop(
+                context,
+              );
+            },
+          ),
+        )
+      ],
     );
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: searchAppBar(),
       body: isLoading
           ? Container(
               child: Center(
@@ -126,70 +192,7 @@ class _SearchState extends State<SearchQuestion> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
                     color: Colors.transparent, //Color(0x54FFFFFF)
                     child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExplorePage()),
-                            );
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              padding: EdgeInsets.only(right: 20, top: 1),
-                              child: Icon(
-                                Icons.chevron_left,
-                                size: 35,
-                                color: Colors.black,
-                              )),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: searchEditingController,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Search question",
-                              hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                              //border: InputBorder.none
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            initiateSearch();
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        const Color(
-                                            0x1544d1), //Color(0x36FFFFFF),
-                                        const Color(
-                                            0x1544d1) //Color(0x0FFFFFFF)
-                                      ],
-                                      begin: FractionalOffset.topLeft,
-                                      end: FractionalOffset.bottomRight),
-                                  borderRadius: BorderRadius.circular(40)),
-                              padding: EdgeInsets.all(12),
-                              child: Icon(
-                                Icons.search,
-                                size: 25,
-                                color: Colors.black,
-                              )),
-                          //Image.asset("assets/images/search_white.png",
-                          //height: 25, width: 25,)),
-                        )
-                      ],
+                      children: [],
                     ),
                   ),
                   userList()
