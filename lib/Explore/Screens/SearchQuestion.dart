@@ -8,12 +8,11 @@
 
  */
 
+import 'package:buddyappfirebase/GlobalWidget/Progress.dart';
 import 'package:buddyappfirebase/GlobalWidget/TimeStamp.dart';
 import 'package:buddyappfirebase/Message/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'explore.dart';
 
 class SearchQuestion extends StatefulWidget {
   @override
@@ -68,40 +67,59 @@ class _SearchState extends State<SearchQuestion> {
       padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {},
+          Container(
+            color: Colors.transparent,
+            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
             child: Row(
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage: NetworkImage(photoUrl),
+              children: [
+                Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 25.0,
+                      backgroundImage: photoUrl != null
+                          ? NetworkImage(photoUrl)
+                          : circularProgress(), //Todo
+                    ),
+                    SizedBox(width: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          userName,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: Text(
+                            message,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10.0),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      userName,
+                      TimeStamp().readQuestionTimeStamp(timeStamp),
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15.0,
+                        fontSize: 12.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 5.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    
+                    SizedBox(height: 15.0),
                   ],
                 ),
               ],
@@ -188,13 +206,13 @@ class _SearchState extends State<SearchQuestion> {
           : Container(
               child: Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                    color: Colors.transparent, //Color(0x54FFFFFF)
-                    child: Row(
-                      children: [],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                  //   color: Colors.transparent, //Color(0x54FFFFFF)
+                  //   child: Row(
+                  //     children: [],
+                  //   ),
+                  // ),
                   userList()
                 ],
               ),

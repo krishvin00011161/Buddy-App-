@@ -10,6 +10,7 @@
 
 
 import 'package:buddyappfirebase/FirebaseData/firebaseMethods.dart';
+import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
 import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:buddyappfirebase/Message/screens/chatrooms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,8 +54,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
       setState(() {
         isLoading = true;
       });
-      await databaseMethods
-        ..searchTopicQuestions(widget.categories).then((snapshot) {
+      await databaseMethods.searchTopicQuestions(widget.categories).then((snapshot) {
           searchResultSnapshot = snapshot;
           print("$searchResultSnapshot");
           setState(() {
@@ -155,54 +155,7 @@ class _RecommendedQuestionViewState extends State<RecommendedQuestionView> {
       appBar: appBar(),
       key: _scaffoldKey,
       drawer: CustomDrawers(),
-      bottomNavigationBar: CupertinoTabBar(
-        // Code reuse make some class Reminder
-        currentIndex: _currentIndex,
-        //activeColor: Theme.of(context).primaryColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _currentIndex == 0
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey,
-            ),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search,
-                color: _currentIndex == 1
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat,
-                color: _currentIndex == 2
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-            title: Text(""),
-          )
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MainHomeView()),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ExplorePage()),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ChatRoom()),
-            );
-          }
-        },
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
       body: Container(
         child: Column(
           children: <Widget>[

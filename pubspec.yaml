@@ -67,7 +67,7 @@ dependencies:
 
   ff_navigation_bar: ^0.1.0
 
-  #page_transition: ^1.1.6
+  dotted_border: ^1.0.5
   
   
 

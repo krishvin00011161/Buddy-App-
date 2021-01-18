@@ -81,6 +81,8 @@ class _ComposeScreenState extends State<ComposeScreen> {
   _createQuestion() async {
     DocumentReference documentReference =
         Firestore.instance.collection('questions').document();
+     DocumentReference docReference =
+        Firestore.instance.collection('recommends').document();
 
     Map<String, dynamic> content = {
       'userId': Constants.myId,
@@ -93,7 +95,20 @@ class _ComposeScreenState extends State<ComposeScreen> {
       'photoUrl' : Constants.myProfileImg,
     };
 
+    Map<String, dynamic> categories = {
+      'timeStamp': timestamp,
+      'categories': categoriesEditingController.text,
+    };
+
     databaseMethods.addQuestion(content, documentReference.documentID);
+    databaseMethods.addRecommend(categories, categoriesEditingController.text);
+
+    // if (databaseMethods.getRecommend(categoriesEditingController.toString())!= null) {
+      
+    // } else {
+    //   databaseMethods.addRecommend(categories, categoriesEditingController.text);
+    // }
+
   }
 
   @override

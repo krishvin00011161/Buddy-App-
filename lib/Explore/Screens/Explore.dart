@@ -8,7 +8,7 @@
 
  */
 
-import 'package:buddyappfirebase/Explore/Screens/recommendedQuestionsview.dart';
+import 'package:buddyappfirebase/Explore/Screens/RecommendedQuestionsView.dart';
 import 'package:buddyappfirebase/Explore/Widget/SearchExploreCard.dart';
 import 'package:buddyappfirebase/FirebaseData/FirebaseReference.dart';
 import 'package:buddyappfirebase/GlobalWidget/TextEditingControllers.dart';
@@ -19,12 +19,15 @@ import 'package:buddyappfirebase/Home/Widgets/CustomDrawers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../FirebaseData/firebaseMethods.dart';
 import '../../Message/services/database.dart';
 import '../../home/screens/composeScreen.dart';
 import 'SearchQuestion.dart';
 import 'classesQuestionView.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:buddyappfirebase/GlobalWidget/CustomBottomNavigationBar.dart';
+import 'dart:ui' as ui;
 
 class ExplorePage extends StatefulWidget {
   final int index;
@@ -38,13 +41,23 @@ class _ExplorePageState extends State<ExplorePage> {
   String _profileImg = "";
   DatabaseMethods databaseMethods = new DatabaseMethods();
   QuerySnapshot searchResultSnapshot;
+  Stream<QuerySnapshot> recommends;
+  Stream<QuerySnapshot> classes;
   bool isLoading = false;
   bool haveUserSearched = false;
   Map values = {};
   int amountOfClasses = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _getUserProfileImg();
+    _getAmountOfRecommends();
+    _getAmountOfClasses();
+  }
+
   // searches for question with keyword
-  initiateSearch() async {
+  _searchQuestion() async {
     if (TextEditingControllers.searchEditingControllers.text.isNotEmpty) {
       setState(() {
         isLoading = true;
@@ -63,28 +76,6 @@ class _ExplorePageState extends State<ExplorePage> {
     }
   }
 
-  // Populates question content
-  Widget questionContentList() {
-    return haveUserSearched
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: searchResultSnapshot.documents.length,
-            itemBuilder: (context, index) {
-              return questionTile(
-                  searchResultSnapshot.documents[index].data["questionContent"],
-                  searchResultSnapshot
-                      .documents[index].data["questionContent"]);
-            })
-        : Container();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getUserProfileImg();
-    _getClasses();
-  }
-
   // This gets the profile Img url
   _getUserProfileImg() async {
     Constants.myId = await HelperFunctions.getUserIDSharedPreference();
@@ -98,35 +89,291 @@ class _ExplorePageState extends State<ExplorePage> {
         : circularProgress();
   }
 
-  // gets classes
-  _getClasses() async {
-    FirebaseMethods().getUserClasses();
-    setState(() {
-      values = FirebaseMethods.classValues;
-      amountOfClasses = FirebaseMethods.amountOfClasses;
+  _getAmountOfRecommends() async {
+    databaseMethods.getRecommend("categories").then((val) {
+      setState(() {
+        recommends = val;
+      });
     });
   }
 
-  // creates a widget based on class
-  Widget classes({String nameOfCourse}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        child: ExploreCard(
-          imgScr: 'assets/images/coding.jpg',
-          title: nameOfCourse,
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ClassQuestionView(
-                      className: nameOfCourse,
-                    )),
-          );
-        },
-      ),
-    );
+  _getAmountOfClasses() async {
+    databaseMethods.getClasses("classes").then((val) {
+      setState(() {
+        classes = val;
+      });
+    });
+  }
+
+
+
+
+
+  var items = [
+    PlaceInfo('Dubai Mall Food Court', Color(0xff6DC8F3), Color(0xff73A1F9),
+        4.4, 'Dubai · In The Dubai Mall', 'Cosy · Casual · Good for kids'),
+    PlaceInfo('Hamriyah Food Court', Color(0xffFFB157), Color(0xffFFA057), 3.7,
+        'Sharjah', 'All you can eat · Casual · Groups'),
+    PlaceInfo('Gate of Food Court', Color(0xffFF5B95), Color(0xffF8556D), 4.5,
+        'Dubai · Near Dubai Aquarium', 'Casual · Groups'),
+    PlaceInfo('Express Food Court', Color(0xffD76EF5), Color(0xff8F7AFE), 4.1,
+        'Dubai', 'Casual · Good for kids · Delivery'),
+    PlaceInfo('BurJuman Food Court', Color(0xff42E695), Color(0xff3BB2B8), 4.2,
+        'Dubai · In BurJuman', '...'),
+  ];
+
+  Widget recommendList() {
+    return StreamBuilder(
+        stream: recommends,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Stack(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RecommendedQuestionView(
+                                              categories: snapshot
+                                                  .data
+                                                  .documents[index]
+                                                  .data['categories'])),
+                                );
+                              },
+                              child: Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        items[index].startColor,
+                                        items[index].endColor
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: items[index].endColor,
+                                      blurRadius: 12,
+                                      offset: Offset(0, 6),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              top: 0,
+                              child: CustomPaint(
+                                size: Size(100, 150),
+                                painter: CustomCardShapePainter(
+                                    24,
+                                    items[index].startColor,
+                                    items[index].endColor),
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Image.asset(
+                                      'assets/icon.png',
+                                      height: 64,
+                                      width: 64,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          snapshot.data.documents[index]
+                                              .data['categories'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Avenir',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          "",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Avenir',
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Text(
+                                          items[index]
+                                              .rating
+                                              .toString(), // keep for later
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Avenir',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        // RatingBar(rating: items[index].rating),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+              : Container(color: Colors.blue);
+        });
+  }
+
+  Widget classList() {
+    return StreamBuilder(
+        stream: classes,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Stack(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ClassQuestionView(
+                                             className: snapshot.data.documents[index].data['className'],)),
+                                );
+                              },
+                              child: Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        items[index].startColor,
+                                        items[index].endColor
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: items[index].endColor,
+                                      blurRadius: 12,
+                                      offset: Offset(0, 6),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              top: 0,
+                              child: CustomPaint(
+                                size: Size(100, 150),
+                                painter: CustomCardShapePainter(
+                                    24,
+                                    items[index].startColor,
+                                    items[index].endColor),
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Image.asset(
+                                      'assets/icon.png',
+                                      height: 64,
+                                      width: 64,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          snapshot.data.documents[index]
+                                              .data['className'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Avenir',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          snapshot.data.documents[index]
+                                              .data['classCode'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Avenir',
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Text(
+                                          items[index]
+                                              .rating
+                                              .toString(), // keep for later
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Avenir',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        // RatingBar(rating: items[index].rating),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+              : Container(color: Colors.blue);
+        });
   }
 
   // responsible for UI
@@ -144,10 +391,9 @@ class _ExplorePageState extends State<ExplorePage> {
               child: TextField(
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(8.0),
-                    border: new OutlineInputBorder(
+                    border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide:
-                            new BorderSide(color: Colors.grey, width: 3)),
+                        borderSide: BorderSide(color: Colors.grey, width: 3)),
                     hintStyle: TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
@@ -155,8 +401,10 @@ class _ExplorePageState extends State<ExplorePage> {
                     hintText: "Search question",
                     suffixIcon: Icon(Icons.search)),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchQuestion()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchQuestion()));
                 },
               ),
             ),
@@ -177,181 +425,31 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/history.jpg',
-                      title: "U.S History",
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClassQuestionView(
-                                className: "U.S History",
-                              )),
-                    );
-                  }),
-              GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/chemistry.jpg',
-                      title: "Chemistry I",
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClassQuestionView(
-                                className: "Chemistry",
-                              )),
-                    );
-                  }),
-            ],
+          Container(
+            height: 370,
+            width: 390,
+            child: classList(),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/psychology.jpg',
-                      title: "Psychology",
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClassQuestionView(
-                                className: "Psychology",
-                              )),
-                    );
-                  }),
-              GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExploreCard(
-                      imgScr: 'assets/images/literature.jpg',
-                      title: "Literature",
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClassQuestionView(
-                                className: "Literature",
-                              )),
-                    );
-                  }),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(11.5),
+                child: Text(
+                  "Recommended",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18),
+                  maxLines: 1,
+                ),
+              ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(11.5),
-                    child: Text(
-                      "Recommended",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 18),
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExploreCard(
-                          imgScr: 'assets/images/history1.jpg',
-                          title: "History",
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RecommendedQuestionView(
-                                    categories: "History",
-                                  )),
-                        );
-                      }),
-                  GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExploreCard(
-                          imgScr: 'assets/images/chemistry1.jpg',
-                          title: "Chemistry",
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RecommendedQuestionView(
-                                    categories: "Chemistry",
-                                  )),
-                        );
-                      }),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExploreCard(
-                          imgScr: 'assets/images/english.jpg',
-                          title: "English",
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RecommendedQuestionView(
-                                    categories: "English",
-                                  )),
-                        );
-                      }),
-                  GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExploreCard(
-                          imgScr: 'assets/images/psychology1.jpg',
-                          title: "Psychology",
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RecommendedQuestionView(
-                                    categories: "Psychology",
-                                  )),
-                        );
-                      }),
-                ],
-              ),
-            ],
+          Container(
+            height: 370,
+            width: 390,
+            child: recommendList(),
           ),
         ],
       ),
@@ -375,18 +473,6 @@ class _ExplorePageState extends State<ExplorePage> {
         "Explore",
         style: TextStyle(color: Colors.black),
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.add,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ComposeScreen()));
-          },
-        )
-      ],
     );
   }
 
@@ -407,38 +493,52 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 }
 
-Widget questionTile(String userName, String userEmail) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-    child: Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              userName,
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            Text(
-              userEmail,
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            )
-          ],
-        ),
-        Spacer(),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(24)),
-            child: Text(
-              "Message",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-        )
-      ],
-    ),
-  );
+class PlaceInfo {
+  final String name;
+  final String category;
+  final String location;
+  final double rating;
+  final Color startColor;
+  final Color endColor;
+
+  PlaceInfo(this.name, this.startColor, this.endColor, this.rating,
+      this.location, this.category);
+}
+
+class CustomCardShapePainter extends CustomPainter {
+  final double radius;
+  final Color startColor;
+  final Color endColor;
+
+  CustomCardShapePainter(this.radius, this.startColor, this.endColor);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var radius = 24.0;
+
+    var paint = Paint();
+    paint.shader = ui.Gradient.linear(
+        Offset(0, 0), Offset(size.width, size.height), [
+      HSLColor.fromColor(startColor).withLightness(0.8).toColor(),
+      endColor
+    ]);
+
+    var path = Path()
+      ..moveTo(0, size.height)
+      ..lineTo(size.width - radius, size.height)
+      ..quadraticBezierTo(
+          size.width, size.height, size.width, size.height - radius)
+      ..lineTo(size.width, radius)
+      ..quadraticBezierTo(size.width, 0, size.width - radius, 0)
+      ..lineTo(size.width - 1.5 * radius, 0)
+      ..quadraticBezierTo(-radius, 2 * radius, 0, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
 }
